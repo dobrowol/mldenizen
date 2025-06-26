@@ -1,0 +1,149 @@
+<table border="1" cellpadding="10">
+    <thead>
+        <tr>
+            <th>Feature</th>
+            <th>McCulloch-Pitts Neuron</th>
+            <th>Perceptron</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Activation Function</td>
+            <td>Step Function (Threshold)</td>
+            <td>Step Function (Threshold)</td>
+        </tr>
+        <tr>
+            <td>Weights</td>
+            <td>Implicit (binary 0 or 1)</td>
+            <td>Trainable (adjustable)</td>
+        </tr>
+        <tr>
+            <td>Training Method</td>
+            <td>None (static)</td>
+            <td>Can be trained (Perceptron learning rule)</td>
+        </tr>
+        <tr>
+            <td>Bias/Threshold</td>
+            <td>Fixed threshold</td>
+            <td>Trainable bias (threshold)</td>
+        </tr>
+        <tr>
+            <td>Application</td>
+            <td>Simple logical gates</td>
+            <td>Binary classification (linearly separable)</td>
+        </tr>
+        <tr>
+            <td>Learning Rule</td>
+            <td>None (static)</td>
+            <td>Perceptron learning rule (error correction)</td>
+        </tr>
+        <tr>
+            <td>Model Complexity</td>
+            <td>Simple, single-layer</td>
+            <td>Single-layer, but adjustable with learning</td>
+        </tr>
+    </tbody>
+</table>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>McCulloch-Pitts vs Perceptron - A Pratchett-Style Summary</title>
+    <style>
+        body {
+            font-family: "Comic Sans MS", sans-serif;
+            background-color: #f7f7f7;
+            color: #333;
+            padding: 20px;
+        }
+        h1 {
+            color: #5A2A83;
+        }
+        h2 {
+            color: #2A5A83;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+        th {
+            background-color: #5A2A83;
+            color: white;
+            text-align: left;
+        }
+        td {
+            background-color: #f9f9f9;
+        }
+        .fun-text {
+            font-style: italic;
+            color: #6A4F9C;
+        }
+    </style>
+</head>
+<body>
+
+<h1>McCulloch-Pitts Neuron vs Perceptron: A Pratchett-Style Comparison</h1>
+
+<h2>The Tale of Two Neurons</h2>
+
+<p>Once upon a time, in a land full of binary logic and squiggly math, two neurons set out to change the world of computing. One was called <strong>McCulloch-Pitts</strong>, and the other, somewhat more adventurous, was named <strong>Perceptron</strong>. Their personalities were very different, and, much like wizards and trolls, they didn’t always get along.</p>
+
+<p>Here’s how they compared:</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Feature</th>
+            <th>McCulloch-Pitts Neuron</th>
+            <th>Perceptron</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Activation Function</td>
+            <td>The ol' step function, a no-nonsense approach. "If it's above this line, I’ll say 1. Otherwise, 0. Simple. Done."</td>
+            <td>Step function again, but with a twist! Now it's ready to learn. "I'll adjust myself and get better with each mistake!"</td>
+        </tr>
+        <tr>
+            <td>Weights</td>
+            <td>Well, let's call them "binary" and rather passive. Fixed at 1 or 0, they just sit there and wait to be summed.</td>
+            <td>Ah, <strong>adjustable</strong> weights, like a knight sharpening his sword before the battle. These weights <strong>learn</strong> and change with every misstep.</td>
+        </tr>
+        <tr>
+            <td>Training Method</td>
+            <td>Ha! Training? No time for that. It's <strong>static</strong>, like a book that can’t be edited. You get what you get, and you don’t ask for more.</td>
+            <td>Training! Yes, this is where things get interesting. <strong>Perceptron</strong> learns from its mistakes, using the <strong>Perceptron learning rule</strong>. It’s like learning to cook: the first few tries might burn the soup, but eventually, it makes something edible.</td>
+        </tr>
+        <tr>
+            <td>Bias/Threshold</td>
+            <td>The bias is <strong>fixed</strong>—it's like trying to move an immovable object. It <strong>cannot</strong> be changed.</td>
+            <td>The bias, on the other hand, is <strong>trainable</strong>, constantly shifting like a wizard trying to find the right amount of magic for a spell.</td>
+        </tr>
+        <tr>
+            <td>Application</td>
+            <td>Small tasks. Logical gates like AND and OR, but ask it to do XOR, and it might just give you a blank stare.</td>
+            <td>Can tackle <strong>binary classification</strong> with grace. With a little training, it learns to do more, like solving the XOR problem and maybe even cooking dinner. Who knows?</td>
+        </tr>
+        <tr>
+            <td>Learning Rule</td>
+            <td>No learning rule. The McCulloch-Pitts neuron does its job once and never changes. <strong>Static. Unchanging. Eternal.**</td>
+            <td>Learning rule? Ah yes, the <strong>Perceptron learning rule</strong>. It's like a book that gets better with each chapter—adjusting the weights based on errors. It learns and grows with experience.</td>
+        </tr>
+        <tr>
+            <td>Model Complexity</td>
+            <td>Very simple. Think of a <strong>one-trick pony</strong> who does just one thing and does it well.</td>
+            <td>More flexible, but requires <strong>training</strong>. Like an apprentice learning a new craft, the <strong>Perceptron</strong> grows more powerful with each mistake.</td>
+        </tr>
+    </tbody>
+</table>
+
+<p class="fun-text">In the end, the McCulloch-Pitts neuron is a bit of a <strong>static old sage</strong>, while the Perceptron is the <strong>young, ambitious learner</strong> willing to improve and adapt over time. One’s all about simplicity, the other is about growth, training, and <strong>getting better with every mistake</strong>. Who would have guessed?</p>
+
+</body>
+</html>

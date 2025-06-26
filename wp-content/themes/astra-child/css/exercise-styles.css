@@ -1,0 +1,179 @@
+/* Match Boxes Exercise Styles */
+.match-boxes-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1em;
+}
+.match-boxes-table th, .match-boxes-table td {
+    border: 1px solid #ccc;
+    padding: 0.5em;
+    vertical-align: top;
+}
+.match-boxes-table select {
+    width: 100%;
+    padding: 0.3em;
+}
+.match-term {
+    font-weight: bold;
+}
+
+.exercise-container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 60px 20px 160px;
+    font-family: "Segoe UI", sans-serif;
+    text-align: left;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.exercise-title {
+    font-size: 28px;
+    margin-bottom: 30px;
+    width: 100%;
+    text-align: left;
+}
+
+.exercise-description {
+    font-size: 18px;
+    margin-bottom: 50px;
+    width: 100%;
+    text-align: left;
+}
+
+.exercise-form select {
+    text-align: left;
+    text-align-last: left; /* Ensures selected item is left-aligned in most browsers */
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    direction: ltr; /* Ensure left-to-right layout */
+}
+
+/* Inside the form, options are left-aligned */
+.exercise-form label {
+    font-size: 18px;
+    margin: 10px 0;
+    text-align: left;     /* ? left-align the text */
+    align-self: flex-start; /* ? make label float left inside right-aligned container */
+    width: 100%;
+}
+
+/* Inputs like textarea still take full width but follow direction */
+textarea {
+    font-size: 16px;
+    padding: 8px;
+    width: 100%;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    direction: ltr; /* still RTL if needed for content */
+}
+
+/* Drag and drop */
+.draggable-option {
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    background: #f9f9f9;
+    font-size: 16px;
+    width: 100%;
+    cursor: move;
+    text-align: left; /* ? options left-aligned */
+}
+
+.dropzone {
+    border: 2px dashed #aaa;
+    min-height: 40px;
+    margin: 10px 0;
+    padding: 8px;
+    text-align: center;
+    font-size: 16px;
+    background: #fff;
+    width: 100%;
+}
+
+/* Submit button remains centered */
+.submit-button-container {
+    position: fixed;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 999;
+}
+
+.submit-button-container input[type="submit"] {
+    padding: 12px 35px;
+    font-size: 18px;
+    background-color: #58cc02;
+    border: none;
+    border-radius: 25px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+.exercise-divider {
+    border: none;
+    border-top: 1px solid #ccc;
+    margin: 60px 0 30px;
+    width: 100%;
+    opacity: 0.4;
+}
+.submit-button-container input[type="submit"]:hover {
+    background-color: #46a400;
+}
+.correct-answer {
+    background-color: #d4edda;
+    border-left: 4px solid #28a745;
+    padding: 8px;
+}
+
+.incorrect-answer {
+    background-color: #f8d7da;
+    border-left: 4px solid #dc3545;
+    padding: 8px;
+}
+.tooltip {
+    position: relative;
+    cursor: help;
+    border-bottom: 1px dotted #555;
+}
+
+.tooltip .tooltip-text {
+    visibility: hidden;
+    width: max-content;
+    max-width: 300px;
+    background-color: #333;
+    color: #fff;
+    text-align: left;
+    border-radius: 6px;
+    padding: 8px;
+    position: absolute;
+    z-index: 1000;
+    bottom: 125%; /* Position above the word */
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.tooltip:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+.correct-answer input {
+    border: 2px solid green;
+    background-color: #eaffea;
+}
+.incorrect-answer input {
+    border: 2px solid red;
+    background-color: #ffeaea;
+}
+.missing-answer input {
+    border: 2px dashed gray;
+    background-color: #f0f0f0;
+}

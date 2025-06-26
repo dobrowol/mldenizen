@@ -1,0 +1,35 @@
+# Ignore everything by default
+/*
+
+# Allow only wp-content
+!/wp-content/
+
+# Within wp-content, allow only themes and plugins folders
+/wp-content/*
+!/wp-content/themes/
+!/wp-content/plugins/
+
+# Ignore all themes and plugins by default
+/wp-content/themes/*
+/wp-content/plugins/*
+
+# Except your custom theme(s) and plugin(s)
+!/wp-content/themes/my-custom-theme/
+!/wp-content/plugins/my-custom-plugin-1/
+!/wp-content/plugins/my-custom-plugin-2/
+
+# Ignore uploads and other dynamic folders
+/wp-content/uploads/
+/wp-content/cache/
+/wp-content/upgrade/
+/wp-content/debug.log
+
+# Ignore editor project files
+*.log
+*.sql
+.env
+.DS_Store
+.idea/
+.vscode/
+node_modules/
+vendor/
