@@ -19,7 +19,7 @@ function add_probability_distributions_exercises_to_the_lesson($lesson_number) {
     // Retrieve the ID of the first lesson for this category.
     $lesson_id = get_lesson_for_category( $category_id, $lesson_number );
 
-    $exercise_number = 0;
+    $exercise_number = 1;
     $options = json_encode([
         
         "A" => "A distribution over multiple categories, normalized to sum to one.",
@@ -29,7 +29,7 @@ function add_probability_distributions_exercises_to_the_lesson($lesson_number) {
     ], JSON_UNESCAPED_UNICODE);
 
     $correct_matches = json_encode([
-        "corrrect_option" => "B"
+        "correct_option" => "B"
     ]);
     // ---------------------------------------------------------------------------
     $result = add_exercise(
@@ -37,11 +37,11 @@ function add_probability_distributions_exercises_to_the_lesson($lesson_number) {
         $category_id,
         'Exercise ' . $exercise_number . ' – What is the Bernoulli Distribution?',
         <<<EOT
-        The <strong>Bernoulli distribution</strong> models a binary outcome: it returns 1 ("success") with probability <code>p</code> and 0 ("failure") with probability <code>1 - p</code>.
-
-        <strong>Example:</strong> Tossing a biased coin that lands heads with probability <code>p = 0.7</code>. Let "heads" be encoded as 1 and "tails" as 0.
-
-        <strong>Question:</strong> What is the correct definition of the Bernoulli distribution?
+        The <span class="tooltip"><strong>Bernoulli distribution</strong><span class="tooltip-text">Just the simplest of all distributions, a binary oracle: 1 or 0, success or failure, cat or not-a-cat. The great coin flip of statistical destiny.</span></span> models a binary outcome: it returns 1 ("success") with probability <code>p</code> and 0 ("failure") with probability <code>1 - p</code>.<br>
+        <br>
+        <strong>Example:</strong><br> Tossing a biased coin that lands heads with probability <code>p = 0.7</code>. Let "heads" be encoded as 1 and "tails" as 0.<br>
+        <br>
+        <strong>Question:</strong><br> What is the correct definition of the Bernoulli distribution?<br>
         EOT,
         'Solution: A – A distribution over two outcomes: success (1) with probability p, and failure (0) with probability 1-p.',
         'easy',
@@ -57,30 +57,30 @@ function add_probability_distributions_exercises_to_the_lesson($lesson_number) {
         $category_id,
         'Exercise ' . $exercise_number . ' – Introduction to PMF with Bernoulli',
         <<<EOT
-    Suppose you are modeling whether a user clicks a button on a website. We define the variable \( X \) such that:
-    - \( X = 1 \) if the user clicks,
-    - \( X = 0 \) if the user does not click.
-
-    If the probability of a click is \( p = 0.2 \), we need a function that gives the probability of observing either outcome. This is the role of the <strong>Probability Mass Function (PMF)</strong>, which defines the probability that a <strong>discrete random variable</strong> takes a specific value.
-
-    For the <strong>Bernoulli distribution</strong>, which models binary outcomes, the PMF is given by:
-
+    Suppose you are modeling whether a user clicks a button on a website. We define the variable \( X \) such that:<br>
+    - \( X = 1 \) if the user clicks,<br>
+    - \( X = 0 \) if the user does not click.<br>
+        <br>
+    If the probability of a click is \( p = 0.2 \), we need a function that gives the probability of observing either outcome. This is the role of the <span class="tooltip"><strong>Probability Mass Function (PMF)</strong><span class="tooltip-text">PMF is the ancient scroll that tells you exactly how likely the universe is to hand you each possible outcome — usually just before handing you something else entirely, with a smug statistical shrug.</span></span>, which defines the probability that a <span class="tooltip"><strong>discrete random variable</strong><span class="tooltip-text">is the kind of creature that only deals in distinct, countable outcomes — like a bureaucrat who refuses to acknowledge anything between “approved,” “denied,” and “lost in the system,” even when reality is clearly leaking between the forms.</span></span> takes a specific value.<br>
+        <br>
+    For the <strong>Bernoulli distribution</strong>, which models binary outcomes, the PMF is given by:<br>
+        
     \[
-    P(X = x) = p^x (1 - p)^{1 - x}, \quad \text{for } x \in \{0, 1\}
+    P(X = x) = p^x (1 - p)^{1 - x}, \quad \\text{for } x \in \{0, 1\}
     \]
 
-    where:
-    - \( p \) is the probability of success (i.e., \( X = 1 \)),
-    - \( 1 - p \) is the probability of failure (i.e., \( X = 0 \)).
+    where:<br>
+    - \( p \) is the probability of success (i.e., \( X = 1 \)),<br>
+    - \( 1 - p \) is the probability of failure (i.e., \( X = 0 \)).<b>
 
-    <strong>Example:</strong>  
-    Using the parameters from our scenario:
-    - \( P(X = 1) = 0.2 \)
-    - \( P(X = 0) = 0.8 \)
+    <strong>Example:</strong> <br>
+    Using the parameters from our scenario:<br>
+    - \( P(X = 1) = 0.2 \)<br>
+    - \( P(X = 0) = 0.8 \)<br>
 
-    <strong>Question:</strong>  
-    You observe a single data point: the user clicked (i.e., \( X = 1 \)). What is the value of the PMF for this observation?
-
+    <strong>Question:</strong><br>  
+    You observe a single data point: the user clicked (i.e., \( X = 1 \)). What is the value of the PMF for this observation?<br>
+        <br>
     Assume \( p = 0.84 \). Use the PMF formula to compute \( P(X = 1) \).
     EOT,
         'Solution: A – Since \( x = 1 \), we plug into the PMF: \( P(1) = 0.2^1 \cdot (1 - 0.2)^0 = 0.2 \cdot 1 = 0.2 \)',
@@ -104,21 +104,21 @@ function add_probability_distributions_exercises_to_the_lesson($lesson_number) {
         $category_id,
         'Exercise ' . $exercise_number . ' – Definition of the Binomial Distribution',
         <<<EOT
-    The <strong>Binomial distribution</strong> is used to model the number of successes in a fixed number of independent trials, where each trial results in either success or failure, and the probability of success remains constant.
-
-    Formally, a random variable \( X \sim \text{Binomial}(n, p) \) if:
-    - \( n \) is the number of independent trials,
-    - \( p \) is the probability of success in each trial,
-    - \( X \) counts the number of successes.
-
+    The <span class="tooltip"><strong>Binomial distribution</strong><span class="tooltip-text">is the stern accountant of the probability world — it counts how many successes you get out of a fixed number of yes-or-no trials, flipping coins, making decisions, or taking chances, all while muttering, “independent and identical, or it doesn’t count.”</span></span> is used to model the number of successes in a fixed number of independent trials, where each trial results in either success or failure, and the probability of success remains constant.<br>
+        <br>
+    Formally, a random variable \( X \sim \\text{Binomial}(n, p) \) if:<br>
+    - \( n \) is the number of independent trials, <br>
+    - \( p \) is the probability of success in each trial,<br>
+    - \( X \) counts the number of successes.<br>
+        <br>
     The probability mass function (PMF) of the Binomial distribution is:
 
     \[
     P(X = k) = \binom{n}{k} p^k (1 - p)^{n - k}
     \]
 
-    <strong>Question:</strong>  
-    Which of the following scenarios is best described by a Binomial distribution?
+    <strong>Question:</strong>  <br>
+    Which of the following scenarios is best described by a Binomial distribution?<br>
 
     EOT,
         'Solution: C – The Binomial distribution applies when we count the number of times an event (like "heads") happens in a fixed number of independent trials with constant probability.',
@@ -142,41 +142,41 @@ function add_probability_distributions_exercises_to_the_lesson($lesson_number) {
         $category_id,
         'Exercise ' . $exercise_number . ' – Introduction to the Binomial Distribution',
         <<<EOT
-    The <strong>Binomial distribution</strong> models the number of successes in a fixed number of independent trials, where each trial has only two outcomes (success or failure), and each success occurs with probability \( p \).
-
-    The <strong>Probability Mass Function (PMF)</strong> of the Binomial distribution is:
+    The <strong>Binomial distribution</strong> models the number of successes in a fixed number of independent trials, where each trial has only two outcomes (success or failure), and each success occurs with probability \( p \).<br>
+        <br>
+    The <strong>Probability Mass Function (PMF)</strong> of the Binomial distribution is:<br>
 
     \[
     P(X = k) = \binom{n}{k} p^k (1 - p)^{n - k}
     \]
 
-    where:
-    - \( n \) is the number of trials,
-    - \( k \) is the number of observed successes,
-    - \( p \) is the probability of success on a single trial.
+    where:<br>
+    - \( n \) is the number of trials,<br>
+    - \( k \) is the number of observed successes,<br>
+    - \( p \) is the probability of success on a single trial.<br>
 
-    <strong>Example:</strong>  
-    Suppose a user has a 20% chance of clicking a button on any page they visit. They visit 3 pages independently.
-
-    <strong>Question:</strong>  
-    What is the probability that the user clicks the button exactly once during those 3 visits?
-
-    Use the formula above with:
-    - \( n = 3 \)
-    - \( k = 1 \)
-    - \( p = 0.2 \)
+    <strong>Example:</strong>  <br>
+    Suppose a user has a 20% chance of clicking a button on any page they visit. <span class="tooltip">They visit 3 pages independently.<span class="tooltip-text">Told ya, that's the sacred incantation right there: independent and identically distributed. Or as the Neuronite monks chant it during the Midnight Sampling Ritual: "i.i.d., i.i.d., I summon thee, O Central Limit Theorem!”. Each visit, each click, each little stochastic decision dances alone and yet follows the same mysterious distribution scroll. No collusion, no memory, no hidden whispers between trials. Just pure, unadulterated statistical solitude — identical in law, independent in fate. Like triplets raised in separate libraries./span></span><br>
+        <br>
+    <strong>Question:</strong>  <br>
+    What is the probability that the user clicks the button exactly once during those 3 visits?<br>
+        <br>
+    Use the formula above with:<br>
+    - \( n = 3 \)<br>
+    - \( k = 1 \)<br>
+    - \( p = 0.2 \)<br>
     EOT,
         'Solution: B – We compute \( P(X = 1) = \binom{3}{1} \cdot 0.2^1 \cdot 0.8^2 = 3 \cdot 0.2 \cdot 0.64 = 0.384 \)',
         'easy',
         'one_of_many',
         json_encode([
             "A" => "0.512",
-            "B" => "0.384",
-            "C" => "0.128",
+            "B" => "0.128",
+            "C" => "0.384",
             "D" => "0.256"
         ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
         json_encode([
-            "correct_option" => "B"
+            "correct_option" => "C"
         ]),
         $exercise_number
     );

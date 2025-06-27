@@ -114,50 +114,6 @@ function ml_courses_grid_shortcode() {
 
     ob_start();
     ?>
-    <style>
-        .ml-course-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 24px;
-        }
-        .ml-course-card {
-            position: relative;
-            border: 2px solid transparent;
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            background: #fff;
-            box-shadow: 0 0 10px rgba(0,0,0,0.05);
-            transition: 0.2s;
-            text-decoration: none;
-            color: inherit;
-        }
-        .ml-course-card:hover {
-            transform: scale(1.02);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        .ml-course-card.selected {
-            border-color: #28a745;
-            box-shadow: 0 0 0 3px rgba(40,167,69,0.2);
-        }
-        .ml-course-flag img {
-            width: 48px;
-            height: auto;
-            margin-bottom: 12px;
-        }
-        .ml-course-title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 6px;
-        }
-        .checkmark {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 20px;
-            color: #28a745;
-        }
-    </style>
 
     <div class="ml-course-grid">
     <?php foreach ($courses as $course): 
@@ -319,6 +275,9 @@ function ml_duolingo_learning_path_shortcode() {
     if ( isset($_POST['submit_continue']) ) {
         handle_submit_continue();
     }
+    if (!isset($_SESSION['clicked_modules']) || !is_array($_SESSION['clicked_modules'])) {
+        $_SESSION['clicked_modules'] = [];
+    }
     $course_id = null;
 
     $course_id = $_SESSION['selected_course_id'] ?? null;
@@ -417,185 +376,32 @@ function ml_duolingo_learning_path_shortcode() {
 
     ob_start();
     ?>
-    <style>
-        .neuron-wrapper {
-            background-image: url('https://mldenizen.com/wp-content/uploads/2025/05/neuron_no_background.png');
-            background-repeat: no-repeat;
-            background-position: center ; /* shift up if needed */
-            background-size: 600px auto;       /* or exact pixel width */
-            overflow: visible;
-            position: relative;
-            z-index: 0;
-            min-height: 600px; /* ensure it can fit the whole neuron image */
-        }
-        .ml-module {
-            position: relative;
-            width: 420px;
-            height: 380px;
-            margin: 60px auto;
-            overflow: visible; /* allow background to overflow */
-        }
-
-        .module-node-wrapper {
-            position: absolute;
-            top: 330px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 2;
-        }
-
-        .lesson-circle {
-            position: absolute;
-            top: 400px;
-            left: 0;
-            width: 100%;
-            height: 220px;
-        }
-
-        .lesson-positioned {
-            position: absolute;
-            transform: translate(-50%, -50%);
-        }
-
-        .ml-module .lesson-cluster:not(:first-child) {
-            margin-top: 20px;           /* reduce spacing between lessons */
-        }
-        .lesson-cluster {
-            position: relative;
-            width: 100px;       /* optional: slightly tighter width */
-            height: 100px;      /* reduced height */
-            margin: 30px auto;  /* reduced top/bottom margin */
-        }
-
-        .lesson-image-link {
-            display: block;
-            width: 80px;
-            height: 80px;
-            margin: 0 auto;
-            text-align: center;
-            position: relative;
-            z-index: 2;
-            border-radius: 50%;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            transition: transform 0.2s ease;
-        }
-
-        .lesson-image-link:hover {
-            transform: scale(1.05);
-        }
-
-        .lesson-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-        }
-
-        .lesson-image-link.completed {
-            box-shadow: 0 0 8px #4CAF50;
-        }
-
-        .lesson-image-link.enabled {
-            box-shadow: 0 0 6px #87CEEB;
-        }
-
-        .lesson-image-link.disabled {
-            opacity: 0.4;
-            pointer-events: none;
-        }
-
-
-        .module-node {
-            width: 80px;
-            height: 80px;
-            background: #6a1b9a;
-            color: white;
-            font-size: 14px;
-            line-height: 80px;
-        }
-
-        .exercise-group {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        .exercise-circle {
-            position: absolute;
-            width: 16px;
-            height: 16px;
-            background: #aaa;
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-        }
-        .exercise-circle.completed {
-            background: #4CAF50; /* Green for completed lessons */
-        }
-        .module-icon-link {
-            display: block;
-            width: 80px;
-            height: 80px;
-            margin: 0 auto;
-            text-align: center;
-            position: relative;
-            z-index: 2;
-            
-            border-radius: 50%; /* make it round */
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            transition: transform 0.2s ease;
-        }
-
-        .module-icon-link.disabled {
-            opacity: 0.4;
-            pointer-events: none;
-        }
-
-        .module-icon {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* ensures image fills the circular container */
-            border-radius: 50%;
-            display: block;
-            background: transparent !important;
-            box-shadow: none;
-            transition: transform 0.2s ease;
-        }
-
-        .module-icon-link:hover .module-icon {
-            transform: scale(1.05);
-        }
-
-        /* ✅ Purple glow when completed */
-        .module-icon-link.completed .module-icon {
-            box-shadow: 0 0 10px 3px #a020f0;
-        }
-
-        .connection-line {
-            position: absolute;
-            height: 2px;
-            background: rgba(160, 160, 255, 0.5); /* soft blue line */
-            transform-origin: left center;
-            z-index: 1;
-        }
-        .ml-course-visual,
-        .ml-learning-path-content,
-        .ml-course-inner,
-        .ml-course-single {
-            overflow: visible !important;
-            position: relative;
-        }
-    </style>
 
     <div class="ml-course-visual">
     <?php
     $module_index = 0;
     error_log('Modules found: ' . count($modules));
+    $active_module = null;
+    $last_completed_lesson = end($completed_lessons); // ostatnia na liście 
+    $active_module_term_id = null;
+    foreach ($modules as $module) {
+        $lessons = get_posts([
+            'post_type' => 'lesson',
+            'tax_query' => [[
+                'taxonomy' => 'course_topic',
+                'field' => 'term_id',
+                'terms' => $module->term_id,
+            ]],
+            'fields' => 'ids',
+            'posts_per_page' => -1,
+        ]);
+
+        if (in_array($last_completed_lesson, $lessons)) {
+            $active_module_term_id = $module->term_id;
+            break;
+        }
+    }
+
     foreach ($modules as $module):
         $lessons = get_posts([
             'post_type' => 'lesson',
@@ -618,21 +424,42 @@ function ml_duolingo_learning_path_shortcode() {
                 break;
             }
         }
+        $is_next_module = !$all_lessons_completed && isset($modules[$module_index - 1]) && (
+            // previous module is fully completed
+            !array_diff(
+                get_posts([
+                    'post_type' => 'lesson',
+                    'fields' => 'ids',
+                    'tax_query' => [[
+                        'taxonomy' => 'course_topic',
+                        'field' => 'term_id',
+                        'terms' => $modules[$module_index - 1]->term_id,
+                    ]]
+                ]),
+                $completed_lessons
+            )
+        );
 
         $module_enabled = $module_index === 0 || in_array($modules[$module_index - 1]->term_id, $unlocked_modules);
         $module_clickable = $module_index === 0 || $module_enabled;
-
+        $module_clicked = isset($_SESSION['clicked_modules']) && in_array($active_module_term_id, $_SESSION['clicked_modules']);
+        $should_glow = $is_next_module && !$module_clicked;
         $module_url = add_query_arg([
             'term_id' => $module->term_id,
             'stage' => 'module_intro'
         ], get_permalink($_SESSION['selected_course_id']));
 
         ?>
-        <div class="neuron-wrapper">
+        <div class="module-separator">
+            <span class="module-separator-text"><?php echo esc_html($module->name); ?></span>
+        </div>
+        <div class="neuron-wrapper" <?php if ($module->term_id == $active_module_term_id) echo 'id="active-module"'; ?>>
             <div class="ml-module">
                 <div class="module-node-wrapper">
                     <?php if ($module_clickable): ?>
-                        <a href="<?php echo esc_url($module_url); ?>" class="module-icon-link<?php echo $all_lessons_completed ? ' completed' : ''; ?>">
+                        <a href="<?php echo esc_url($module_url); ?>"
+                            class="module-icon-link<?php echo $all_lessons_completed ? ' completed' : ''; ?>
+                                                    <?php echo $should_glow ? ' glowing-icon' : ''; ?>">
                         <img src="https://mldenizen.com/wp-content/uploads/2025/05/module-3.png" alt="<?php echo esc_attr($module->name); ?>" class="module-icon">
                         </a>
                     <?php else: ?>
@@ -645,6 +472,14 @@ function ml_duolingo_learning_path_shortcode() {
     <div class="lesson-circle">
         <?php
         $lesson_count = count($lessons);
+        $first_incomplete_lesson_id = null;
+        foreach ($lessons as $l) {
+            if (!in_array($l->ID, $completed_lessons)) {
+                $first_incomplete_lesson_id = $l->ID;
+                break;
+            }
+        }
+
         foreach ($lessons as $index => $lesson):
             $lesson_id = $lesson->ID;
             $is_completed = in_array($lesson_id, $completed_lessons);
@@ -690,7 +525,11 @@ function ml_duolingo_learning_path_shortcode() {
             error_log("Image URL: " . $image_url);
             ?>
             <div class="lesson-positioned" style="<?php echo $style; ?>">
-                <a href="<?php echo esc_url($lesson_url); ?>" class="lesson-image-link<?php echo $is_completed ? ' completed' : ($is_enabled ? ' enabled' : ' disabled'); ?>">
+                <a href="<?php echo esc_url($lesson_url); ?>"
+                    class="lesson-image-link
+                            <?php echo $is_completed ? ' completed' : ($is_enabled ? ' enabled' : ' disabled'); ?>
+                            <?php echo $lesson_id === $first_incomplete_lesson_id ? ' glowing-icon' : ''; ?>">
+
                     <?php if ($image_url): ?>
                         <img src="<?php echo esc_url($image_url); ?>" class="lesson-image" alt="Lesson Icon">
                     <?php endif; ?>
@@ -778,3 +617,143 @@ function enqueue_exercise_styles() {
     }
 }
 add_action( 'wp_enqueue_scripts', 'enqueue_exercise_styles' );
+function enqueue_modules_styles() {
+    if ( is_singular() ) { // Load only on individual post/page
+        wp_enqueue_style(
+            'modules-styles',
+            get_stylesheet_directory_uri() . '/css/modules-styles.css',
+            [],
+            filemtime( get_stylesheet_directory() . '/css/modules-styles.css' )
+        );
+    }
+}
+add_action( 'wp_enqueue_scripts', 'enqueue_modules_styles' );
+
+function handle_submit_answer($exercise_id, $term_id, $exercise) {
+    global $wpdb;
+    error_log('handle_submit_answer Exercise type: ' . $exercise->question_type);
+    error_log('user_answer set: ' . (isset($_POST['user_answer']) ? 'yes' : 'no'));
+
+    error_log('POST user_answer: ' . print_r($_POST['user_answer'], true));
+    // Get answer
+    if ( 'array_type' === $exercise->question_type ) {
+        $raw = $_POST['t'] ?? [];
+        $clean = [];
+        foreach ($raw as $r => $cols) {
+            foreach ($cols as $c => $v) {
+                $clean[$r][$c] = trim(wp_strip_all_tags($v));
+            }
+        }
+        $user_answer = wp_json_encode($clean);
+    } // ✅ labeled_input expects associative array of floats (not imploded string)
+    elseif ( 'labeled_inputs' === $exercise->question_type && isset($_POST['user_answer']) && is_array($_POST['user_answer']) ) {
+        $user_answer = [];
+        foreach ($_POST['user_answer'] as $label => $value) {
+            $user_answer[ sanitize_text_field($label) ] = floatval($value);
+        }
+        error_log("user answer is ".print_r($user_answer, true));
+    } elseif ( 'match_boxes' === $exercise->question_type && isset($_POST['user_answer']) ) {
+        error_log('✅ Entered match_boxes handler');
+
+        // We assume: $_POST['user_answer'] is a 1-indexed array of selected definition indices
+        error_log('POST user_answer: ' . print_r($_POST['user_answer'], true));
+
+        $user_answer = [];
+
+        foreach ($_POST['user_answer'] as $i => $selected_index) {
+            $user_answer[] = ($selected_index === '') ? null : intval($selected_index);
+        }
+
+        $user_answer_json = wp_json_encode($user_answer);
+        error_log('✅ Final JSON user_answer: ' . $user_answer_json);
+
+        $user_answer = $user_answer_json;
+    } elseif (isset($_POST['user_answer']) && is_array($_POST['user_answer'])) {
+        $user_answer = implode(',', array_map('sanitize_text_field', $_POST['user_answer']));
+    }  else {
+        $user_answer = sanitize_text_field($_POST['user_answer']);
+    }
+
+    // Verify
+    $result = verify_answer($exercise_id, $user_answer);
+
+    error_log("result of verify_answer is ".print_r($result, true));
+    $_SESSION['last_answer_feedback'] = [
+        'exercise_id' => $exercise_id,
+        'submitted' => $result['user_keys'],
+        'correct' => $result['correct'],
+        'correct_keys' => $result['correct_keys'] ?? [], // you must return this from `verify_answer`
+    ];
+    // Log attempt
+    $attempts_table = $wpdb->prefix . 'exercise_attempts';
+    $wpdb->insert($attempts_table, [
+        'exercise_id'   => $exercise_id,
+        'user_id'       => get_current_user_id(),
+        'user_answer'   => $user_answer,
+        'is_correct'    => $result['correct'],
+        'attempt_time'  => current_time('mysql'),
+        'points_awarded'=> $result['points'],
+    ]);
+
+
+
+    
+
+    // echo '<form method="post">';
+    // echo '<input type="hidden" name="continue_next" value="1">';
+    // echo '<input type="hidden" name="exercise_id" value="' . esc_attr($exercise_id) . '">';
+    // echo '<input type="hidden" name="term_id" value="' . esc_attr($term_id) . '">';
+    // echo '<div class="submit-button-container">';
+    // echo '<input type="submit" name="submit_continue" value="Continue">';
+    // echo '</div></form>';
+
+    return $_SESSION['last_answer_feedback'];
+}
+add_action('wp_ajax_ml_submit_exercise', 'ml_submit_exercise_ajax');
+add_action('wp_ajax_nopriv_ml_submit_exercise', 'ml_submit_exercise_ajax');
+
+function ml_submit_exercise_ajax() {
+    error_log("ml submit exercise ajax");
+
+    $exercise_id = intval($_POST['exercise_id'] ?? 0);
+    $term_id = intval($_POST['term_id'] ?? 0);
+
+    global $wpdb;
+    $table = $wpdb->prefix . 'exercises';
+    $exercise = $wpdb->get_row(
+        $wpdb->prepare("SELECT * FROM $table WHERE id = %d", $exercise_id)
+    );
+
+    if (!$exercise) {
+        wp_send_json_error(['message' => 'Exercise not found']);
+    }
+
+    // Update session and verify answer
+    handle_submit_answer($exercise_id, $term_id, $exercise);
+
+    // Now render the updated part of the form only (options/feedback)
+    ob_start();
+    render_exercise($exercise, $term_id, $_SESSION['last_answer_feedback']);
+    $markup = ob_get_clean();
+
+    wp_send_json_success([
+        'html' => $markup
+    ]);
+
+    wp_die();
+}
+add_action('wp_enqueue_scripts', function () {
+    error_log("wp_enque_scripts ".get_stylesheet_directory_uri() . '/js/exercise.js');
+    wp_enqueue_script(
+        'ml-exercise-script',
+        get_stylesheet_directory_uri() .  '/js/exercise.js',
+        [],
+        null,
+        true
+    );
+
+    wp_localize_script('ml-exercise-script', 'ajaxobject', [
+        'ajaxurl' => admin_url('admin-ajax.php')
+    ]);
+});
+

@@ -48,7 +48,9 @@ function show_module_intro($term_id) {
 
     $course_id = $_SESSION['selected_course_id'] ?? 0;
     $first_lesson_id = get_first_lesson_id($term_id);
-
+    if ($term_id && !in_array($term_id, $_SESSION['clicked_modules'])) {
+        $_SESSION['clicked_modules'][] = $term_id;
+    }
     echo '<form method="get" action="' . esc_url(get_permalink($course_id)) . '">';
     echo '<input type="hidden" name="term_id" value="' . esc_attr($term_id) . '">';
     echo '<input type="hidden" name="lesson_id" value="' . esc_attr($first_lesson_id) . '">';
@@ -68,11 +70,10 @@ function show_lesson_intro($lesson_id, $term_id) {
     echo '<input type="submit" value="Start Lesson">';
     echo '</form>';
 }
-function render_exercise($recommended_exercise, $term_id) {
+function render_exercise($recommended_exercise, $term_id, $feedback = null) {
     error_log("recommended exercise id ".$recommended_exercise->id);
     echo '<div class="exercise-container">';
 
-    $feedback = $_SESSION['last_answer_feedback'] ?? null;
     error_log("feedback is ".print_r($feedback, true));
     $submitted = ($feedback && $feedback['exercise_id'] == $recommended_exercise->id)
     ? $feedback['submitted']
@@ -94,7 +95,7 @@ function render_exercise($recommended_exercise, $term_id) {
 
     }
     // Start the form. The action posts back to the same page.
-    echo '<form method="post" action="" class="exercise-form">';
+    echo '<form method="post" action="" id="exercise-form" class="exercise-form">';
 
     // Include hidden exercise_id so we know which exercise is being answered.
     echo '<input type="hidden" name="exercise_id" value="' . esc_attr( $recommended_exercise->id ) . '">';
@@ -110,7 +111,7 @@ function render_exercise($recommended_exercise, $term_id) {
         // Check if options exist and contain any {inputX} placeholders
         if ( !empty($options) && isset($options[0]) && preg_match('/\{input\d+\}/', $options[0]) ) {
             $template = $options[0];
-
+            echo '<div class="exercise-dynamic-area">';
             // Replace placeholders like {input1}, {input2}, ... with input fields
             $template_with_inputs = preg_replace_callback(
                 '/\{input(\d+)\}/',
@@ -120,7 +121,7 @@ function render_exercise($recommended_exercise, $term_id) {
                 },
                 $template
             );
-
+            echo '</div>';
             // Escape the final output safely
             echo '<div class="open-text-exercise">' . wp_kses_post( $template_with_inputs ) . '</div>';
             echo '<div class="exercise-table">' . $table_html . '</div>';
@@ -276,6 +277,7 @@ function render_exercise($recommended_exercise, $term_id) {
                 $checked = in_array($key, $submitted) ? 'checked' : '';
                 $class = '';
                 if (in_array($key, $submitted) && in_array($key, $correct_keys)) {
+                    error_log("should be dsiplayed as correct answer");
                     $class = 'correct-answer';
                 } elseif (in_array($key, $submitted) && !in_array($key, $correct_keys)) {
                     $class = 'incorrect-answer';
@@ -587,104 +589,21 @@ function render_exercise($recommended_exercise, $term_id) {
     echo '<div class="submit-button-container">';
     if ( $recommended_exercise->question_type === 'code_runner' || 
     $recommended_exercise->question_type === 'geometric_interpretation' || $feedback ) {
-        echo '<input type="submit" name="submit_continue" value="Continue">';
+        echo '<input type="submit" name="submit_continue" value="Continue" onclick="location.reload()">';
     } else{
         echo '<input type="submit" name="submit_answer" value="Check"></div>';
     }
     echo '</form>';
     echo '</div>';
-}
 
-function handle_submit_answer($exercise_id, $term_id, $exercise) {
-    global $wpdb;
-    error_log('handle_submit_answer Exercise type: ' . $exercise->question_type);
-    error_log('user_answer set: ' . (isset($_POST['user_answer']) ? 'yes' : 'no'));
-    error_log('match_term set: ' . (isset($_POST['match_term']) ? 'yes' : 'no'));
-
-    error_log('POST user_answer: ' . print_r($_POST['user_answer'], true));
-    error_log('POST match_term: ' . print_r($_POST['match_term'], true));
-    // Get answer
-    if ( 'array_type' === $exercise->question_type ) {
-        $raw = $_POST['t'] ?? [];
-        $clean = [];
-        foreach ($raw as $r => $cols) {
-            foreach ($cols as $c => $v) {
-                $clean[$r][$c] = trim(wp_strip_all_tags($v));
-            }
-        }
-        $user_answer = wp_json_encode($clean);
-    } // ✅ labeled_input expects associative array of floats (not imploded string)
-    elseif ( 'labeled_inputs' === $exercise->question_type && isset($_POST['user_answer']) && is_array($_POST['user_answer']) ) {
-        $user_answer = [];
-        foreach ($_POST['user_answer'] as $label => $value) {
-            $user_answer[ sanitize_text_field($label) ] = floatval($value);
-        }
-        error_log("user answer is ".print_r($user_answer, true));
-    } elseif ( 'match_boxes' === $exercise->question_type && isset($_POST['user_answer']) ) {
-        error_log('✅ Entered match_boxes handler');
-
-        // We assume: $_POST['user_answer'] is a 1-indexed array of selected definition indices
-        error_log('POST user_answer: ' . print_r($_POST['user_answer'], true));
-
-        $user_answer = [];
-
-        foreach ($_POST['user_answer'] as $i => $selected_index) {
-            $user_answer[] = ($selected_index === '') ? null : intval($selected_index);
-        }
-
-        $user_answer_json = wp_json_encode($user_answer);
-        error_log('✅ Final JSON user_answer: ' . $user_answer_json);
-
-        $user_answer = $user_answer_json;
-    } elseif (isset($_POST['user_answer']) && is_array($_POST['user_answer'])) {
-        $user_answer = implode(',', array_map('sanitize_text_field', $_POST['user_answer']));
-    }  else {
-        $user_answer = sanitize_text_field($_POST['user_answer']);
-    }
-
-    // Verify
-    $result = verify_answer($exercise_id, $user_answer);
-
-    error_log("result of verify_answer is ".print_r($result, true));
-    $_SESSION['last_answer_feedback'] = [
-        'exercise_id' => $exercise_id,
-        'submitted' => $result['user_keys'],
-        'correct' => $result['correct'],
-        'correct_keys' => $result['correct_keys'] ?? [], // you must return this from `verify_answer`
-    ];
-    // Log attempt
-    $attempts_table = $wpdb->prefix . 'exercise_attempts';
-    $wpdb->insert($attempts_table, [
-        'exercise_id'   => $exercise_id,
-        'user_id'       => get_current_user_id(),
-        'user_answer'   => $user_answer,
-        'is_correct'    => $result['correct'],
-        'attempt_time'  => current_time('mysql'),
-        'points_awarded'=> $result['points'],
-    ]);
-
-    // Return markup
-    ob_start();
-    echo '<div class="exercise-feedback ' . ($result['correct'] ? 'correct' : 'incorrect') . '">';
-    echo $result['correct'] ? '✅ Correct!' : '❌ Incorrect.';
-    echo '</div>';
-
-    if (!$result['correct']) {
+    if ($feedback && !$feedback['correct'] && !empty($recommended_exercise->exercise_solution)) {
         echo '<div class="exercise-solution"><h3>Solution:</h3>';
-        echo wp_kses_post($exercise->exercise_solution);
+        echo wp_kses_post($recommended_exercise->exercise_solution);
         echo '</div>';
     }
-
-    // echo '<form method="post">';
-    // echo '<input type="hidden" name="continue_next" value="1">';
-    // echo '<input type="hidden" name="exercise_id" value="' . esc_attr($exercise_id) . '">';
-    // echo '<input type="hidden" name="term_id" value="' . esc_attr($term_id) . '">';
-    // echo '<div class="submit-button-container">';
-    // echo '<input type="submit" name="submit_continue" value="Continue">';
-    // echo '</div></form>';
-
-    return ob_get_clean();
 }
+
+
 
 function show_exercise($lesson_id, $exercise_number, $term_id) {
     
@@ -695,7 +614,8 @@ function show_exercise($lesson_id, $exercise_number, $term_id) {
         $lesson_id, $exercise_number
     ));
     if (isset($_POST['submit_answer']) && intval($_POST['exercise_id']) == $exercise->id) {
-        echo handle_submit_answer($exercise->id, $term_id, $exercise);
+        error_log("show_exercise POST submit answer");
+        handle_submit_answer($exercise->id, $term_id, $exercise);
         
     }
     if (!$exercise) {
