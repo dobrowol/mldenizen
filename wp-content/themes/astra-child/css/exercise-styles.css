@@ -177,3 +177,16 @@ textarea {
     border: 2px dashed gray;
     background-color: #f0f0f0;
 }
+.exercise-solution {
+    margin-top: 20px;
+    padding: 15px;
+    border-left: 4px solid #2d9cdb; /* blue highlight */
+    background-color: #f1f9ff;
+    font-family: "Segoe UI", sans-serif;
+}
+
+.exercise-solution h3 {
+    margin-top: 0;
+    color: #2d9cdb;
+}
+

@@ -584,7 +584,13 @@ function render_exercise($recommended_exercise, $term_id, $feedback = null) {
         }
     
     }
-
+    error_log("feedback correct: " . var_export($feedback['correct'], true));
+    if (isset($feedback['correct']) && $feedback['correct'] === false)  {
+        error_log("displaying solution ".html_entity_decode($recommended_exercise->exercise_solution));
+        echo '<div class="exercise-solution"><h3>Solution:</h3>';
+        echo html_entity_decode($recommended_exercise->exercise_solution);
+        echo '</div>';
+    }
     echo '<hr class="exercise-divider">';
     echo '<div class="submit-button-container">';
     if ( $recommended_exercise->question_type === 'code_runner' || 
@@ -593,14 +599,11 @@ function render_exercise($recommended_exercise, $term_id, $feedback = null) {
     } else{
         echo '<input type="submit" name="submit_answer" value="Check"></div>';
     }
+    
     echo '</form>';
     echo '</div>';
 
-    if ($feedback && !$feedback['correct'] && !empty($recommended_exercise->exercise_solution)) {
-        echo '<div class="exercise-solution"><h3>Solution:</h3>';
-        echo wp_kses_post($recommended_exercise->exercise_solution);
-        echo '</div>';
-    }
+
 }
 
 

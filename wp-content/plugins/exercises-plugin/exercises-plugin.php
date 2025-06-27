@@ -428,7 +428,10 @@ function verify_answer( $exercise_id, $user_answer ) {
         if ( ! isset( $correct_data['correct_option'] ) ) {
             return array( 'correct' => false, 'points' => 0 );
         }
+        error_log("user answer ".trim( $user_answer )." correct option ".trim( $correct_data['correct_option'] ));
         $is_correct = ( trim( $user_answer ) === trim( $correct_data['correct_option'] ) );
+        error_log("correct ".( trim( $user_answer ) === trim( $correct_data['correct_option'] ) ));
+        error_log("is_correct " . ($is_correct ? 'true' : 'false'));
         $points = $is_correct ? 25 : 0;
         return array( 'correct' => $is_correct, 'points' => $points, 'correct_keys' => array($correct_data['correct_option']), 'user_keys' => array($user_answer) );
     }
