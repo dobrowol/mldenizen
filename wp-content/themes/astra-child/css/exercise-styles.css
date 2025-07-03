@@ -147,6 +147,8 @@ textarea {
     visibility: hidden;
     width: max-content;
     max-width: 300px;
+    max-height: 400px; /* Limit the height */
+    overflow-y: auto;   /* Scroll vertically if needed */
     background-color: #333;
     color: #fff;
     text-align: left;

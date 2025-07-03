@@ -382,9 +382,11 @@ function ml_duolingo_learning_path_shortcode() {
     $module_index = 0;
     error_log('Modules found: ' . count($modules));
     $active_module = null;
-    $last_completed_lesson = end($completed_lessons); // ostatnia na liście 
+    $last_completed_lesson = end($completed_lessons);
     $active_module_term_id = null;
-    foreach ($modules as $module) {
+
+    for ($i = 0; $i < count($modules); $i++) {
+        $module = $modules[$i];
         $lessons = get_posts([
             'post_type' => 'lesson',
             'tax_query' => [[
@@ -397,9 +399,20 @@ function ml_duolingo_learning_path_shortcode() {
         ]);
 
         if (in_array($last_completed_lesson, $lessons)) {
-            $active_module_term_id = $module->term_id;
+            // Check if all lessons from this module are completed
+            $all_completed = !array_diff($lessons, $completed_lessons);
+            if ($all_completed && isset($modules[$i + 1])) {
+                // Move to next module if exists
+                $active_module_term_id = $modules[$i + 1]->term_id;
+            } else {
+                $active_module_term_id = $module->term_id;
+            }
             break;
         }
+    }
+    // Fallback: if all modules are completed, show the last module
+    if (!$active_module_term_id && !empty($modules)) {
+        $active_module_term_id = end($modules)->term_id;
     }
 
     foreach ($modules as $module):

@@ -231,13 +231,13 @@ function render_exercise($recommended_exercise, $term_id, $feedback = null) {
 
                     echo '<label class="' . esc_attr($class) . '" style="display:block; margin-bottom:8px;">';
                     echo $safe_label . ' = ';
-                    echo '<input type="number" step="any" value="' . esc_attr($user_value) . '" readonly style="width:80px;">';
+                    echo '<input type="number" step="any" value="' . esc_attr($user_value) . '" readonly style="width:120px;">';
                     echo '</label>';
                 }
                 // Not submitted yet — show editable input
                 else {
                     echo '<label>' . $safe_label . ' = ';
-                    echo '<input type="number" step="any" name="' . $input_name . '" required style="width: 80px;"></label><br>';
+                    echo '<input type="number" step="any" name="' . $input_name . '" required style="width: 120px;"></label><br>';
                 }
             }
 
@@ -283,7 +283,7 @@ function render_exercise($recommended_exercise, $term_id, $feedback = null) {
                     $class = 'incorrect-answer';
                 }
 
-                echo '<label class="' . esc_attr($class) . '" style="display:block;margin-bottom:5px;">';
+                echo '<label class="' . esc_attr($class) . ' mathjax-render" style="display:block;margin-bottom:5px;">';
                 echo '<input type="radio" name="user_answer" value="' . esc_attr($key) . '" ' . $checked . '> ' . wp_kses_post($option);
                 echo '</label>';
             }
@@ -314,7 +314,7 @@ function render_exercise($recommended_exercise, $term_id, $feedback = null) {
 
                 $checked = $is_selected ? 'checked' : '';
 
-                echo '<label class="' . esc_attr($class) . '" style="display:block; margin-bottom:5px;">';
+                echo '<label class="' . esc_attr($class) . ' mathjax-render" style="display:block; margin-bottom:5px;">';
                 echo '<input type="checkbox" name="user_answer[]" value="' . esc_attr($key) . '" ' . $checked . '> ';
                 echo wp_kses_post($option_text);
                 echo '</label>';
@@ -503,13 +503,13 @@ function render_exercise($recommended_exercise, $term_id, $feedback = null) {
                     }
                 }
                 // force exact indent regardless of what's in the original content
-                $replacement = '<div class="dropzone ' . esc_attr($css_class) . '" style="display:inline-block; border:2px dashed #aaa; min-height:30px; margin:3px 0; width:90%; padding:3px 6px; vertical-align:middle;">' .
-                    '<div class="dropzone-content" style="pointer-events:none; white-space:pre; text-align:left;">' . wp_kses_post($options[$submitted_val] ?? 'Drop here') . '</div>' .
+                $replacement = '<div class="dropzone ' . esc_attr($css_class) . '" style="display:inline-block; border:2px dashed #aaa; min-height:30px; margin:3px 0; width:50%; padding:3px 6px; vertical-align:middle;">' .
+                    '<div class="dropzone-content" style="ppointer-events:none; white-space:nowrap; overflow-x:auto; text-align:left;">' . wp_kses_post($options[$submitted_val] ?? 'Drop here') . '</div>' .
                     '<input type="hidden" name="user_answer[' . $i . ']" value="' . esc_attr($submitted_val) . '">' .
                 '</div>';
 
                 $full_content = preg_replace(
-                    '/^\s*\{blank' . $i . '\}/m',
+                    '/\{blank' . $i . '\}/',
                     $replacement,
                     $full_content
                 );
@@ -528,7 +528,7 @@ function render_exercise($recommended_exercise, $term_id, $feedback = null) {
                 $option_with_spaces = str_replace(' ', '&nbsp;', $option);
                 // echo '<li class="draggable-option" draggable="true" data-value="' . esc_attr( $key ) . '" style="padding:8px;border:1px solid #ccc;margin-bottom:5px;cursor:move;background:#f9f9f9;">' . wp_kses_post( $option ) . '</li>';
                 // echo '<li class="draggable-option" draggable="true" data-value="' . esc_attr( $key ) . '" style="padding:8px;border:1px solid #ccc;margin-bottom:5px;cursor:move;background:#f9f9f9;">' . $option_with_spaces . '</li>';
-                echo '<li class="draggable-option" draggable="true" data-value="' . esc_attr($key) . '" style="
+                echo '<li class="draggable-option mathjax-render" draggable="true" data-value="' . esc_attr($key) . '" style="
                     padding:8px;
                     border:1px solid #ccc;
                     margin-bottom:5px;
@@ -566,7 +566,9 @@ function render_exercise($recommended_exercise, $term_id, $feedback = null) {
                     dropzone.addEventListener("drop", e => {
                         e.preventDefault();
                         const value = e.dataTransfer.getData("text/plain");
-                        const text = e.dataTransfer.getData("text/html");
+                        let text = e.dataTransfer.getData("text/html");
+                        text = text.replace(/[\r\n]+/g, " "); 
+                        console.log("🔹 Raw dragged text (text/html):", JSON.stringify(text));      
                         
                         dropzone.querySelector("input").value = value;
                         dropzone.querySelector(".dropzone-content").innerText = text;

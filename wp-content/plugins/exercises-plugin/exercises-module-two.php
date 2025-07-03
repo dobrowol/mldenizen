@@ -156,7 +156,7 @@ function add_probability_distributions_exercises_to_the_lesson($lesson_number) {
     - \( p \) is the probability of success on a single trial.<br>
 
     <strong>Example:</strong>  <br>
-    Suppose a user has a 20% chance of clicking a button on any page they visit. <span class="tooltip">They visit 3 pages independently.<span class="tooltip-text">Told ya, that's the sacred incantation right there: independent and identically distributed. Or as the Neuronite monks chant it during the Midnight Sampling Ritual: "i.i.d., i.i.d., I summon thee, O Central Limit Theorem!”. Each visit, each click, each little stochastic decision dances alone and yet follows the same mysterious distribution scroll. No collusion, no memory, no hidden whispers between trials. Just pure, unadulterated statistical solitude — identical in law, independent in fate. Like triplets raised in separate libraries./span></span><br>
+    Suppose a user has a 20% chance of clicking a button on any page they visit. <span class="tooltip">They visit 3 pages independently.<span class="tooltip-text">Told ya, that's the sacred incantation right there: independent and identically distributed. Or as the Neuronite monks chant it during the Midnight Sampling Ritual: "i.i.d., i.i.d., I summon thee, O Central Limit Theorem!”. Each visit, each click, each little stochastic decision dances alone and yet follows the same mysterious distribution scroll. No collusion, no memory, no hidden whispers between trials. Just pure, unadulterated statistical solitude — identical in law, independent in fate. Like triplets raised in separate libraries.</span></span><br>
         <br>
     <strong>Question:</strong>  <br>
     What is the probability that the user clicks the button exactly once during those 3 visits?<br>
@@ -415,7 +415,7 @@ function add_exponential_family_exercises_to_the_lesson($lesson_number) {
     What is the primary role of the natural parameter \( \\eta(\\theta) \) in the exponential family?<br>
 
     EOT,
-        'Solution: The natural parameter \( \eta(\theta) \) determines the shape or behavior of the distribution of \( y \) by weighting the sufficient statistic \( T(y) \) in the exponent, influencing the probability density or mass function. For example, in a Bernoulli distribution, \( \eta = \ln\left(\frac{p}{1 - p}\right) \) controls the probability of success. Answer: B.',
+        'Solution: The natural parameter \(\\eta(\theta) \) determines the shape or behavior of the distribution of \( y \) by weighting the sufficient statistic \( T(y) \) in the exponent, influencing the probability density or mass function. For example, in a Bernoulli distribution, \(\\eta = \ln\left(\frac{p}{1 - p}\right) \) controls the probability of success. Answer: B.',
         'easy',
         'one_of_many',
         json_encode([
@@ -459,7 +459,6 @@ function add_exponential_family_exercises_to_the_lesson($lesson_number) {
     
 
 }
-
 function add_glm_exercises_to_the_lesson($lesson_number){
 
     $module_two_term = get_term_by( 'slug', 'module-two', 'course_topic' );
@@ -479,10 +478,18 @@ function add_glm_exercises_to_the_lesson($lesson_number){
         $category_id,
         'Exercise ' . $exercise_number . ' – Properties of Generalized Linear Models',
         <<<EOT
-    <strong>Generalized Linear Models (GLMs)</strong> extend the exponential family to incorporate covariates, modeling the relationship between a response variable \( y \) and predictors \( \mathbf{x} \). A GLM consists of three components:<br>
+    <strong>Generalized Linear Models (GLMs)</strong> extend the exponential family to incorporate <span class="tooltip">covariates <span class="tooltip-text">A covariate, dear traveler of the Data Plains, is one of those mysterious creatures that quietly influences your outcome variable while pretending it’s just “passing through.” It’s the input — the X to your Y, the question to your answer, the weather to your umbrella sales. It doesn’t shout. It doesn’t demand attention. But without it, your precious prediction would be floating in statistical space like a lost sock in a cosmic dryer.
+
+    Think of covariates as the party guests who bring all the drama but never appear on the invitation. They shape the night, alter the mood, and leave you wondering why everyone’s crying over the guacamole.
+
+    You don’t have to understand them fully just yet — many a Neuronite spent entire epochs mistaking them for noise or furniture.
+
+    But heed this warning: random covariate shift is coming. It looms just offstage, wrapped in distribution drift and armed with a sinister smile. When it arrives, your model — so carefully trained, so sure of itself — will suddenly forget how to tie its own shoelaces.
+
+    So mark the word: covariate. Whisper it into your loss function. Write it in the margin of your notes. One day soon, you'll need it. Probably right after deployment.</span></span>, modeling the relationship between a response variable \( y \) and predictors \( \mathbf{x} \). A GLM consists of three components:<br>
     1. <strong>Random Component</strong>: The response \( y \) follows a distribution from the exponential family (e.g., Gaussian, Bernoulli, Poisson).<br>
-    2. <strong>Systematic Component</strong>: A linear predictor \( \eta = \mathbf{w} \cdot \mathbf{x} \), where \( \mathbf{w} \) are weights and \( \mathbf{x} \) are covariates.<br>
-    3. <strong>Link Function</strong>: A function \( g \) such that \( g(\mu) = \eta \), where \( \mu = E[y] \) is the expected value of the response.<br>
+    2. <strong>Systematic Component</strong>: A linear predictor \( \\eta = \mathbf{w} \cdot \mathbf{x} \), where \( \mathbf{w} \) are weights and \( \mathbf{x} \) are covariates.<br>
+    3. <strong>Link Function</strong>: A function \( g \) such that \( g(\mu) = \\eta \), where \( \mu = E[y] \) is the expected value of the response.<br>
         <br>
     Key properties of GLMs include:<br>
     - They use the exponential family to model various response distributions.<br>
@@ -515,6 +522,475 @@ function add_glm_exercises_to_the_lesson($lesson_number){
         $exercise_number
     );
     $exercise_number++;
+    $result = add_exercise(
+    $lesson_id,
+    $category_id,
+    'Exercise ' . $exercise_number . ' – From Exponential Family to GLM',
+    <<<EOT
+    Suppose the conditional distribution of the target variable is from the <strong>exponential family</strong>:
+
+    \[
+    p(y \mid \\theta) = h(y) \\exp(\\eta \cdot T(y) - A(\\eta))
+    \]
+
+    We now define the following assumptions for a Generalized Linear Model (GLM):<br>
+    1. The input \( \mathbf{x} \in \mathbb{R}^n \).<br>
+    2. The natural parameter \(\\eta \) is a linear function of the input: \(\\eta = \mathbf{x}^\\top \boldsymbol{w} \).<br>
+    3. The model output at test time is the expected value \( \mu = \mathbb{E}[y \mid \mathbf{x}] \).<br>
+    <br>
+    Given this, the link function connects the expectation to the linear predictor:  
+    \[
+    g(\mu) =\\eta = \mathbf{x}^\\top \boldsymbol{w}
+    \]
+    and the <strong>hypothesis function</strong> is:
+    \[
+    h(\mathbf{x}) = \mathbb{E}[y \mid \mathbf{x}]
+    \]
+    <br>
+    <strong>Question:</strong><br>
+    Which of the following are assumptions or structural components of GLMs based on the exponential family framework?
+
+    EOT,
+        'Solution: <br>
+    A: True — The conditional distribution \( y \mid \mathbf{x} \) is from the exponential family.<br>
+    B: True — The natural parameter \(\\eta \) is modeled as a linear function of input \( \mathbf{x} \).<br>
+    C: True — The output of the model is the expected value \( \mu \), making the hypothesis function \( h(\mathbf{x}) = \mathbb{E}[y \mid \mathbf{x}] \).<br>
+    D: False — The natural parameter is not necessarily equal to the expected value; rather, \( \mu \) is obtained via a link function \( g(\mu) =\\eta \).<br>
+    Correct answers: A, B, C.',
+        'medium',
+        'multiple_choice',
+        json_encode([
+            "A" => "The conditional distribution \( y \mid \mathbf{x} \) is in the exponential family.",
+            "B" => "The natural parameter is a linear function of input: \(\\eta = \mathbf{x}^\\top \boldsymbol{w} \).",
+            "C" => "The hypothesis function returns the expected value: \( h(\mathbf{x}) = \mathbb{E}[y \mid \mathbf{x}] \).",
+            "D" => "The natural parameter equals the expected value: \(\\eta = \mathbb{E}[y \mid \mathbf{x}] \)."
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+        json_encode(["correct_options" => ["A", "B", "C"]]),
+        $exercise_number
+    );
+    $exercise_number++;
+    $result = add_exercise(
+        $lesson_id,
+        $category_id,
+        'Exercise ' . $exercise_number . ' – Model vs. Distribution in GLMs',
+        <<<EOT
+    In a Generalized Linear Model (GLM), it is important to distinguish between the <strong>model</strong> and the <strong>distribution</strong>:<br><br>
+
+    - The <strong>model</strong> defines how we compute the natural parameter \(\\eta \) from the input \( \mathbf{x} \). Usually:  
+    \[
+        \\eta = \mathbf{x}^\\top \boldsymbol{w}
+    \]<br>
+
+    - The <strong>distribution</strong> specifies how the target variable \( y \) is generated, given \(\\eta \), and must belong to the <strong>exponential family</strong>.  
+    That is:  
+    \[
+        p(y \mid\\eta) = h(y) \\exp(\\eta \cdot T(y) - A(\\eta))
+    \]<br><br>
+
+    <strong>Key relationship:</strong>  
+    The <strong>output of the model</strong> (i.e. \(\\eta \)) becomes the <strong>parameter of the distribution</strong>.
+
+    <br><br>
+    <strong>Question:</strong><br>
+    Which of the following correctly describe the distinction between the model and the distribution in a GLM?
+
+    EOT,
+        "Solution:<br>
+    A: True — The model maps input \( \mathbf{x} \) to the natural parameter \(\\eta \).<br>
+    B: True — The distribution describes how \( y \) is generated given \(\\eta \), and belongs to the exponential family.<br>
+    C: False — \(\\eta \) is the output of the model, not the observed variable.<br>
+    D: True — The distribution's natural parameter is determined by the model's output.<br>
+    Correct answers: A, B, D.",
+        'medium',
+        'multiple_choice',
+        json_encode([
+            "A" => "The model defines how \(\\eta \) is computed from \( \mathbf{x} \).",
+            "B" => "The distribution defines how \( y \) is generated, given \(\\eta \).",
+            "C" => "The natural parameter \(\\eta \) is the observed output.",
+            "D" => "The model produces \(\\eta \), which serves as the parameter for the distribution."
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+        json_encode(["correct_options" => ["A", "B", "D"]]),
+        $exercise_number
+    );
+    $exercise_number++;
+    $result = add_exercise(
+        $lesson_id,
+        $category_id,
+        'Exercise ' . $exercise_number . ' – What Does Training a GLM Actually Learn?',
+        <<<EOT
+    In a Generalized Linear Model (GLM), we assume that the conditional distribution of \( y \mid \mathbf{x} \) belongs to the exponential family, with the natural parameter \(\\eta = \mathbf{x}^\\top \boldsymbol{w} \).<br><br>
+
+    During training, we are given a dataset of input-output pairs \( (\mathbf{x}^{(i)}, y^{(i)}) \), and we aim to choose model parameters \( \boldsymbol{w} \) that best explain the data.
+
+    <br><br>
+    <strong>Key point:</strong><br>
+    We do <strong>not</strong> learn the parameters of the exponential family distribution directly. Instead, we learn the parameters of the <strong>model</strong> that produces the natural parameter \(\\eta \), which in turn defines the distribution.<br><br>
+
+    In other words, we maximize the likelihood of the observed data by optimizing \( \boldsymbol{w} \), not \(\\eta \), which is computed as \(\\eta = \mathbf{x}^\\top \boldsymbol{w} \).
+
+    <br><br>
+    <strong>Question:</strong><br>
+    Which of the following statements are correct?
+
+    EOT,
+        'Solution:<br>
+    A: False — We do not learn the distribution parameters directly; \(\\eta \) is derived from \( \mathbf{x} \) and \( \boldsymbol{w} \).<br>
+    B: True — The parameters we optimize are the weights \( \boldsymbol{w} \) in the linear model.<br>
+    C: True — The natural parameter \(\\eta \) depends on \( \boldsymbol{w} \), which we learn.<br>
+    D: False — We do not estimate \(\\eta \) independently of \( \mathbf{x} \); it is computed via the model.<br>
+    Correct answers: B, C',
+        'medium',
+        'multiple_choice',
+        json_encode([
+            "A" => "We learn the parameters of the distribution directly, such as \(\\eta \).",
+            "B" => "We optimize the model weights \( \boldsymbol{w} \), not the distribution parameters.",
+            "C" => "The natural parameter \(\\eta \) depends on the model weights \( \boldsymbol{w} \).",
+            "D" => "We estimate \(\\eta \) directly without using \( \mathbf{x} \)."
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+        json_encode(["correct_options" => ["B", "C"]]),
+        $exercise_number
+    );
+    $exercise_number++;
+    $result = add_exercise(
+        $lesson_id,
+        $category_id,
+        'Exercise ' . $exercise_number . ' – How Do We Train a GLM?',
+        <<<EOT
+    In Generalized Linear Models (GLMs), we train the model by estimating parameters \( \boldsymbol{w} \) that maximize the likelihood of the observed data.<br><br>
+
+    Given data pairs \( (\mathbf{x}^{(i)}, y^{(i)}) \), we assume that the response \( y^{(i)} \) follows an exponential family distribution whose natural parameter \(\\eta^{(i)} = \mathbf{x}^{(i)\top} \boldsymbol{w} \).<br><br>
+
+    The model is trained using <strong>Maximum Likelihood Estimation (MLE)</strong>:
+
+    \[
+    \boldsymbol{w}^* = \arg\max_{\boldsymbol{w}} \sum_{i=1}^{n} \log p(y^{(i)} \mid \mathbf{x}^{(i)}; \boldsymbol{w})
+    \]
+
+    Because this expression is often differentiable, we typically use <strong>gradient ascent</strong> (or descent on the negative log-likelihood) to find \( \boldsymbol{w} \).
+
+    <br><br>
+    <strong>Question:</strong><br>
+    Which of the following statements about GLM training are true?
+
+    EOT,
+        'Solution:<br>
+    A: True — Training a GLM means maximizing the likelihood of the observed data.<br>
+    B: False — We do not use closed-form least squares; GLMs generalize beyond Gaussian.<br>
+    C: True — Gradient ascent is commonly used to optimize the log-likelihood.<br>
+    D: True — The objective function is the log-likelihood, derived from the exponential family.<br>
+    Correct answers: A, C, D',
+        'medium',
+        'multiple_choice',
+        json_encode([
+            "A" => "GLMs are trained using maximum likelihood estimation.",
+            "B" => "GLMs always use least squares to find a closed-form solution.",
+            "C" => "GLMs are often optimized using gradient ascent on the log-likelihood.",
+            "D" => "The training objective is the log-likelihood of the exponential family distribution."
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+        json_encode(["correct_options" => ["A", "C", "D"]]),
+        $exercise_number
+    );
+    $exercise_number++;
+    $result = add_exercise(
+        $lesson_id,
+        $category_id,
+        'Exercise ' . $exercise_number . ' – Gradient Update Rule in GLM Training',
+        <<<EOT
+    In a Generalized Linear Model (GLM), we train the model by maximizing the log-likelihood using gradient-based optimization. For a single training example \( (\mathbf{x}, y) \), the gradient of the log-likelihood with respect to parameter \( \\theta_j \) is:
+
+    \[
+    \\frac{\partial \\ell}{\partial \\theta_j} = (y - \hat{y}) x_j
+    \]
+
+    where \( \hat{y} = h(\mathbf{x}) = \mathbb{E}[y \mid \mathbf{x}] \) is the model's predicted value.<br><br>
+
+    Using gradient ascent with learning rate \( \alpha \), the update rule becomes:
+
+    \[
+    \\theta_j \leftarrow \\theta_j + \alpha (y - \hat{y}) x_j
+    \]
+
+    This rule adjusts each parameter based on the input value \( x_j \), the learning rate, and the prediction error.
+
+    <br><br>
+    <strong>Question:</strong><br>
+    Which of the following correctly describes the learning update rule for parameter \( \\theta_j \) in GLM training?
+
+    EOT,
+        'Solution:<br>
+    A: True — This is the correct gradient ascent rule for log-likelihood in GLMs.<br>
+    B: False — This is the Perceptron update rule (does not use \( \hat{y} \)).<br>
+    C: False — This form would move in the wrong direction (negative gradient).<br>
+    D: False — Division by \( x_j \) is incorrect and has no basis in the MLE derivation.<br>
+    Correct answer: A',
+        'medium',
+        'one_of_many',
+        json_encode([
+            "A" => "\( \\theta_j \leftarrow \\theta_j + \alpha (y - \hat{y}) x_j \)",
+            "B" => "\( \\theta_j \leftarrow \\theta_j + \alpha y x_j \)",
+            "C" => "\( \\theta_j \leftarrow \\theta_j - \alpha (y - \hat{y}) x_j \)",
+            "D" => "\( \\theta_j \leftarrow \\theta_j + \alpha\\frac{(y - \hat{y})}{x_j} \)"
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+        json_encode(["correct_option" => "A"]),
+        $exercise_number
+    );
+    $exercise_number++;
+    $result = add_exercise(
+        $lesson_id,
+        $category_id,
+        'Exercise ' . $exercise_number . ' – From Stochastic to Batch Gradient Ascent',
+        <<<EOT
+    In Generalized Linear Models (GLMs), we often use <strong>gradient ascent</strong> to maximize the log-likelihood. For a single training example \( (\mathbf{x}^{(i)}, y^{(i)}) \), the parameter update rule for \( \\theta_j \) is:
+
+    \[
+    \\theta_j \leftarrow \\theta_j + \alpha (y^{(i)} - \hat{y}^{(i)}) x^{(i)}_j
+    \]
+
+    where \( \hat{y}^{(i)} \) is the predicted value for the \( i \)-th input.
+
+    <br><br>
+    In <strong>batch gradient ascent</strong>, instead of updating using a single example, we compute the gradient over the entire dataset of \( n \) examples:
+
+    \[
+    \\theta_j \leftarrow \\theta_j + \alpha \sum_{i=1}^{n} (y^{(i)} - \hat{y}^{(i)}) x^{(i)}_j
+    \]
+
+    This provides a smoother and more stable update by averaging over the dataset.
+
+    <br><br>
+    <strong>Question:</strong><br>
+    Which of the following correctly represents the batch gradient update rule for parameter \( \\theta_j \) in GLMs?
+
+    EOT,
+        'Solution:<br>
+    A: True — This is the correct batch gradient ascent rule.<br>
+    B: False — This omits the error term \( y - \hat{y} \).<br>
+    C: False — Averaging instead of summing is optional, but this form drops the learning rate.<br>
+    D: False — Subtracting the sum of gradients is gradient descent, not ascent.<br>
+    Correct answer: A',
+        'medium',
+        'one_of_many',
+        json_encode([
+            "A" => "\( \\theta_j \leftarrow \\theta_j + \alpha \sum_{i=1}^{n} (y^{(i)} - \hat{y}^{(i)}) x^{(i)}_j \)",
+            "B" => "\( \\theta_j \leftarrow \\theta_j + \alpha \sum_{i=1}^{n} x^{(i)}_j \)",
+            "C" => "\( \\theta_j \leftarrow \sum_{i=1}^{n} (y^{(i)} - \hat{y}^{(i)}) x^{(i)}_j \)",
+            "D" => "\( \\theta_j \leftarrow \\theta_j - \alpha \sum_{i=1}^{n} (y^{(i)} - \hat{y}^{(i)}) x^{(i)}_j \)"
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+        json_encode(["correct_option" => "A"]),
+        $exercise_number
+    );
+    $exercise_number++;
+    $result = add_exercise(
+        $lesson_id,
+        $category_id,
+        'Exercise ' . $exercise_number . ' – Terminology in Generalized Linear Models',
+        <<<EOT
+    In the context of Generalized Linear Models (GLMs), several key terms describe the structure inherited from the exponential family:
+
+    <br><br>
+    - <strong>Natural parameter</strong> \(\\eta \): The parameter that appears linearly in the exponent of the exponential family distribution. In GLMs, \(\\eta = \mathbf{x}^\\top \boldsymbol{w} \).
+    <br>
+    - <strong>Canonical link function</strong>: A link function \( g \) that satisfies \( g(\mu) =\\eta \). When this link function matches the natural parameter directly, it's called canonical.
+    <br>
+    - <strong>Canonical response</strong>: The expected value \( \mu = \mathbb{E}[y] \), which is related to the natural parameter by the gradient of the log-partition function:
+    \[
+    \mu =\\frac{dA(\\eta)}{d\eta}
+    \]
+
+    This gradient defines the <strong>canonical response</strong>.
+
+    <br><br>
+    <strong>Question:</strong><br>
+    Which of the following statements are true?
+
+    EOT,
+        'Solution:<br>
+    A: True — The natural parameter appears linearly in the exponential family form.<br>
+    B: True — The canonical link maps \( \mu \) to \(\\eta \), often with \( g(\mu) = \log\left(\\frac{\mu}{1 - \mu} \right) \) for Bernoulli.<br>
+    C: True — The canonical response is \( \mu =\\frac{dA(\\eta)}{d\eta} \), the gradient of the log-partition function.<br>
+    D: False — The natural parameter \(\\eta \) is computed from input, not equal to the expected value \( \mu \).<br>
+    Correct answers: A, B, C',
+        'medium',
+        'multiple_choice',
+        json_encode([
+            "A" => "The natural parameter appears linearly in the exponential family distribution.",
+            "B" => "The canonical link function relates the expected value \( \mu \) to \(\\eta \).",
+            "C" => "The canonical response \( \mu \) is the gradient of the log-partition function: \( \mu = \\frac{dA(\\eta)}{d\eta} \).",
+            "D" => "The natural parameter \(\\eta \) equals the expected value \( \mu \)."
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+        json_encode(["correct_options" => ["A", "B", "C"]]),
+        $exercise_number
+    );
+    $exercise_number++;
+    $result = add_exercise(
+        $lesson_id,
+        $category_id,
+        'Exercise ' . $exercise_number . ' – Parametrizations in GLMs',
+        <<<EOT
+    In Generalized Linear Models (GLMs), there are three different kinds of parameters involved, depending on the level of abstraction:
+
+    <br><br>
+    1. <strong>Model parameters</strong> \( \boldsymbol{\\theta} \): These are the parameters of the linear predictor \(\\eta = \mathbf{x}^\\top \boldsymbol{\\theta} \). These are what we learn during training.
+    <br><br>
+    2. <strong>Natural parameters</strong> \(\\eta \): These are the parameters used in the exponential family form of the distribution:
+    \[
+    p(y) = h(y) \\exp(\\eta \cdot T(y) - A(\\eta))
+    \]
+    The natural parameter \(\\eta \) is produced by the model but not learned directly.
+    <br><br>
+    3. <strong>Canonical parameters</strong>: These refer to standard parameters used to describe common distributions — e.g.:
+    <ul>
+    <li>\( \phi \) for Bernoulli (probability of success)</li>
+    <li>\( \mu \) and \( \sigma \) for Gaussian (mean and standard deviation)</li>
+    </ul>
+
+    <br>
+    GLMs define a mapping:
+    \[
+    \mathbf{x} \xrightarrow{\text{model}}\\eta \xrightarrow{\text{link function}} \mu
+    \]
+
+    <br>
+    <strong>Question:</strong><br>
+    Which of the following statements are true?
+
+    EOT,
+        'Solution:<br>
+    A: True — Model parameters \( \\theta \) determine \(\\eta \) through \(\\eta = \mathbf{x}^\\top \boldsymbol{\\theta} \).<br>
+    B: True — The model outputs the natural parameter \(\\eta \), which is then used by the distribution.<br>
+    C: False — We do not directly optimize the canonical parameters like \( \phi \) or \( \mu \); they’re derived via link functions.<br>
+    D: True — The only parameters learned during training are the model parameters \( \boldsymbol{\\theta} \).<br>
+    Correct answers: A, B, D',
+        'medium',
+        'multiple_choice',
+        json_encode([
+            "A" => "The model parameters \( \boldsymbol{\\theta} \) determine the natural parameter \(\\eta \).",
+            "B" => "The natural parameter \(\\eta \) is the output of the linear model.",
+            "C" => "We directly learn canonical parameters like \( \mu \) and \( \phi \).",
+            "D" => "The only parameters learned during training are the linear model weights \( \boldsymbol{\\theta} \)."
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+        json_encode(["correct_options" => ["A", "B", "D"]]),
+        $exercise_number
+    );
+    $exercise_number++;
+    $result = add_exercise(
+        $lesson_id,
+        $category_id,
+        'Exercise ' . $exercise_number . ' – Connections Between Model, Natural, and Canonical Parameters',
+        <<<EOT
+    In a Generalized Linear Model (GLM), three types of parameters are involved:
+
+    <br><br>
+    - <strong>Model parameters</strong> \( \boldsymbol{\\theta} \): The weights of the linear model.
+    - <strong>Natural parameter</strong> \(\\eta \): The parameter in the exponential family form.
+    - <strong>Canonical parameter</strong> (e.g. \( \mu \), \( \phi \)): The standard parameter of the distribution, such as the mean or probability.
+
+    <br><br>
+    The relationships between these parameters are:
+
+    <ol>
+    <li><strong>From model to natural parameter:</strong>  
+    \[
+    \\eta = \mathbf{x}^\\top \boldsymbol{\\theta}
+    \]
+    This is a linear transformation.</li>
+    
+    <li><strong>From natural to canonical parameter:</strong>  
+    \[
+    \mu =\\frac{dA(\\eta)}{d\eta}
+    \]
+    This gives the canonical response (expected value). In the canonical link case:
+    \[
+    \\eta = g(\mu)
+    \]</li>
+    </ol>
+
+    <br>
+    <strong>Question:</strong><br>
+    Which of the following describe correct relationships between parameters in a GLM?
+
+    EOT,
+        'Solution:<br>
+    A: True — The natural parameter is a linear function of the input and model weights.<br>
+    B: True — The expected value (canonical response) is given by \( \mu = A(\\eta) \).<br>
+    C: False — We do not compute \( \mu \) directly from \( \mathbf{x} \); we go through \(\\eta \).<br>
+    D: True — The canonical link function connects \( \mu \) and \(\\eta \).<br>
+    Correct answers: A, B, D',
+        'medium',
+        'multiple_choice',
+        json_encode([
+            "A" => "The natural parameter \(\\eta \) is computed as \( \mathbf{x}^\\top \boldsymbol{\\theta} \).",
+            "B" => "The canonical response \( \mu \) is the derivative of the log-partition function: \( \mu = \\frac{dA}{d\eta} \).",
+            "C" => "We compute \( \mu \) directly from \( \mathbf{x} \), skipping \(\\eta \).",
+            "D" => "The canonical link function connects the canonical response \( \mu \) and natural parameter \(\\eta \)."
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+        json_encode(["correct_options" => ["A", "B", "D"]]),
+        $exercise_number
+    );
+    $exercise_number++;
+    $result = add_exercise(
+        $lesson_id,
+        $category_id,
+        'Exercise ' . $exercise_number . ' – Why Is Logistic Regression Still Called Regression?',
+        <<<EOT
+    In traditional machine learning terms:
+    - <strong>Regression</strong> means predicting a continuous output.
+    - <strong>Classification</strong> means predicting discrete categories.
+
+    Yet in statistics, both <strong>linear regression</strong> and <strong>logistic regression</strong> are called <strong>regression models</strong> — even though logistic regression is used for classification.
+
+    <br><br>
+    <strong>Why?</strong><br>
+    Because in Generalized Linear Models (GLMs), “regression” refers not to the output type, but to the structure of the model:
+    - Both models use a <strong>linear function of inputs</strong>: \(\\eta = \mathbf{x}^\\top \boldsymbol{\\theta} \)
+    - Both models use that \(\\eta \) to predict the <strong>expected value</strong> of \( y \), possibly through a <strong>link function</strong>.
+
+    For example:
+    <ul>
+    <li>Linear regression: \( \mu =\\eta \)</li>
+    <li>Logistic regression: \( \mu = \sigma(\\eta) =\\frac{1}{1 + e^{-\eta}} \)</li>
+    </ul>
+
+    In both cases, the <strong>structure is a regression on the expected value</strong> — even if the final prediction is categorical.
+
+    <br><br>
+    <strong>Question:</strong><br>
+    Why is logistic regression still called "regression"?
+
+    EOT,
+        'Solution:<br>
+    A: True — Logistic regression uses a linear model to predict the expected value (probability), just like linear regression.<br>
+    B: False — Logistic regression is not misnamed; it follows the GLM definition of regression.<br>
+    C: False — It is not called regression because of a mistake; it’s deliberate and structural.<br>
+    D: True — In GLMs, “regression” refers to the linear structure, not to the output type.<br>
+    Correct answers: A, D',
+        'easy',
+        'multiple_choice',
+        json_encode([
+            "A" => "Because logistic regression models a transformed expected value via a linear predictor.",
+            "B" => "Because someone misnamed it and it stuck.",
+            "C" => "Because it was originally used for continuous values.",
+            "D" => "Because in GLMs, regression refers to modeling structure, not output type."
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+        json_encode(["correct_options" => ["A", "D"]]),
+        $exercise_number
+    );
+    $exercise_number++;
+
+}
+function add_exponential_family_two_exercises_to_the_lesson($lesson_number){
+
+    $module_two_term = get_term_by( 'slug', 'module-two', 'course_topic' );
+    if ( $module_two_term ) {
+        $category_id = $module_two_term->term_id;
+    } else {
+        error_log('Term "module-two" not found in course_topic taxonomy.');
+        $category_id = 0;
+    }
+    $exercise_number = 1;
+    // Retrieve the ID of the first lesson for this category.
+    $lesson_id = get_lesson_for_category( $category_id, $lesson_number );
+    
     // Exercise 2: Generalized Linear Model and MLE
     $result = add_exercise(
         $lesson_id,
@@ -532,13 +1008,13 @@ function add_glm_exercises_to_the_lesson($lesson_number){
     Given a logistic regression model with features \( \mathbf{x} = [1, 2] \) (including bias) and weights \( \mathbf{w} = [0.5, -0.3] \), the linear predictor is:<br>
 
     \[
-    \\eta = \mathbf{w} \cdot \mathbf{x}
+     \\eta = \mathbf{w} \cdot \mathbf{x}
     \]
 
     The predicted probability is obtained via the logistic function:
 
     \[
-    \mu = \sigma(\\eta) = \\frac{1}{1 + e^{-\\eta}}
+     \mu = \sigma(\\eta) = \\frac{1}{1 + e^{-\\eta}}
     \]
 
     <strong>Question:</strong>  
@@ -556,8 +1032,8 @@ function add_glm_exercises_to_the_lesson($lesson_number){
         'labeled_inputs',
         null,
         json_encode(["correct_options" => [
-            "eta" => "-0.1",
-            "mu" => "0.475"
+            "\(\\eta\)" => "-0.1",
+            "\(\mu\)" => "0.475"
         ]]),
         $exercise_number
     );
@@ -682,7 +1158,7 @@ function add_glm_exercises_to_the_lesson($lesson_number){
     EOT,
         'Solution:  <br>
     1. \( \mathbf{w} \cdot \mathbf{x} = 0.5 \cdot 1 + (-0.3) \cdot 2 = 0.5 - 0.6 = -0.1 \).  <br>
-    2. \( \mu = \sigma(-0.1) = \frac{1}{1 + e^{0.1}} \approx \frac{1}{1 + 1.1052} \approx 0.475 \).  <br>
+    2. \( \mu = \sigma(-0.1) =\\frac{1}{1 + e^{0.1}} \approx\\frac{1}{1 + 1.1052} \approx 0.475 \).  <br>
     3. \( y - \mu = 1 - 0.475 = 0.525 \).  <br>
     4. Gradient = \( 0.525 \cdot [1, 2] = [0.525, 1.050] \).  <br>
     Answer: [0.525, 1.050].',
@@ -691,8 +1167,8 @@ function add_glm_exercises_to_the_lesson($lesson_number){
         null,
         json_encode([
             "correct_options" => [
-                "w0" => "0.525",
-                "w1" => "1.050"
+                "\(w_0\)" => "0.525",
+                "\(w_1\)" => "1.050"
             ]
         ]),
         $exercise_number
@@ -705,7 +1181,7 @@ function add_glm_exercises_to_the_lesson($lesson_number){
         $category_id,
         'Exercise ' . $exercise_number . ' – Logistic Regression in Exponential Family',
         <<<EOT
-    Logistic regression models the target variable \( y \in \{0, 1\} \) as a Bernoulli distribution, parameterized by \( p = \sigma(\mathbf{w} \cdot \mathbf{x}) \), where \( \sigma(z) = \frac{1}{1 + e^{-z}} \). In the exponential family, the natural parameter \( \eta \) relates to the linear predictor.
+    Logistic regression models the target variable \( y \in \{0, 1\} \) as a Bernoulli distribution, parameterized by \( p = \sigma(\mathbf{w} \cdot \mathbf{x}) \), where \( \sigma(z) =\\frac{1}{1 + e^{-z}} \). In the exponential family, the natural parameter \(\\eta \) relates to the linear predictor.
     <br>
     Given the canonical form of the Bernoulli distribution:<br>
 
@@ -757,7 +1233,7 @@ function add_repetition_exercises_to_the_lesson($lesson_number) {
         $category_id,
         'Exercise ' . $exercise_number . ' – Binary Inputs in Neuron Types',
         <<<EOT
-    In neural network models, neurons process input features to produce an output based on a weighted sum and an activation function. Some neurons are designed to accept **binary inputs**, where each input feature \( x_i \in \{0, 1\}\). Consider the following neuron types:<br>
+    In neural network models, neurons process input features to produce an output based on a weighted sum and an activation function. Some neurons are designed to accept <strong>binary inputs</strong>, where each input feature \( x_i \in \{0, 1\}\). Consider the following neuron types:<br>
     - <strong>McCulloch-Pitts Neuron</strong>: An early computational model (1943) that uses binary inputs and outputs, designed to mimic logical operations with a threshold activation.<br>
     - <strong>Perceptron</strong>: A single-layer model (1958) introduced by Rosenblatt, capable of learning linear decision boundaries, typically accepting continuous or binary inputs but often using binary inputs in early applications.<br>
     - <strong>Modern Neuron</strong>: A neuron in contemporary neural networks, typically part of deep networks, processing continuous real-valued inputs with activation functions like ReLU or sigmoid.<br>
@@ -789,12 +1265,12 @@ function add_repetition_exercises_to_the_lesson($lesson_number) {
     Perceptrons use <strong>activation functions</strong> to transform the weighted Perceptron inputs into an output. Two common activation functions are:
     - <strong>Threshold Function</strong>: Outputs 1 if the weighted sum exceeds a threshold, otherwise 0, i.e., \( f(z) = 1 \) if \( z \geq \\theta \), else \( f(z) = 0 \).
     - <strong>Softmax Function</strong>: Outputs a probability distribution over multiple classes, i.e., \( \sigma(\mathbf{z})_i = \\frac{e^{z_i}}{\sum_j e^{z_j}} \).
-
-    Consider the following scenarios:
-    - <strong>Scenario A</strong>: A single-layer perceptron for binary classification (e.g., AND gate).
-    - <strong>Scenario B</strong>: A neural network output layer for multiclass classification (e.g., digit recognition).
-    - <strong>Scenario C</strong>: A hidden layer in a modern neural network.
-
+        <br>
+    Consider the following scenarios:<br>
+    - <strong>Scenario A</strong>: A single-layer perceptron for binary classification (e.g., AND gate).<br>
+    - <strong>Scenario B</strong>: A neural network output layer for multiclass classification (e.g., digit recognition).<br>
+    - <strong>Scenario C</strong>: A hidden layer in a modern neural network.<br>
+        <br>
     <strong>Question:</strong><br>
     Which scenarios correctly match the activation function to the neuron type? Select all that apply.<br>
 
@@ -814,6 +1290,48 @@ function add_repetition_exercises_to_the_lesson($lesson_number) {
             "D" => "Scenario B uses threshold"
         ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
         json_encode(["correct_options" => ["A", "B"]]),
+        $exercise_number
+    );
+    $exercise_number++;
+    // Exercise 4: Geometric Change After Misclassifying a Positive Example
+    $result = add_exercise(
+        $lesson_id,
+        $category_id,
+        'Exercise ' . $exercise_number . ' – Geometric Effect of Misclassification',
+        <<<EOT
+    In the perceptron algorithm, when a <strong>positive input</strong> (true label \( y = 1 \)) is misclassified as negative (\( \hat{y} = 0 \)), the weight vector is updated using:<br>
+    <br>
+    \[
+    \mathbf{w} \leftarrow \mathbf{w} + \\eta \mathbf{x}
+    \]<br>
+    <br>
+    This update changes the direction of the weight vector.<br>
+    <br>
+    <strong>Geometric interpretation:</strong> <br>
+    <br>
+    <img src="https://mldenizen.com/wp-content/uploads/2025/07/miscalssification.png" alt="Misclasiification of positive input" style="max-width:100%; height:auto; border:1px solid #ccc; padding:5px;"><br>
+    <br>
+    <strong>Question:</strong><br>
+    After this update, does the weight vector become more aligned (i.e., the angle between \( \mathbf{w} \) and \( \mathbf{x} \) decreases), or less aligned with the input vector \( \mathbf{x} \)?
+    EOT,
+        'Solution:  
+    Since the weight vector is updated by adding the input vector \( \mathbf{x} \), the new weight vector points more in the direction of \( \mathbf{x} \).<br>
+    This reduces the angle between them, making them more aligned.<br>
+    <strong>Answer: It becomes more aligned.</strong>
+    <br>
+    <img src="https://mldenizen.com/wp-content/uploads/2025/07/updated_decision_boundary.png" alt="Update makes weight vector more aligned" style="max-width:100%; height:auto; border:1px solid #ccc; padding:5px;"><br>
+    <br>',
+        'easy',
+        'one_of_many',
+        json_encode([
+            "A" => "Less aligned with the input vector",
+            "B" => "Unchanged in direction",
+            "C" => "More aligned with the input vector",
+            "D" => "Orthogonal to the input vector"
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+        json_encode([
+            "correct_option" => "C"
+        ]),
         $exercise_number
     );
     $exercise_number++;
@@ -851,13 +1369,10 @@ function add_repetition_exercises_to_the_lesson($lesson_number) {
     Answer: [0, 1].',
         'medium',
         'labeled_inputs',
+        null,
         json_encode([
-            "w0" => "Updated weight w0",
-            "w1" => "Updated weight w1"
-        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
-        json_encode([
-            "w0" => "0",
-            "w1" => "1"
+            "correct_options" => ["\(w_0\)" => "0",
+            "\(w_1\)" => "1"]
         ]),
         $exercise_number
     );
@@ -869,25 +1384,25 @@ function add_repetition_exercises_to_the_lesson($lesson_number) {
         $category_id,
         'Exercise ' . $exercise_number . ' – Binomial Distribution Calculation',
         <<<EOT
-    The **binomial distribution** models the number of successes in \( n \) independent trials, each with success probability \( p \). The probability mass function is:
+    The <strong>binomial distribution</strong> models the number of successes in \( n \) independent trials, each with success probability \( p \). The probability mass function is:
 
     \[
     P(X = k) = \binom{n}{k} p^k (1 - p)^{n - k}
     \]
 
-    where \( \binom{n}{k} = \\frac{n!}{k!(n - k)!} \).
-
-    Consider a scenario with \( n = 5 \) trials and success probability \( p = 0.4 \).
-
-    **Question:**  
-    Compute the probability of exactly 3 successes, i.e., \( P(X = 3) \). Round to 3 decimal places.
-
-    1. Calculate the binomial coefficient \( \binom{5}{3} \).  
-    2. Compute \( p^k (1 - p)^{n - k} \).  
-    3. Combine to find \( P(X = 3) \).
+    where \( \binom{n}{k} = \\frac{n!}{k!(n - k)!} \).<br>
+        <br>
+    Consider a scenario with \( n = 5 \) trials and success probability \( p = 0.4 \).<b>
+        <br>
+    <strong>Question:</strong><br>
+    Compute the probability of exactly 3 successes, i.e., \( P(X = 3) \). Round to 3 decimal places.<br>
+        <br>
+    1. Calculate the binomial coefficient \( \binom{5}{3} \).  <br>
+    2. Compute \( p^k (1 - p)^{n - k} \).  <br>
+    3. Combine to find \( P(X = 3) \).<br>
     EOT,
         'Solution:  
-    1. \( \binom{5}{3} = \frac{5!}{3!2!} = \frac{120}{6 \cdot 2} = 10 \).  
+    1. \( \binom{5}{3} =\\frac{5!}{3!2!} =\\frac{120}{6 \cdot 2} = 10 \).  
     2. \( p^3 = (0.4)^3 = 0.064 \), \( (1 - p)^{5 - 3} = (0.6)^2 = 0.36 \).  
     3. \( P(X = 3) = 10 \cdot 0.064 \cdot 0.36 = 0.2304 \approx 0.230 \).  
     Answer: C.',
@@ -910,48 +1425,156 @@ function add_repetition_exercises_to_the_lesson($lesson_number) {
         $category_id,
         'Exercise ' . $exercise_number . ' – Perceptron Training Process',
         <<<EOT
-    Training a perceptron involves updating the weight vector \( \mathbf{w} \) and bias \( b \) to correctly classify inputs. The process includes:
-    - Computing the weighted sum \( z = \mathbf{w} \cdot \mathbf{x} + b \).
-    - Applying an activation function (e.g., threshold).
-    - Updating weights based on the error between predicted and true labels.
+    Training a perceptron involves updating the weight vector \( \mathbf{w} \) and bias \( b \) to correctly classify inputs. The process includes:<br>
+    - Computing the weighted sum \( z = \mathbf{w} \cdot \mathbf{x} + b \).<br>
+    - Applying an activation function (e.g., threshold).<br>
+    - Updating weights based on the error between predicted and true labels.<br>
+        <br>
+    Match each component of the perceptron training process to its description by dragging the terms to the correct boxes.<br>
+        <br>
+    - <strong>Weighted Sum</strong>         {blank1}<br>
+    - <strong>Activation Function</strong>  {blank2}<br>
+    - <strong>Error Calculation</strong>    {blank3}<br>
+    - <strong>Weight Update</strong>        {blank4}<br>
 
-    Match each component of the perceptron training process to its description by dragging the terms to the correct boxes.
 
-    - **Weighted Sum**  
-    - **Activation Function**  
-    - **Weight Update**  
-    - **Error Calculation**
-
-    Descriptions:
-    - Computes \( y - \hat{y} \) to determine the prediction error.
-    - Applies a function like threshold or sigmoid to the weighted sum.
-    - Adjusts \( \mathbf{w} \) using the update rule \( \mathbf{w} \leftarrow \mathbf{w} + \\eta (y - \hat{y}) \mathbf{x} \).
-    - Calculates \( \mathbf{w} \cdot \mathbf{x} + b \).
     EOT,
-        'Solution:  
-    - Weighted Sum: Calculates \( \mathbf{w} \cdot \mathbf{x} + b \).  
-    - Activation Function: Applies a function like threshold or sigmoid.  
-    - Weight Update: Adjusts \( \mathbf{w} \) using the update rule.  
-    - Error Calculation: Computes \( y - \hat{y} \).',
+        'Solution:  <br>
+        - Weighted Sum: Calculates \( \mathbf{w} \cdot \mathbf{x} + b \).  <br>
+        - Activation Function: Applies a function like threshold or sigmoid.  <br>
+        - Error Calculation: Computes \( error = y - \hat{y} \).  <br>
+        - Weight Update: Adjusts \( \mathbf{w} \) using the update rule \( \mathbf{w} \leftarrow \mathbf{w} +\\eta (error) \mathbf{x} \).',
         'easy',
         'drag_and_drop',
         json_encode([
-            "Weighted Sum" => "Computes the linear combination",
-            "Activation Function" => "Transforms the linear combination",
-            "Weight Update" => "Adjusts weights based on error",
-            "Error Calculation" => "Determines prediction error"
+            "A" => "Adjusts \( \mathbf{w} \) using the update rule \( \mathbf{w} \leftarrow \mathbf{w} + \\eta (error) \mathbf{x} \)",
+            "B" => "Applies a function like threshold or sigmoid to the weighted sum.",
+            "C" => "Calculates \( \mathbf{w} \cdot \mathbf{x} + b \).",
+            "D" => "Computes \( error = y - \hat{y} \) to determine the prediction error."
         ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
         json_encode([
-            "Weighted Sum" => "Calculates w · x + b",
-            "Activation Function" => "Applies a function like threshold or sigmoid",
-            "Weight Update" => "Adjusts w using the update rule",
-            "Error Calculation" => "Computes y - ŷ"
+            "1" => "C",
+            "2" => "B",
+            "3" => "D",
+            "4" => "A"
         ]),
         $exercise_number
     );
     $exercise_number++;
 
 }
+function add_bernoulli_distribution_exercises_to_the_lesson($lesson_number) {
+    $module_two_term = get_term_by( 'slug', 'module-two', 'course_topic' );
+    if ( $module_two_term ) {
+        $category_id = $module_two_term->term_id;
+    } else {
+        error_log('Term "module-two" not found in course_topic taxonomy.');
+        $category_id = 0;
+    }
+
+    $exercise_number = 1;
+    $lesson_id = get_lesson_for_category($category_id, $lesson_number);
+
+    // Exercise 1: Bernoulli Definition
+    add_exercise(
+        $lesson_id,
+        $category_id,
+        'Exercise ' . $exercise_number . ' – Bernoulli Distribution Definition',
+        <<<EOT
+    The <strong>Bernoulli distribution</strong> is a special case of the binomial distribution with a single trial (\( n = 1 \)).<br><br>
+    <strong>Question:</strong><br>
+    What values can a Bernoulli random variable take, and what is its probability mass function (PMF)?<br><br>
+    A. Values 0 or 1; \( P(X = x) = p^x (1 - p)^{1 - x} \)<br>
+    B. Values 0 or 1; \( P(X = x) = \binom{1}{x} p^x (1 - p)^{1 - x} \)<br>
+    C. Values 0 or 1; \( P(X = x) = px \)<br>
+    D. Values 0 or 1; \( P(X = x) = (1 - p)^x \)<br>
+    EOT,
+        'Solution:  
+    Correct PMF is \( P(X = x) = p^x (1 - p)^{1 - x} \) for \( x \in \\{0, 1\\} \).  
+    Binomial coefficient for \( n = 1 \) is 1, so it simplifies to that form.  
+    Answer: A.',
+        'easy',
+        'one_of_many',
+        json_encode([
+            "A" => "Values 0 or 1; p^x (1 - p)^{1 - x}",
+            "B" => "Values 0 or 1; binomial form",
+            "C" => "px",
+            "D" => "(1 - p)^x"
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+        json_encode(["correct_option" => "A"]),
+        $exercise_number
+    );
+    $exercise_number++;
+
+    // Exercise 2: Bernoulli Moments
+    add_exercise(
+        $lesson_id,
+        $category_id,
+        'Exercise ' . $exercise_number . ' – Expected Value and Variance of Bernoulli',
+        <<<EOT
+    A Bernoulli-distributed random variable \( X \sim \\text{Bernoulli}(p) \) has:<br>
+    - <strong>Expected Value</strong>: \( E[X] = p \)<br>
+    - <strong>Variance</strong>: \( \\text{Var}(X) = p(1 - p) \)<br><br>
+    <strong>Question:</strong><br>
+    Compute the expected value and variance of a Bernoulli random variable with \( p = 0.7 \).<br>
+    Provide both values.
+    EOT,
+        'Solution:<br>
+    - Expected Value: \( E[X] = 0.7 \)<br>
+    - Variance: \( \\text{Var}(X) = 0.7 \\cdot 0.3 = 0.21 \)',
+        'easy',
+        'labeled_inputs',
+        null,
+        json_encode([
+            "correct_options" => ["expected_value" => "0.7", "variance" => "0.21"]
+        ]),
+        $exercise_number
+    );
+    $exercise_number++;
+
+    // Exercise 3: Bernoulli as Exponential Family
+    add_exercise(
+        $lesson_id,
+        $category_id,
+        'Exercise ' . $exercise_number . ' – Bernoulli in Exponential Family',
+        <<<EOT
+    The Bernoulli distribution is also part of the <strong>exponential family</strong> and can be written as:
+
+    \[
+    p(x | p) = p^x (1 - p)^{1 - x} = \\exp\\left( x \\ln\\left(\\frac{p}{1 - p}\\right) + \\ln(1 - p) \\right)
+    \]
+
+    <strong>Question:</strong><br>
+    What are the components of the exponential family form for Bernoulli?<br>
+    Match the following:<br><br>
+    - \( T(x) \): {blank1}<br>
+    - \( \\eta(p) \): {blank2}<br>
+    - \( A(p) \): {blank3}<br>
+    - \( h(x) \): {blank4}<br>
+    EOT,
+        'Solution: <br>
+    - \( T(x) = x \) (sufficient statistic)  <br>
+    - \( \\eta(p) = \\ln\\left(\\frac{p}{1 - p}\\right) \) (natural parameter)  <br>
+    - \( A(p) = -\\ln(1 - p) \) (log-partition)  <br>
+    - \( h(x) = 1 \) (base measure)',
+        'medium',
+        'drag_and_drop',
+        json_encode([
+            "A" => "x",
+            "B" => "ln(p/(1 - p))",
+            "C" => "-ln(1 - p)",
+            "D" => "1"
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+        json_encode([
+            "1" => "A",
+            "2" => "B",
+            "3" => "C",
+            "4" => "D"
+        ]),
+        $exercise_number
+    );
+}
+
 function add_binomial_distribution_exercises_to_the_lesson($lesson_number) {
     $module_two_term = get_term_by( 'slug', 'module-two', 'course_topic' );
     if ( $module_two_term ) {
@@ -989,11 +1612,11 @@ function add_binomial_distribution_exercises_to_the_lesson($lesson_number) {
     P(X = k) = \binom{n}{k} (1 - p)^n \left(\\frac{p}{1 - p}\\right)^k = \binom{n}{k} (1 - p)^n \\exp\left(k \ln\left(\\frac{p}{1 - p}\\right)\\right)
     \]
 
-    **Question:**  
-    What is the natural parameter \( \\eta(p) \) for the binomial distribution when \( p = 0.6 \)? Round to 2 decimal places.
-
-    1. Identify \( \\eta(p) \) from the exponential form.
-    2. Compute \( \\eta(p) \) for \( p = 0.6 \).
+    <strong>Question:</strong><br>  
+    What is the natural parameter \( \\eta(p) \) for the binomial distribution when \( p = 0.6 \)? Round to 2 decimal places.<br>
+        <br>
+    1. Identify \( \\eta(p) \) from the exponential form.<br>
+    2. Compute \( \\eta(p) \) for \( p = 0.6 \).<br>
     EOT,
         'Solution:  
     From the exponential form, \( \\eta(p) = \ln\left(\\frac{p}{1 - p}\\right) \).  
@@ -1019,31 +1642,28 @@ function add_binomial_distribution_exercises_to_the_lesson($lesson_number) {
         $category_id,
         'Exercise ' . $exercise_number . ' – Moments of Binomial Distribution',
         <<<EOT
-    The binomial distribution, modeling a target variable with \( n \) trials and success probability \( p \), has the following moments:
-    - **Expected Value**: \( E[X] = np \)
-    - **Variance**: \( \\text{Var}(X) = np(1 - p) \)
-
-    Consider a binomial random variable \( X \) with \( n = 10 \) and \( p = 0.2 \).
-
-    **Question:**  
-    Compute the expected value and variance of \( X \). Provide the answers as numerical values.
-
-    1. Calculate \( E[X] = np \).
-    2. Calculate \( \\text{Var}(X) = np(1 - p) \).
+    The binomial distribution, modeling a target variable with \( n \) trials and success probability \( p \), has the following moments:<br>
+    - <strong>Expected Value</strong>: \( E[X] = np \)<br>
+    - <strong>Variance</strong>: \( \\text{Var}(X) = np(1 - p) \)<br>
+        <br>
+    Consider a binomial random variable \( X \) with \( n = 10 \) and \( p = 0.2 \).<br>
+        <br>
+    <strong>Question:</strong><br>  
+    Compute the expected value and variance of \( X \). Provide the answers as numerical values.<br>
+        <br>
+    1. Calculate \( E[X] = np \).<br>
+    2. Calculate \( \\text{Var}(X) = np(1 - p) \).<br>
     EOT,
-        'Solution:  
-    1. \( E[X] = np = 10 \cdot 0.2 = 2 \).  
-    2. \( \text{Var}(X) = np(1 - p) = 10 \cdot 0.2 \cdot (1 - 0.2) = 10 \cdot 0.2 \cdot 0.8 = 1.6 \).  
+        'Solution:  <br>
+    1. \( E[X] = np = 10 \cdot 0.2 = 2 \).  <br>
+    2. \( \text{Var}(X) = np(1 - p) = 10 \cdot 0.2 \cdot (1 - 0.2) = 10 \cdot 0.2 \cdot 0.8 = 1.6 \).  <br>
     Answer: Expected Value = 2, Variance = 1.6.',
         'easy',
         'labeled_inputs',
+        null,
         json_encode([
-            "expected_value" => "Expected Value (E[X])",
-            "variance" => "Variance (Var(X))"
-        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
-        json_encode([
-            "expected_value" => "2",
-            "variance" => "1.6"
+            "correct_options" => ["expected_value" => "2",
+            "variance" => "1.6"]
         ]),
         $exercise_number
     );
@@ -1055,30 +1675,30 @@ function add_binomial_distribution_exercises_to_the_lesson($lesson_number) {
         $category_id,
         'Exercise ' . $exercise_number . ' – Log-Likelihood of Binomial',
         <<<EOT
-    For a binomial distributed target variable \( X \) with \( n \) trials and success probability \( p \), the probability mass function is:
+    For a binomial distributed target variable \( Y \) with \( n \) trials and success probability \( p \), the probability mass function is:
 
     \[
-    P(X = k) = \binom{n}{k} p^k (1 - p)^{n - k}
+    P(Y = y) = \binom{n}{k} p^y (1 - p)^{n - y}
     \]
 
-    The <strong>log-likelihood function</strong> for a single observation \( k \) is:
+    The <strong>log-likelihood function</strong> for a single observation \( y \) is:
 
     \[
-    \\ell(p) = \ln\left(\binom{n}{k}\right) + k \ln(p) + (n - k) \ln(1 - p)
+    \\ell(p) = \ln\left(\binom{n}{k}\\right) + y \ln(p) + (n - y) \ln(1 - p)
     \]
 
-    Consider \( n = 8 \) and an observed number of successes \( k = 3 \).
-
-    **Question:**  
-    Which of the following represents the correct log-likelihood function for this observation? Assume the binomial coefficient term is constant and focus on the variable-dependent terms.
-
-    A. \( 3 \ln(p) + 5 \ln(1 - p) \)  
-    B. \( 8 \ln(p) + 3 \ln(1 - p) \)  
-    C. \( 3 \ln(p) + 8 \ln(1 - p) \)  
-    D. \( 5 \ln(p) + 3 \ln(1 - p) \)
+    Consider \( n = 8 \) and an observed number of successes \( y = 3 \).<br>
+        <br>
+    <strong>Question:</strong><br>  
+    Which of the following represents the correct log-likelihood function for this observation? Assume the binomial coefficient term is constant and focus on the variable-dependent terms.<br>
+        <br>
+    A. \( 3 \ln(p) + 5 \ln(1 - p) \)  <br>
+    B. \( 8 \ln(p) + 3 \ln(1 - p) \)  <br>
+    C. \( 3 \ln(p) + 8 \ln(1 - p) \)  <br>
+    D. \( 5 \ln(p) + 3 \ln(1 - p) \)    <br>
     EOT,
         'Solution:  
-    The log-likelihood is \( \ell(p) = \ln\left(\binom{8}{3}\right) + 3 \ln(p) + (8 - 3) \ln(1 - p) \).  
+    The log-likelihood is \( \\ell(p) = \ln\left(\binom{8}{3}\right) + 3 \ln(p) + (8 - 3) \ln(1 - p) \).  
     Ignoring the constant \( \ln\left(\binom{8}{3}\right) \), the variable-dependent terms are:  
     \( 3 \ln(p) + 5 \ln(1 - p) \).  
     Answer: A.',
@@ -1104,47 +1724,47 @@ function add_binomial_distribution_exercises_to_the_lesson($lesson_number) {
     The binomial distribution can be expressed in the exponential family form:
 
     \[
-    p(k | p) = h(k) \\exp\left(\\eta(p) \cdot T(k) - A(p)\\right)
+    p(y | p) = h(y) \\exp\left(\\eta(p) \cdot T(y) - A(p)\\right)
     \]
 
-    For the binomial distribution with PMF \( P(X = k) = \binom{n}{k} p^k (1 - p)^{n - k} \), the exponential form is:
+    For the binomial distribution with PMF \( P(Y = y) = \binom{n}{y} p^y (1 - p)^{n - y} \), the exponential form is:
 
     \[
-    P(X = k) = \binom{n}{k} (1 - p)^n \\exp\left(k \ln\left(\\frac{p}{1 - p}\\right)\\right)
+    P(Y = y) = \binom{n}{y} (1 - p)^n \\exp\left(y \ln\left(\\frac{p}{1 - p}\\right)\\right)
     \]
 
-    **Question:**  
-    Match each component of the binomial distribution to its exponential family counterpart by dragging the terms to the correct boxes.
-
-    - \( h(k) \)  
-    - \( T(k) \)  
-    - \( \\eta(p) \)  
-    - \( A(p) \)
-
-    Descriptions:
-    - Sufficient statistic
-    - Natural parameter
-    - Log-partition function
-    - Base measure
+    <strong>Question:</strong><br>  
+    Match each component of the binomial distribution to its exponential family counterpart by dragging the terms to the correct boxes.<br>
+        <br>
+    - \( h(y) \)  <br>
+    - \( T(y) \)  <br>
+    - \( \\eta(p) \)  <br>
+    - \( A(p) \) <br>
+        <br>
+    Descriptions:<br>
+    - Sufficient statistic \( T(y) \)   {blank1}<br>
+    - Natural parameter  \( \\eta(p) \) {blank2}<br>
+    - Log-partition function \( A(p) \) {blank3}<br>
+    - Base measure \( h(y) \)           {blank4}<br>
     EOT,
-        'Solution:  
-    - \( h(k) = \binom{n}{k} \) (Base measure)  
-    - \( T(k) = k \) (Sufficient statistic)  
-    - \( \eta(p) = \ln\left(\frac{p}{1 - p}\right) \) (Natural parameter)  
+        'Solution:  <br>
+    - \( h(y) = \binom{n}{y} \) (Base measure)  <br>
+    - \( T(y) = y \) (Sufficient statistic)  <br>
+    - \(\\eta(p) = \ln\left(\frac{p}{1 - p}\right) \) (Natural parameter)  <br>
     - \( A(p) = -n \ln(1 - p) \) (Log-partition function)',
         'medium',
         'drag_and_drop',
         json_encode([
-            "h(k)" => "Base measure",
-            "T(k)" => "Sufficient statistic",
-            "eta(p)" => "Natural parameter",
-            "A(p)" => "Log-partition function"
+            "A" => "-n ln(1-p)",
+            "B" => "binom(n,y)",
+            "C" => "y",
+            "D" => "ln(p/(1-p))"  
         ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
         json_encode([
-            "h(k)" => "binom(n,k)",
-            "T(k)" => "k",
-            "eta(p)" => "ln(p/(1-p))",
-            "A(p)" => "-n ln(1-p)"
+            "1" => "B",
+            "2" => "C",
+            "3" => "D",
+            "4" => "A"
         ]),
         $exercise_number
     );
@@ -1168,21 +1788,21 @@ function add_binomial_distribution_exercises_to_the_lesson($lesson_number) {
     \\frac{d\\ell}{dp} = \\frac{k}{p} - \\frac{n - k}{1 - p} = 0
     \]
 
-    Consider an experiment with \( n = 10 \) trials and \( k = 4 \) successes.
-
-    **Question:**  
-    Compute the MLE for \( p \). Select all that apply.
-
-    A. The MLE is \( \hat{p} = \\frac{k}{n} \).  
-    B. The MLE is \( \hat{p} = 0.4 \).  
-    C. The derivative \( \\frac{d\\ell}{dp} \) is positive for all \( p \).  
-    D. The log-likelihood is concave, ensuring a unique maximum.
+    Consider an experiment with \( n = 10 \) trials and \( k = 4 \) successes.<br>
+        <br>
+    <strong>Question:</strong><br>  
+    Compute the MLE for \( p \). Select all that apply.<br>
+        <br>
+    A. The MLE is \( \hat{p} = \\frac{k}{n} \).  <br>
+    B. The MLE is \( \hat{p} = 0.4 \).  <br>
+    C. The derivative \( \\frac{d\\ell}{dp} \) is positive for all \( p \).  <br>
+    D. The log-likelihood is concave, ensuring a unique maximum.<br>
     EOT,
-        'Solution:  
-    Solving the derivative: \( \\frac{k}{p} = \\frac{n - k}{1 - p} \), so \( \hat{p} = \\frac{k}{n} \).  
-    For \( n = 10 \), \( k = 4 \): \( \hat{p} = \\frac{4}{10} = 0.4 \).  
-    The second derivative of the log-likelihood is negative, confirming concavity.  
-    The derivative is not always positive; it equals zero at the maximum.  
+        'Solution:  <br>
+    Solving the derivative: \( \\frac{k}{p} = \\frac{n - k}{1 - p} \), so \( \hat{p} = \\frac{k}{n} \).<br>  
+    For \( n = 10 \), \( k = 4 \): \( \hat{p} = \\frac{4}{10} = 0.4 \).  <br>
+    The second derivative of the log-likelihood is negative, confirming concavity.  <br>
+    The derivative is not always positive; it equals zero at the maximum.  <br>
     Correct answers: A, B, D.',
         'hard',
         'multiple_choice',
@@ -1198,6 +1818,8 @@ function add_binomial_distribution_exercises_to_the_lesson($lesson_number) {
     $exercise_number++;
 
 }
+
+
 function add_multinomial_distribution_exercises_to_the_lesson($lesson_number) {
     $module_two_term = get_term_by( 'slug', 'module-two', 'course_topic' );
     if ( $module_two_term ) {
@@ -1222,19 +1844,19 @@ function add_multinomial_distribution_exercises_to_the_lesson($lesson_number) {
     \sigma(\mathbf{z})_i = \\frac{e^{z_i}}{\sum_{j=1}^K e^{z_j}}
     \]
 
-    Given a score vector \( \mathbf{z} = [0, 1, -1] \), compute the softmax probabilities for each class.
-
-    **Question:**  
-    What is the softmax probability for the second class (corresponding to \( z_2 = 1 \))? Round to 3 decimal places.
-
-    1. Compute \( e^{z_i} \) for each \( z_i \).
-    2. Calculate the sum \( \sum_{j=1}^3 e^{z_j} \).
-    3. Compute \( \sigma(\mathbf{z})_2 = \\frac{e^{z_2}}{\sum_{j=1}^3 e^{z_j} \).
+    Given a score vector \( \mathbf{z} = [0, 1, -1] \), compute the softmax probabilities for each class.<br>
+        <br>
+    <strong>Question:</strong><br>  
+    What is the softmax probability for the second class (corresponding to \( z_2 = 1 \))? Round to 3 decimal places.<br>
+        <br>
+    1. Compute \( e^{z_i} \) for each \( z_i \).<br>
+    2. Calculate the sum \( \sum_{j=1}^3 e^{z_j} \).<br>
+    3. Compute \( \sigma(\mathbf{z})_2 = \\frac{e^{z_2}}{\sum_{j=1}^3 e^{z_j}} \).
     EOT,
         'Solution:  
-    1. \( e^{z_1} = e^0 = 1 \), \( e^{z_2} = e^1 \approx 2.718 \), \( e^{z_3} = e^{-1} \approx 0.368 \).  
-    2. Sum: \( 1 + 2.718 + 0.368 \approx 4.086 \).  
-    3. \( \sigma(\mathbf{z})_2 = \frac{e^1}{4.086} \approx \frac{2.718}{4.086} \approx 0.665 \).  
+    1. \( e^{z_1} = e^0 = 1 \), \( e^{z_2} = e^1 \approx 2.718 \), \( e^{z_3} = e^{-1} \approx 0.368 \).  <br>
+    2. Sum: \( 1 + 2.718 + 0.368 \approx 4.086 \).     <br>
+    3. \( \sigma(\mathbf{z})_2 =\\frac{e^1}{4.086} \approx\\frac{2.718}{4.086} \approx 0.665 \).  <br>
     Answer: C.',
         'medium',
         'one_of_many',
@@ -1261,21 +1883,21 @@ function add_multinomial_distribution_exercises_to_the_lesson($lesson_number) {
     P(y = k | \mathbf{x}, \mathbf{W}) = \sigma(\mathbf{W} \mathbf{x})_k = \\frac{e^{\mathbf{w}_k \cdot \mathbf{x}}}{\sum_{j=1}^K e^{\mathbf{w}_j \cdot \mathbf{x}}}
     \]
 
-    Here, \( \mathbf{W} \) is the weight matrix, and \( \mathbf{x} \) is the input feature vector. The categorical distribution ensures that the probabilities sum to 1 and are non-negative.
-
-    **Question:**  
-    Which of the following statements about the softmax function’s role in modeling the categorical distribution are true? Select all that apply.
-
-    A. The softmax function guarantees that probabilities sum to 1.  
-    B. The softmax function outputs negative probabilities for some classes.  
-    C. The softmax function is invariant to adding a constant to all input scores.  
-    D. The softmax function requires the input scores to be positive.
+    Here, \( \mathbf{W} \) is the weight matrix, and \( \mathbf{x} \) is the input feature vector. The categorical distribution ensures that the probabilities sum to 1 and are non-negative.<br>
+        <br>
+    <strong>Question:</strong><br>  
+    Which of the following statements about the softmax function’s role in modeling the categorical distribution are true? Select all that apply.<br>
+        <br>
+    A. The softmax function guarantees that probabilities sum to 1.  <br>
+    B. The softmax function outputs negative probabilities for some classes.  <br>
+    C. The softmax function is invariant to adding a constant to all input scores. <br> 
+    D. The softmax function requires the input scores to be positive.<br>
     EOT,
-        'Solution:  
-    - A: True (softmax normalizes probabilities to sum to 1).  
-    - B: False (softmax outputs non-negative probabilities).  
-    - C: True (adding a constant to all scores does not change the probabilities due to normalization).  
-    - D: False (softmax accepts any real-valued scores).  
+        'Solution:  <br>
+    - A: True (softmax normalizes probabilities to sum to 1).  <br>
+    - B: False (softmax outputs non-negative probabilities).  <br>
+    - C: True (adding a constant to all scores does not change the probabilities due to normalization).  <br>
+    - D: False (softmax accepts any real-valued scores).  <br>
     Correct answers: A, C.',
         'medium',
         'multiple_choice',
@@ -1285,7 +1907,7 @@ function add_multinomial_distribution_exercises_to_the_lesson($lesson_number) {
             "C" => "Invariant to constant shift",
             "D" => "Requires positive inputs"
         ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
-        json_encode(["correct_option" => "A", "2" => "C"]),
+        json_encode(["correct_options" => ["A", "C"]]),
         $exercise_number
     );
     $exercise_number++;
@@ -1296,7 +1918,7 @@ function add_multinomial_distribution_exercises_to_the_lesson($lesson_number) {
         $category_id,
         'Exercise ' . $exercise_number . ' – Gradient of Softmax Loss',
         <<<EOT
-    In softmax regression, the loss function is typically the <strong>cross-entropy loss</strong>, defined for a single observation with true label \( y \) (one-hot encoded as \( \mathbf{y} \)) and predicted probabilities \( \hat{\mathbf{y}} = \sigma(\mathbf{W} \mathbf{x}) \):
+    In softmax regression, the loss function is typically the <span class="tooltip"><strong>cross-entropy loss</strong><span class="tooltip-text">Admit it: that "typically" was slick, wasn’t it? Makes it sound like we’re being casual, not doctrinal. But no worries — I’ll just tell you it comes from the GLM. Nothing more. As the great mathematician Kuratowski once said, “You don’t have to read it on the first pass.” (Which is academic code for: you’ll come back eventually, when the pain of not knowing outweighs the pain of trying to understand.) </span></span>, defined for a single observation with true label \( y \) (one-hot encoded as \( \mathbf{y} \)) and predicted probabilities \( \hat{\mathbf{y}} = \sigma(\mathbf{W} \mathbf{x}) \):
 
     \[
     L = -\sum_{k=1}^K y_k \ln(\hat{y}_k)
@@ -1305,19 +1927,19 @@ function add_multinomial_distribution_exercises_to_the_lesson($lesson_number) {
     The gradient of the loss with respect to the weight vector \( \mathbf{w}_k \) for class \( k \) is:
 
     \[
-    \nabla_{\mathbf{w}_k} L = (\hat{y}_k - y_k) \mathbf{x}
+    \\nabla_{\mathbf{w}_k} L = (\hat{y}_k - y_k) \mathbf{x}
     \]
 
-    Given:
-    - Input vector \( \mathbf{x} = [1, 2] \).
-    - Predicted probabilities \( \hat{\mathbf{y}} = [0.2, 0.7, 0.1] \).
-    - True label is class 2 (i.e., \( \mathbf{y} = [0, 1, 0] \)).
-
-    **Question:**  
-    Compute the gradient \( \nabla_{\mathbf{w}_2} L \) for the weight vector of class 2. Provide the components rounded to 2 decimal places.
-
-    1. Identify \( \hat{y}_2 \) and \( y_2 \).
-    2. Compute \( \hat{y}_2 - y_2 \).
+    Given:<br>
+    - Input vector \( \mathbf{x} = [1, 2] \).<br>
+    - Predicted probabilities \( \hat{\mathbf{y}} = [0.2, 0.7, 0.1] \).<br>
+    - True label is class 2 (i.e., \( \mathbf{y} = [0, 1, 0] \)).<br>
+        <br>
+    <strong>Question:</strong><br>  
+    Compute the gradient \( \\nabla_{\mathbf{w}_2} L \) for the weight vector of class 2. Provide the components rounded to 2 decimal places.<br>
+        <br>
+    1. Identify \( \hat{y}_2 \) and \( y_2 \).<br>
+    2. Compute \( \hat{y}_2 - y_2 \).<br>
     3. Multiply by \( \mathbf{x} \) to obtain the gradient.
     EOT,
         'Solution:  
@@ -1327,14 +1949,11 @@ function add_multinomial_distribution_exercises_to_the_lesson($lesson_number) {
     Answer: [-0.30, -0.60].',
         'hard',
         'labeled_inputs',
-        json_encode([
-            "w2_0" => "Gradient component for w2,0",
-            "w2_1" => "Gradient component for w2,1"
-        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
-        json_encode([
-            "w2_0" => "-0.30",
-            "w2_1" => "-0.60"
-        ]),
+        null,
+        json_encode(["correct_options" =>[
+            "\(w_{2,0}\)" => "-0.30",
+            "\(w_{2,1}\)" => "-0.60"
+        ]]),
         $exercise_number
     );
     $exercise_number++;
@@ -1345,25 +1964,20 @@ function add_multinomial_distribution_exercises_to_the_lesson($lesson_number) {
         $category_id,
         'Exercise ' . $exercise_number . ' – Components of Softmax Regression',
         <<<EOT
-    Softmax regression extends logistic regression to multiclass classification by modeling the target variable as a categorical distribution. The key components include:
-    - **Score Calculation**: Computing \( \mathbf{z} = \mathbf{W} \mathbf{x} \), where \( \mathbf{W} \) is the weight matrix.
-    - **Softmax Activation**: Transforming scores into probabilities using \( \sigma(\mathbf{z})_k = \\frac{e^{z_k}}{\sum_j e^{z_j}} \).
-    - **Loss Function**: Typically cross-entropy loss, \( L = -\sum_k y_k \ln(\hat{y}_k) \).
-    - **Gradient Update**: Adjusting weights using the gradient of the loss.
+    Softmax regression extends logistic regression to multiclass classification by modeling the target variable as a categorical distribution. The key components include:<br>
+    - <strong>Score Calculation</strong>: Computing \( \mathbf{z} = \mathbf{W} \mathbf{x} \), where \( \mathbf{W} \) is the weight matrix.<br>
+    - <strong>Softmax Activation</strong>: Transforming scores into probabilities using \( \sigma(\mathbf{z})_k = \\frac{e^{z_k}}{\sum_j e^{z_j}} \).<br>
+    - <strong>Loss Function</strong>: Typically cross-entropy loss, \( L = -\sum_k y_k \ln(\hat{y}_k) \).<br>
+    - <strong>Gradient Update</strong>: Adjusting weights using the gradient of the loss.<br>
+        <br>
+    <strong>Question:</strong><br>  
+    Match each component of softmax regression to its description by dragging the terms to the correct boxes.<br>
+        <br>
 
-    **Question:**  
-    Match each component of softmax regression to its description by dragging the terms to the correct boxes.
-
-    - **Score Calculation**  
-    - **Softmax Activation**  
-    - **Loss Function**  
-    - **Gradient Update**
-
-    Descriptions:
-    - Computes the linear combination of weights and inputs.
-    - Transforms scores into a probability distribution.
-    - Measures the error between predicted and true labels.
-    - Adjusts weights based on the loss gradient.
+    Score Calculation    {blank1}<br>
+    Softmax Activation   {blank2}<br>
+    Loss Function        {blank3}<br>
+    Gradient Update      {blank4}<br>
     EOT,
         'Solution:  
     - Score Calculation: Computes the linear combination of weights and inputs.  
@@ -1373,16 +1987,16 @@ function add_multinomial_distribution_exercises_to_the_lesson($lesson_number) {
         'easy',
         'drag_and_drop',
         json_encode([
-            "Score Calculation" => "Computes linear combination",
-            "Softmax Activation" => "Transforms to probabilities",
-            "Loss Function" => "Measures prediction error",
-            "Gradient Update" => "Adjusts weights"
+            "A" => "Transforms to probabilities",
+            "B" => "Computes linear combination",
+            "C" => "Adjusts weights",
+            "D" => "Measures prediction error"
         ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
         json_encode([
-            "Score Calculation" => "Computes Wx",
-            "Softmax Activation" => "Transforms scores into a probability distribution",
-            "Loss Function" => "Measures the error between predicted and true labels",
-            "Gradient Update" => "Adjusts weights based on the loss gradient"
+            "1" => "B",
+            "2" => "A",
+            "3" => "D",
+            "4" => "C"
         ]),
         $exercise_number
     );
@@ -1394,54 +2008,184 @@ function add_multinomial_distribution_exercises_to_the_lesson($lesson_number) {
         $category_id,
         'Exercise ' . $exercise_number . ' – Softmax Prediction',
         <<<EOT
-    In softmax regression, the predicted class is the one with the highest probability. Given:
-    - Input vector \( \mathbf{x} = [1, -1] \) (including bias).
-    - Weight matrix \( \mathbf{W} \) with rows \( \mathbf{w}_1 = [0.5, 0.2] \), \( \mathbf{w}_2 = [-0.3, 0.4] \), \( \mathbf{w}_3 = [0.1, -0.2] \).
-    - Scores \( \mathbf{z} = \mathbf{W} \mathbf{x} \).
+    In softmax regression, the predicted class is the one with the highest probability. Given:<br>
+    - Input vector \( \mathbf{x^T} = [1, -1] \) (including bias).<br>
+    - Weight matrix \( \mathbf{W} \) with rows \( \mathbf{w}_1 = [0.5, 0.2] \), \( \mathbf{w}_2 = [-0.3, 0.4] \), \( \mathbf{w}_3 = [0.1, -0.2] \).<br>
+    - Scores \( \mathbf{z} = \mathbf{W} \mathbf{x} \).<br>
+        <br>
+    <strong>Question:</strong><br>  
+    Compute the <strong>predicted probability for class 2</strong>, i.e. compute:<br>
+        <br>
+    1. Compute:<br>
+    - \( z_1 = \mathbf{w}_1 \cdot \mathbf{x} \).<br>
+    - \( z_2 = \mathbf{w}_2 \cdot \mathbf{x} \).<br>
+    - \( z_3 = \mathbf{w}_3 \cdot \mathbf{x} \).<br>
+    2: Apply softmax: <br>
+    - Numerator: \( e^{z_2} \)<br>
+    - Denominator: \( e^{z_1} + e^{z_2} + e^{z_3} \)<br>
 
-    **Question:**  
-    Compute the score for class 2 (i.e., \( z_2 = \mathbf{w}_2 \cdot \mathbf{x} \)). Select the correct value.
 
-    1. Compute \( z_2 = \mathbf{w}_2 \cdot \mathbf{x} \).
     EOT,
-        'Solution:  
-    1. \( z_2 = \mathbf{w}_2 \cdot \mathbf{x} = (-0.3) \cdot 1 + 0.4 \cdot (-1) = -0.3 - 0.4 = -0.7 \).  
-    Answer: B.',
+        'Solution: <br>
+        Step 1: Compute logits: <br>
+        - \( z_1 = \mathbf{w}_1 \cdot \mathbf{x} = 1 \cdot 2 + 0 \cdot 3 = 2 \)<br>
+        - \( z_2 = \mathbf{w}_2 \cdot \mathbf{x} = 0 \cdot 2 + 1 \cdot 3 = 3 \)<br>
+        - \( z_3 = \mathbf{w}_3 \cdot \mathbf{x} = 1 \cdot 2 + 1 \cdot 3 = 5 \)<br><br>
+        Step 2: Apply softmax: <br>
+        - Numerator: \( e^{z_2} = e^{-0.7} = 0.496 \)<br>
+        - Denominator: \( e^{0.3} + e^{-0.7} + e^{0.3} = 1.349 + 0.496 + 1.349\)<br>
+        - Final answer: \( \hat{y}_2 = \\frac{0.496}{3.196} \approx 0.155 \)',
         'medium',
         'one_of_many',
         json_encode([
-            "A" => "0.1",
-            "B" => "-0.7",
-            "C" => "-0.2",
-            "D" => "0.5"
+            "A" => "-0.155",
+            "B" => "3.196",
+            "C" => "0.496",
+            "D" => "0.155"
         ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
-        json_encode(["correct_option" => "B"]),
+        json_encode(["correct_option" => "D"]),
         $exercise_number
     );
     $exercise_number++;
 
 }
-function add_linear_regression_exercises_to_the_lesson($lesson_number){
-    $module_two_term = get_term_by( 'slug', 'module-two', 'course_topic' );
-    if ( $module_two_term ) {
-        $category_id = $module_two_term->term_id;
-    } else {
-        error_log('Term "module-two" not found in course_topic taxonomy.');
-        $category_id = 0;
-    }
+function add_gaussian_distribution_exercises_to_the_lesson($lesson_number) {
+    $module_two_term = get_term_by('slug', 'module-two', 'course_topic');
+    $category_id = $module_two_term ? $module_two_term->term_id : 0;
+    $lesson_id = get_lesson_for_category($category_id, $lesson_number);
     $exercise_number = 1;
-    // Retrieve the ID of the first lesson for this category.
-    $lesson_id = get_lesson_for_category( $category_id, $lesson_number );
+
+    // Exercise 1: Gaussian PDF
+    add_exercise(
+        $lesson_id,
+        $category_id,
+        'Exercise ' . $exercise_number . ' – Gaussian PDF',
+        <<<EOT
+    The probability density function (PDF) of the Gaussian distribution with mean \( \mu \) and variance \( \sigma^2 \) is:
+
+    \[
+    p(x) =\\frac{1}{\sqrt{2\pi \sigma^2}} \\exp\left( -\\frac{(x - \mu)^2}{2\sigma^2} \right)
+    \]
+
+    <strong>Question:</strong><br>
+    What is the value of the PDF at \( x = 1 \), given \( \mu = 0 \), \( \sigma^2 = 1 \)? Round to 4 decimal places.
+    EOT,
+            'Solution:  
+    \[
+    p(1) =\\frac{1}{\sqrt{2\pi}} \\exp\left(-\\frac{1}{2}\right) \approx 0.2419
+    \]
+    Answer: 0.2419',
+        'easy',
+        'one_of_many',
+        json_encode([
+            "A" => "0.6065",
+            "B" => "0.2419",
+            "C" => "0.3989",
+            "D" => "0.1353"
+        ]),
+        json_encode(["correct_option" => "B"]),
+        $exercise_number++
+    );
+
+    // Exercise 2: Gaussian in Exponential Family Form
+    add_exercise(
+        $lesson_id,
+        $category_id,
+        'Exercise ' . $exercise_number . ' – Gaussian as Exponential Family',
+        <<<EOT
+    The Gaussian distribution can be written in exponential family form as:
+
+    \[
+    p(x) = h(x) \\exp\left(\\eta_1 x +\\eta_2 x^2 - A(\\eta) \right)
+    \]
+
+    <strong>Question:</strong><br>
+    Which of the following represents the sufficient statistic \( T(x) \) for the Gaussian distribution?
+    EOT,
+            'Solution:  
+    For Gaussian, the sufficient statistics are \( T(x) = (x, x^2) \).  
+    Answer: C.',
+        'medium',
+        'one_of_many',
+        json_encode([
+            "A" => "x",
+            "B" => "x^2",
+            "C" => "(x, x^2)",
+            "D" => "None of the above"
+        ]),
+        json_encode(["correct_option" => "C"]),
+        $exercise_number++
+    );
+
+    // Exercise 3: Mean and Variance of Gaussian
+    add_exercise(
+        $lesson_id,
+        $category_id,
+        'Exercise ' . $exercise_number . ' – Moments of Gaussian Distribution',
+        <<<EOT
+    A Gaussian random variable with parameters \( \mu = 2 \), \( \sigma^2 = 4 \) is given.
+
+    <strong>Question:</strong><br>
+    What are the expected value and variance of this distribution?
+    EOT,
+            'Solution:  <br>
+    Expected value is \( \mu = 2 \), variance is \( \sigma^2 = 4 \).  <br>
+    Answer: Expected Value = 2, Variance = 4.',
+        'easy',
+        'labeled_inputs',
+        null,
+        json_encode(["correct_options"=>[
+            "expected_value" => "2",
+            "variance" => "4"
+        ]]),
+        $exercise_number++
+    );
+
+    // Exercise 4: Log-Likelihood for Gaussian
+    add_exercise(
+        $lesson_id,
+        $category_id,
+        'Exercise ' . $exercise_number . ' – Log-Likelihood of Gaussian',
+        <<<EOT
+    For \( x_1 = 2 \), \( x_2 = 4 \), assuming a Gaussian distribution with known variance \( \sigma^2 = 1 \), the log-likelihood function for mean \( \mu \) is:
+
+    \[
+    \\ell(\mu) = -\\frac{1}{2} \sum_{i=1}^{2} (x_i - \mu)^2 + \text{const}
+    \]
+
+    <strong>Question:</strong><br>
+    Which value of \( \mu \) maximizes the log-likelihood?
+    EOT,
+            'Solution:  <br>
+    The log-likelihood is maximized at the sample mean:  
+    \[
+    \hat{\mu} =\\frac{2 + 4}{2} = 3
+    \]
+    Answer: 3.',
+        'medium',
+        'one_of_many',
+        json_encode([
+            "A" => "2",
+            "B" => "2.5",
+            "C" => "3",
+            "D" => "3.5"
+        ]),
+        json_encode(["correct_option" => "C"]),
+        $exercise_number++
+    );
 }
+
 function exercise_module_two_plugin_activate() {
 
     add_probability_distributions_exercises_to_the_lesson(1);
     add_exponential_family_exercises_to_the_lesson(2);
-    add_glm_exercises_to_the_lesson(3);
-    add_repetition_exercises_to_the_lesson(4);
-    add_binomial_distribution_exercises_to_the_lesson(5);
-    add_multinomial_distribution_exercises_to_the_lesson(6);
-    add_linear_regression_exercises_to_the_lesson(7);
+    add_exponential_family_two_exercises_to_the_lesson(3);
+    add_glm_exercises_to_the_lesson(4);
+    add_repetition_exercises_to_the_lesson(5);
+    add_bernoulli_distribution_exercises_to_the_lesson(6);
+    add_binomial_distribution_exercises_to_the_lesson(7);
+    add_gaussian_distribution_exercises_to_the_lesson(8);
+    add_multinomial_distribution_exercises_to_the_lesson(9);
 }
 register_activation_hook( __FILE__, 'exercise_module_two_plugin_activate' );
 ?>
