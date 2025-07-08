@@ -7,6 +7,8 @@ Author: Wojciech Dobrowolski
 */
 require_once plugin_dir_path( __FILE__ ) . 'bkt-algorithm.php';
 require_once plugin_dir_path( __FILE__ ) . 'exercises-vector-spaces.php';
+require_once plugin_dir_path( __FILE__ ) . 'exercises-module-one.php';
+require_once plugin_dir_path( __FILE__ ) . 'exercises-module-two.php';
 
 function register_lesson_post_type() {
     $labels = array(
@@ -293,7 +295,11 @@ function get_lesson_for_category( $category_id, $lesson_nbr ) {
 function exercise_plugin_activate() {
     create_exercises_table();
 
-    add_vector_spaces_exercises();
+        // First: Module One
+    exercise_module_one_plugin_activate();
+
+    // Then: Module Two
+    exercise_module_two_plugin_activate();
 }
 register_activation_hook( __FILE__, 'exercise_plugin_activate' );
 
@@ -616,4 +622,5 @@ function create_code_runner_exercise($lesson_id, $category_id, $exercise_number,
         $exercise_number
     );
 }
+
 ?>

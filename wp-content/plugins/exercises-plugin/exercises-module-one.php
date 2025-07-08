@@ -1,12 +1,5 @@
 <?php
-/**
- * Plugin Name: Exercises Module One
- * Description: A plugin to demonstrate exercises for module one.
- * Version: 1.0
- * Author: Wojciech Dobrowolski
- * 
- * @package ExercisesModuleOne
- */
+
 function add_module_one_lesson_2_exercises($lesson_number) {
     $module_one_term = get_term_by( 'slug', 'module-one', 'course_topic' );
     if ( $module_one_term ) {
@@ -1851,5 +1844,4 @@ function exercise_module_one_plugin_activate() {
     add_module_one_lesson_5_exercises(6);
     add_module_one_lesson_6_exercises(7);
 }
-register_activation_hook( __FILE__, 'exercise_module_one_plugin_activate' );
 ?>

@@ -89,13 +89,13 @@ function render_exercise($recommended_exercise, $term_id, $feedback = null) {
     if ( $recommended_exercise->question_type !== 'drag_and_drop'  && $recommended_exercise->question_type !== 'array_type' ) {
         $exercise_html = add_tooltips_to_content( $recommended_exercise->exercise_content );
         error_log("exercise html is ".$exercise_html);
-        echo '<div class="exercise-description">' . wp_kses_post( str_replace('\{', '\\{', $exercise_html) ) . '</div>';
+        echo '<div class="exercise-description  mathjax-render">' . wp_kses_post( str_replace('\{', '\\{', $exercise_html) ) . '</div>';
 
         // echo '<div>' . wp_kses( $recommended_exercise->exercise_content, $allowed_tags ) . '</div>';
 
     }
     // Start the form. The action posts back to the same page.
-    echo '<form method="post" action="" id="exercise-form" class="exercise-form">';
+    echo '<form method="post" action="" id="exercise-form" class="exercise-form  mathjax-render">';
 
     // Include hidden exercise_id so we know which exercise is being answered.
     echo '<input type="hidden" name="exercise_id" value="' . esc_attr( $recommended_exercise->id ) . '">';
@@ -151,8 +151,8 @@ function render_exercise($recommended_exercise, $term_id, $feedback = null) {
             // Shuffle the display order (but keep original index)
             shuffle($indexed_definitions);
 
-            echo '<div class="match-boxes-exercise">';
-            echo '<table class="match-boxes-table">';
+            echo '<div class="match-boxes-exercise  mathjax-render">';
+            echo '<table class="match-boxes-table  mathjax-render">';
             echo '<thead><tr><th>Term</th><th>Definition</th></tr></thead>';
             echo '<tbody>';
 
@@ -170,17 +170,17 @@ function render_exercise($recommended_exercise, $term_id, $feedback = null) {
                 }
 
                 echo '<tr>';
-                echo '<td class="match-term">' . esc_html($term) . '</td>';
+                echo '<td class="match-term  mathjax-render">' . esc_html($term) . '</td>';
                 echo '<td>';
 
                 if ($submitted_value != '') {
                     // Show the submitted answer as a colored box (not editable)
-                    echo '<div class="match-result-box ' . esc_attr($input_class) . '">';
+                    echo '<div class="match-result-box ' . esc_attr($input_class) . ' mathjax-render">';
                     echo esc_html($definitions[$submitted_value]);
                     echo '</div>';
                 } else {
                     // Show the select input on first load (not submitted yet)
-                    echo '<select name="user_answer[' . $i . ']" class="match-select">';
+                    echo '<select name="user_answer[' . $i . ']" class="match-select mathjax-render">';
                     echo '<option value="">-- Choose a match --</option>';
                     foreach ($indexed_definitions as $item) {
                         $index = $item['original_index'];
@@ -229,7 +229,7 @@ function render_exercise($recommended_exercise, $term_id, $feedback = null) {
                         $class = 'incorrect-answer';
                     }
 
-                    echo '<label class="' . esc_attr($class) . '" style="display:block; margin-bottom:8px;">';
+                    echo '<label class="' . esc_attr($class) . ' mathjax-render" style="display:block; margin-bottom:8px;">';
                     echo $safe_label . ' = ';
                     echo '<input type="number" step="any" value="' . esc_attr($user_value) . '" readonly style="width:120px;">';
                     echo '</label>';
@@ -269,7 +269,6 @@ function render_exercise($recommended_exercise, $term_id, $feedback = null) {
 
         $json = html_entity_decode($json_string, ENT_QUOTES|ENT_HTML5);
         $options = json_decode( $json, true );
-        $options = add_tooltips_to_content( $options );
         error_log("decoded options are ".print_r($options, true));
 
         if ( is_array( $options ) ) {
@@ -283,7 +282,7 @@ function render_exercise($recommended_exercise, $term_id, $feedback = null) {
                     $class = 'incorrect-answer';
                 }
 
-                echo '<label class="' . esc_attr($class) . ' mathjax-render" style="display:block;margin-bottom:5px;">';
+                echo '<label class="' . esc_attr($class) . ' " style="display:block;margin-bottom:5px;">';
                 echo '<input type="radio" name="user_answer" value="' . esc_attr($key) . '" ' . $checked . '> ' . wp_kses_post($option);
                 echo '</label>';
             }
@@ -314,7 +313,7 @@ function render_exercise($recommended_exercise, $term_id, $feedback = null) {
 
                 $checked = $is_selected ? 'checked' : '';
 
-                echo '<label class="' . esc_attr($class) . ' mathjax-render" style="display:block; margin-bottom:5px;">';
+                echo '<label class="' . esc_attr($class) . '" style="display:block; margin-bottom:5px;">';
                 echo '<input type="checkbox" name="user_answer[]" value="' . esc_attr($key) . '" ' . $checked . '> ';
                 echo wp_kses_post($option_text);
                 echo '</label>';
@@ -503,8 +502,8 @@ function render_exercise($recommended_exercise, $term_id, $feedback = null) {
                     }
                 }
                 // force exact indent regardless of what's in the original content
-                $replacement = '<div class="dropzone ' . esc_attr($css_class) . '" style="display:inline-block; border:2px dashed #aaa; min-height:30px; margin:3px 0; width:50%; padding:3px 6px; vertical-align:middle;">' .
-                    '<div class="dropzone-content" style="ppointer-events:none; white-space:nowrap; overflow-x:auto; text-align:left;">' . wp_kses_post($options[$submitted_val] ?? 'Drop here') . '</div>' .
+                $replacement = '<div class="dropzone ' . esc_attr($css_class) . ' mathjax-render" style="display:inline-block; border:2px dashed #aaa; min-height:30px; margin:3px 0; width:50%; padding:3px 6px; vertical-align:middle;">' .
+                    '<div class="dropzone-content mathjax-render" style="pointer-events:none; white-space:nowrap; overflow-x:auto; text-align:left;">' . wp_kses_post($options[$submitted_val] ?? 'Drop here') . '</div>' .
                     '<input type="hidden" name="user_answer[' . $i . ']" value="' . esc_attr($submitted_val) . '">' .
                 '</div>';
 

@@ -1,12 +1,5 @@
 <?php
-/**
- * Plugin Name: Exercises Module Two
- * Description: A plugin to demonstrate exercises for module two.
- * Version: 1.0
- * Author: Wojciech Dobrowolski
- * 
- * @package ExercisesModuleTwo
- */
+
 function add_probability_distributions_exercises_to_the_lesson($lesson_number) {
     $module_two_term = get_term_by( 'slug', 'module-two', 'course_topic' );
     if ( $module_two_term ) {
@@ -242,19 +235,15 @@ function add_exponential_family_exercises_to_the_lesson($lesson_number) {
     <strong>Question:</strong><br>  
     What is the expression for \( A(\\theta) \)?
     <br>
-    A. \( A(\\theta) = \\int h(y) \\exp\\left(\\eta(\\theta) \\cdot T(y)\\right) \, dy \)  <br>
-    B. \( A(\\theta) = \\ln \\int h(y) \\exp\\left(\\eta(\\theta) \\cdot T(y)\\right) \, dy \) <br> 
-    C. \( A(\\theta) = \\exp\\left(\\int h(y) \\eta(\\theta) \\cdot T(y) \, dy\\right) \)  <br>
-    D. \( A(\\theta) = h(y) \\ln\\left(\\eta(\\theta) \\cdot T(y)\\right) \)<br>
     EOT,
         'Solution: Taking the natural logarithm of both sides of the equation from step 2, \( e^{A(\\theta)} = \\int h(y) \\exp\\left(\\eta(\\theta) \\cdot T(y)\\right) \, dy \), we get \( A(\\theta) = \\ln \\int h(y) \\exp\\left(\\eta(\\theta) \\cdot T(y)\\right) \, dy \). Answer: B.',
         'medium',
         'one_of_many',
         json_encode([
-            "A" => "Integral of h(y) exp(η(θ) · T(y))",
-            "B" => "Log of integral of h(y) exp(η(θ) · T(y))",
-            "C" => "Exp of integral of h(y) η(θ) · T(y)",
-            "D" => "h(y) ln(η(θ) · T(y))"
+            "A" => "\( A(\\theta) = \\int h(y) \\exp\\left(\\eta(\\theta) \\cdot T(y)\\right) \, dy \)",
+            "B" => "\( A(\\theta) = \\ln \\int h(y) \\exp\\left(\\eta(\\theta) \\cdot T(y)\\right) \, dy \)",
+            "C" => "\( A(\\theta) = \\exp\\left(\\int h(y) \\eta(\\theta) \\cdot T(y) \, dy\\right) \) ",
+            "D" => "\( A(\\theta) = h(y) \\ln\\left(\\eta(\\theta) \\cdot T(y)\\right) \)"
         ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
         json_encode(["correct_option" => "B"]),
         $exercise_number
@@ -658,7 +647,7 @@ function add_glm_exercises_to_the_lesson($lesson_number){
         <<<EOT
     In Generalized Linear Models (GLMs), we train the model by estimating parameters \( \boldsymbol{w} \) that maximize the likelihood of the observed data.<br><br>
 
-    Given data pairs \( (\mathbf{x}^{(i)}, y^{(i)}) \), we assume that the response \( y^{(i)} \) follows an exponential family distribution whose natural parameter \(\\eta^{(i)} = \mathbf{x}^{(i)\top} \boldsymbol{w} \).<br><br>
+    Given data pairs \( (\mathbf{x}^{(i)}, y^{(i)}) \), we assume that the response \( y^{(i)} \) follows an exponential family distribution whose natural parameter \(\\eta^{(i)} = \mathbf{x}^{(i)\\top} \boldsymbol{w} \).<br><br>
 
     The model is trained using <strong>Maximum Likelihood Estimation (MLE)</strong>:
 
@@ -704,11 +693,7 @@ function add_glm_exercises_to_the_lesson($lesson_number){
 
     where \( \hat{y} = h(\mathbf{x}) = \mathbb{E}[y \mid \mathbf{x}] \) is the model's predicted value.<br><br>
 
-    Using gradient ascent with learning rate \( \alpha \), the update rule becomes:
-
-    \[
-    \\theta_j \leftarrow \\theta_j + \alpha (y - \hat{y}) x_j
-    \]
+    Using gradient ascent with learning rate \( \alpha \). <br>
 
     This rule adjusts each parameter based on the input value \( x_j \), the learning rate, and the prediction error.
 
@@ -718,20 +703,22 @@ function add_glm_exercises_to_the_lesson($lesson_number){
 
     EOT,
         'Solution:<br>
-    A: True — This is the correct gradient ascent rule for log-likelihood in GLMs.<br>
-    B: False — This is the Perceptron update rule (does not use \( \hat{y} \)).<br>
+    
+    A: False — This is the Perceptron update rule (does not use \( \hat{y} \)).<br>
+    B: True — This is the correct gradient ascent rule for log-likelihood in GLMs.<br>
     C: False — This form would move in the wrong direction (negative gradient).<br>
     D: False — Division by \( x_j \) is incorrect and has no basis in the MLE derivation.<br>
-    Correct answer: A',
+    Correct answer: B',
         'medium',
         'one_of_many',
         json_encode([
-            "A" => "\( \\theta_j \leftarrow \\theta_j + \alpha (y - \hat{y}) x_j \)",
-            "B" => "\( \\theta_j \leftarrow \\theta_j + \alpha y x_j \)",
+            
+            "A" => "\( \\theta_j \leftarrow \\theta_j + \alpha y x_j \)",
+            "B" => "\( \\theta_j \leftarrow \\theta_j + \alpha (y - \hat{y}) x_j \)",
             "C" => "\( \\theta_j \leftarrow \\theta_j - \alpha (y - \hat{y}) x_j \)",
             "D" => "\( \\theta_j \leftarrow \\theta_j + \alpha\\frac{(y - \hat{y})}{x_j} \)"
         ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
-        json_encode(["correct_option" => "A"]),
+        json_encode(["correct_option" => "B"]),
         $exercise_number
     );
     $exercise_number++;
@@ -749,11 +736,7 @@ function add_glm_exercises_to_the_lesson($lesson_number){
     where \( \hat{y}^{(i)} \) is the predicted value for the \( i \)-th input.
 
     <br><br>
-    In <strong>batch gradient ascent</strong>, instead of updating using a single example, we compute the gradient over the entire dataset of \( n \) examples:
-
-    \[
-    \\theta_j \leftarrow \\theta_j + \alpha \sum_{i=1}^{n} (y^{(i)} - \hat{y}^{(i)}) x^{(i)}_j
-    \]
+    In <strong>batch gradient ascent</strong>, instead of updating using a single example, we compute the gradient over the entire dataset of \( n \) examples. <br>
 
     This provides a smoother and more stable update by averaging over the dataset.
 
@@ -770,13 +753,13 @@ function add_glm_exercises_to_the_lesson($lesson_number){
     Correct answer: A',
         'medium',
         'one_of_many',
-        json_encode([
-            "A" => "\( \\theta_j \leftarrow \\theta_j + \alpha \sum_{i=1}^{n} (y^{(i)} - \hat{y}^{(i)}) x^{(i)}_j \)",
-            "B" => "\( \\theta_j \leftarrow \\theta_j + \alpha \sum_{i=1}^{n} x^{(i)}_j \)",
-            "C" => "\( \\theta_j \leftarrow \sum_{i=1}^{n} (y^{(i)} - \hat{y}^{(i)}) x^{(i)}_j \)",
-            "D" => "\( \\theta_j \leftarrow \\theta_j - \alpha \sum_{i=1}^{n} (y^{(i)} - \hat{y}^{(i)}) x^{(i)}_j \)"
+        json_encode([   
+            "A" => "\( \\theta_j \leftarrow \\theta_j + \alpha \sum_{i=1}^{n} x^{(i)}_j \)",
+            "B" => "\( \\theta_j \leftarrow \sum_{i=1}^{n} (y^{(i)} - \hat{y}^{(i)}) x^{(i)}_j \)",
+            "C" => "\( \\theta_j \leftarrow \\theta_j - \alpha \sum_{i=1}^{n} (y^{(i)} - \hat{y}^{(i)}) x^{(i)}_j \)",
+            "D" => "\( \\theta_j \leftarrow \\theta_j + \alpha \sum_{i=1}^{n} (y^{(i)} - \hat{y}^{(i)}) x^{(i)}_j \)"
         ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
-        json_encode(["correct_option" => "A"]),
+        json_encode(["correct_option" => "D"]),
         $exercise_number
     );
     $exercise_number++;
@@ -794,7 +777,7 @@ function add_glm_exercises_to_the_lesson($lesson_number){
     <br>
     - <strong>Canonical response</strong>: The expected value \( \mu = \mathbb{E}[y] \), which is related to the natural parameter by the gradient of the log-partition function:
     \[
-    \mu =\\frac{dA(\\eta)}{d\eta}
+    \mu =\\frac{dA(\\eta)}{d\\eta}
     \]
 
     This gradient defines the <strong>canonical response</strong>.
@@ -806,7 +789,7 @@ function add_glm_exercises_to_the_lesson($lesson_number){
     EOT,
         'Solution:<br>
     A: True — The natural parameter appears linearly in the exponential family form.<br>
-    B: True — The canonical link maps \( \mu \) to \(\\eta \), often with \( g(\mu) = \log\left(\\frac{\mu}{1 - \mu} \right) \) for Bernoulli.<br>
+    B: True — The canonical link maps \( \mu \) to \(\\eta \), often with \( g(\mu) = \log\left(\\frac{\mu}{1 - \mu} \\right) \) for Bernoulli.<br>
     C: True — The canonical response is \( \mu =\\frac{dA(\\eta)}{d\eta} \), the gradient of the log-partition function.<br>
     D: False — The natural parameter \(\\eta \) is computed from input, not equal to the expected value \( \mu \).<br>
     Correct answers: A, B, C',
@@ -847,7 +830,7 @@ function add_glm_exercises_to_the_lesson($lesson_number){
     <br>
     GLMs define a mapping:
     \[
-    \mathbf{x} \xrightarrow{\text{model}}\\eta \xrightarrow{\text{link function}} \mu
+    \mathbf{x} \xrightarrow{\\text{model}}\\eta \xrightarrow{\\text{link function}} \mu
     \]
 
     <br>
@@ -881,8 +864,8 @@ function add_glm_exercises_to_the_lesson($lesson_number){
     In a Generalized Linear Model (GLM), three types of parameters are involved:
 
     <br><br>
-    - <strong>Model parameters</strong> \( \boldsymbol{\\theta} \): The weights of the linear model.
-    - <strong>Natural parameter</strong> \(\\eta \): The parameter in the exponential family form.
+    - <strong>Model parameters</strong> \( \boldsymbol{\\theta} \): The weights of the linear model.<br>
+    - <strong>Natural parameter</strong> \(\\eta \): The parameter in the exponential family form.<br>
     - <strong>Canonical parameter</strong> (e.g. \( \mu \), \( \phi \)): The standard parameter of the distribution, such as the mean or probability.
 
     <br><br>
@@ -933,22 +916,22 @@ function add_glm_exercises_to_the_lesson($lesson_number){
         $category_id,
         'Exercise ' . $exercise_number . ' – Why Is Logistic Regression Still Called Regression?',
         <<<EOT
-    In traditional machine learning terms:
-    - <strong>Regression</strong> means predicting a continuous output.
-    - <strong>Classification</strong> means predicting discrete categories.
-
-    Yet in statistics, both <strong>linear regression</strong> and <strong>logistic regression</strong> are called <strong>regression models</strong> — even though logistic regression is used for classification.
+    In traditional machine learning terms:<br>
+    - <strong>Regression</strong> means predicting a continuous output.<br>
+    - <strong>Classification</strong> means predicting discrete categories.<br>
+        <br>
+    Yet in statistics, both <strong>linear regression</strong> and <strong>logistic regression</strong> are called <strong>regression models</strong> — even though logistic regression is used for classification.<br>
 
     <br><br>
     <strong>Why?</strong><br>
-    Because in Generalized Linear Models (GLMs), “regression” refers not to the output type, but to the structure of the model:
-    - Both models use a <strong>linear function of inputs</strong>: \(\\eta = \mathbf{x}^\\top \boldsymbol{\\theta} \)
-    - Both models use that \(\\eta \) to predict the <strong>expected value</strong> of \( y \), possibly through a <strong>link function</strong>.
-
-    For example:
+    Because in Generalized Linear Models (GLMs), “regression” refers not to the output type, but to the structure of the model:<br>
+    - Both models use a <strong>linear function of inputs</strong>: \(\\eta = \mathbf{x}^\\top \boldsymbol{\\theta} \)<br>
+    - Both models use that \(\\eta \) to predict the <strong>expected value</strong> of \( y \), possibly through a <strong>link function</strong>.<br>
+        <br>
+    For example:<br>
     <ul>
     <li>Linear regression: \( \mu =\\eta \)</li>
-    <li>Logistic regression: \( \mu = \sigma(\\eta) =\\frac{1}{1 + e^{-\eta}} \)</li>
+    <li>Logistic regression: \( \mu = \sigma(\\eta) =\\frac{1}{1 + e^{-\\eta}} \)</li>
     </ul>
 
     In both cases, the <strong>structure is a regression on the expected value</strong> — even if the final prediction is categorical.
@@ -991,53 +974,7 @@ function add_exponential_family_two_exercises_to_the_lesson($lesson_number){
     // Retrieve the ID of the first lesson for this category.
     $lesson_id = get_lesson_for_category( $category_id, $lesson_number );
     
-    // Exercise 2: Generalized Linear Model and MLE
-    $result = add_exercise(
-        $lesson_id,
-        $category_id,
-        'Exercise ' . $exercise_number . ' – Logistic Regression belongs to Exponential Family',
-        <<<EOT
-    A <strong>generalized linear model (GLM)</strong> is a flexible framework for modeling relationships between a response variable and predictors, extending linear regression to non-Gaussian distributions. A GLM consists of three components:<br>
-    1. <strong>Random Component</strong>: The response variable follows a distribution from the exponential family (e.g., Bernoulli for logistic regression).<br>
-    2. <strong>Systematic Component</strong>: A linear predictor \( \\eta = \mathbf{w} \cdot \mathbf{x} \), where \( \mathbf{w} \) are weights and \( \mathbf{x} \) are features.<br>
-    3. <strong>Link Function</strong>: A function \( g \) such that \( g(\mu) = \\eta \), where \( \mu \) is the expected value of the response. For logistic regression, the link function is the logit, \( g(\mu) = \ln\left(\\frac{\mu}{1 - \mu}\\right) \).<br>
-        <br>
-    GLMs are typically solved using <strong>maximum likelihood estimation (MLE)</strong>. The likelihood function is constructed based on the exponential family distribution, and the log-likelihood is maximized with respect to the weights \( \mathbf{w} \). Since the log-likelihood is often non-linear, iterative optimization methods like gradient descent or Newton-Raphson are used to find the optimal weights.
-    <br>
-        <br>
-    Given a logistic regression model with features \( \mathbf{x} = [1, 2] \) (including bias) and weights \( \mathbf{w} = [0.5, -0.3] \), the linear predictor is:<br>
-
-    \[
-     \\eta = \mathbf{w} \cdot \mathbf{x}
-    \]
-
-    The predicted probability is obtained via the logistic function:
-
-    \[
-     \mu = \sigma(\\eta) = \\frac{1}{1 + e^{-\\eta}}
-    \]
-
-    <strong>Question:</strong>  
-    Compute the predicted probability \( \mu \). Round to 3 decimal places.
-        <br>
-        <br>
-    1. Calculate \( \\eta \).  <br>
-    2. Compute \( \mu = \sigma(\\eta) \).<br>
-    EOT,
-        'Solution:  <br>
-    1. \( \\eta = 0.5 \cdot 1 + (-0.3) \cdot 2 = 0.5 - 0.6 = -0.1 \).  <br>
-    2. \( \mu = \\frac{1}{1 + e^{0.1}} \\approx \\frac{1}{1 + 1.1052} \\approx 0.475 \).  <br>
-    Answer: \( \mu \\approx 0.475 \).',
-        'medium',
-        'labeled_inputs',
-        null,
-        json_encode(["correct_options" => [
-            "\(\\eta\)" => "-0.1",
-            "\(\mu\)" => "0.475"
-        ]]),
-        $exercise_number
-    );
-    $exercise_number++;
+    
 
     // Exercise 3: Gaussian Distribution in Exponential Family
     $result = add_exercise(
@@ -1072,21 +1009,17 @@ function add_exponential_family_two_exercises_to_the_lesson($lesson_number){
     \]
 
     <strong>Question:</strong><br>  
-    What is the sufficient statistic \( T(y) \) for the Gaussian distribution in the exponential family form?
+    What is the sufficient statistic \( T(y) \) for the Gaussian distribution in the exponential family form?<br>
 
-    A. \( y^2 \)  
-    B. \( [y, y^2] \)  
-    C. \( y \)  
-    D. \( \\frac{y}{\sigma^2} \)
     EOT,
         'Solution: From the rewritten PDF, the exponent is \( \\frac{\mu y}{\sigma^2} - \\frac{\mu^2}{2\sigma^2} \). The term involving \( y \) is \( \\frac{\mu y}{\sigma^2} \), so the sufficient statistic \( T(y) = y \). Answer: C.',
         'medium',
         'one_of_many',
         json_encode([
-            "A" => "y^2",
-            "B" => "[y, y^2]",
-            "C" => "y",
-            "D" => "y/σ^2"
+            "A" => "\( y^2 \)",
+            "B" => "\( [y, y^2] \)",
+            "C" => "\( y \)",
+            "D" => "\( \\frac{y}{\sigma^2} \)"
         ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
         json_encode(["correct_option" => "C"]),
         $exercise_number
@@ -1129,90 +1062,9 @@ function add_exponential_family_two_exercises_to_the_lesson($lesson_number){
     );
     $exercise_number++;
 
-    // Exercise 4: Log-Likelihood Gradient for Logistic Regression
-    $result = add_exercise(
-        $lesson_id,
-        $category_id,
-        'Exercise ' . $exercise_number . ' – Gradient of Logistic Log-Likelihood',
-        <<<EOT
-    In logistic regression, the log-likelihood is maximized to estimate the weights \( \mathbf{w} \). For a single observation with target \( y \in \{0, 1\} \), features \( \mathbf{x} \), and predicted probability \( \mu = \sigma(\mathbf{w} \cdot \mathbf{x}) \), the log-likelihood is:
+    
 
-    \[
-    \\ell(\mathbf{w}) = y \ln(\mu) + (1 - y) \ln(1 - \mu)
-    \]
 
-    To optimize \( \mathbf{w} \), we compute the gradient of the log-likelihood with respect to \( \mathbf{w} \):
-
-    \[
-    \\nabla_{\mathbf{w}} \\ell(\mathbf{w}) = (y - \mu) \mathbf{x}
-    \]
-
-    Consider a single observation with \( y = 1 \), \( \mathbf{x} = [1, 2] \), and \( \mathbf{w} = [0.5, -0.3] \).
-
-    <strong>Question:</strong>  <br>
-    Compute the gradient \( \\nabla_{\mathbf{w}} \\ell(\mathbf{w}) \). Round each component to 3 decimal places.<br>
-        <br>
-    1. Calculate \( \mathbf{w} \cdot \mathbf{x} \).<br>
-    2. Compute \( \mu = \sigma(\mathbf{w} \cdot \mathbf{x}) \).<br>
-    3. Compute the gradient \( (y - \mu) \mathbf{x} \).<br>
-    EOT,
-        'Solution:  <br>
-    1. \( \mathbf{w} \cdot \mathbf{x} = 0.5 \cdot 1 + (-0.3) \cdot 2 = 0.5 - 0.6 = -0.1 \).  <br>
-    2. \( \mu = \sigma(-0.1) =\\frac{1}{1 + e^{0.1}} \approx\\frac{1}{1 + 1.1052} \approx 0.475 \).  <br>
-    3. \( y - \mu = 1 - 0.475 = 0.525 \).  <br>
-    4. Gradient = \( 0.525 \cdot [1, 2] = [0.525, 1.050] \).  <br>
-    Answer: [0.525, 1.050].',
-        'hard',
-        'labeled_inputs',
-        null,
-        json_encode([
-            "correct_options" => [
-                "\(w_0\)" => "0.525",
-                "\(w_1\)" => "1.050"
-            ]
-        ]),
-        $exercise_number
-    );
-    $exercise_number++;
-
-    // Exercise 5: Exponential Family for Logistic Regression
-    $result = add_exercise(
-        $lesson_id,
-        $category_id,
-        'Exercise ' . $exercise_number . ' – Logistic Regression in Exponential Family',
-        <<<EOT
-    Logistic regression models the target variable \( y \in \{0, 1\} \) as a Bernoulli distribution, parameterized by \( p = \sigma(\mathbf{w} \cdot \mathbf{x}) \), where \( \sigma(z) =\\frac{1}{1 + e^{-z}} \). In the exponential family, the natural parameter \(\\eta \) relates to the linear predictor.
-    <br>
-    Given the canonical form of the Bernoulli distribution:<br>
-
-    \[
-    P(y | \\eta) = (1 - \sigma(\\eta)) \\exp(y \\eta)
-    \]
-
-    where \( \\eta = \ln\left(\\frac{p}{1 - p}\\right) \), and \( p = \sigma(\\eta) \).
-
-    <strong>Question:</strong>  <br>
-    For a logistic regression model with features \( \mathbf{x} = [1, -1] \) and weights \( \mathbf{w} = [0.2, 0.3] \), compute the natural parameter \( \\eta \). Round to 2 decimal places.<br>
-        <br>
-    1. Compute \( \mathbf{w} \cdot \mathbf{x} \).  <br>
-    2. Since \( \\eta = \mathbf{w} \cdot \mathbf{x} \) in logistic regression, report \( \\eta \).<br>
-    EOT,
-        'Solution:  <br>
-    1. \( \mathbf{w} \cdot \mathbf{x} = 0.2 \cdot 1 + 0.3 \cdot (-1) = 0.2 - 0.3 = -0.1 \).  <br>
-    2. \( \\eta = -0.1 \).  <br>
-    Answer: A.',
-        'medium',
-        'one_of_many',
-        json_encode([
-            "A" => "-0.10",
-            "B" => "0.10",
-            "C" => "-0.50",
-            "D" => "0.50"
-        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
-        json_encode(["correct_option" => "A"]),
-        $exercise_number
-    );
-    $exercise_number++;
 }
 
 function add_repetition_exercises_to_the_lesson($lesson_number) {
@@ -1275,11 +1127,11 @@ function add_repetition_exercises_to_the_lesson($lesson_number) {
     Which scenarios correctly match the activation function to the neuron type? Select all that apply.<br>
 
     EOT,
-        'Solution:  
-    - Scenario A: A single-layer perceptron for binary classification typically uses a threshold function (A is true).  
-    - Scenario B: Multiclass classification uses softmax to output probabilities (B is true).  
-    - Scenario C: Hidden layers typically use functions like ReLU or sigmoid, not threshold (C is false).  
-    - Scenario D: Scenario B does not use threshold (D is false).  
+        'Solution:  <br>
+    - Scenario A: A single-layer perceptron for binary classification typically uses a threshold function (A is true).  <br>
+    - Scenario B: Multiclass classification uses softmax to output probabilities (B is true).  <br>
+    - Scenario C: Hidden layers typically use functions like ReLU or sigmoid, not threshold (C is false).  <br>
+    - Scenario D: Scenario B does not use threshold (D is false).  <br>
     Correct answers: A, B.',
         'medium',
         'multiple_choice',
@@ -1392,7 +1244,7 @@ function add_repetition_exercises_to_the_lesson($lesson_number) {
 
     where \( \binom{n}{k} = \\frac{n!}{k!(n - k)!} \).<br>
         <br>
-    Consider a scenario with \( n = 5 \) trials and success probability \( p = 0.4 \).<b>
+    Consider a scenario with \( n = 5 \) trials and success probability \( p = 0.4 \).<br>
         <br>
     <strong>Question:</strong><br>
     Compute the probability of exactly 3 successes, i.e., \( P(X = 3) \). Round to 3 decimal places.<br>
@@ -1484,24 +1336,21 @@ function add_bernoulli_distribution_exercises_to_the_lesson($lesson_number) {
     The <strong>Bernoulli distribution</strong> is a special case of the binomial distribution with a single trial (\( n = 1 \)).<br><br>
     <strong>Question:</strong><br>
     What values can a Bernoulli random variable take, and what is its probability mass function (PMF)?<br><br>
-    A. Values 0 or 1; \( P(X = x) = p^x (1 - p)^{1 - x} \)<br>
-    B. Values 0 or 1; \( P(X = x) = \binom{1}{x} p^x (1 - p)^{1 - x} \)<br>
-    C. Values 0 or 1; \( P(X = x) = px \)<br>
-    D. Values 0 or 1; \( P(X = x) = (1 - p)^x \)<br>
+
     EOT,
         'Solution:  
-    Correct PMF is \( P(X = x) = p^x (1 - p)^{1 - x} \) for \( x \in \\{0, 1\\} \).  
+    Correct PMF is \( P(Y = y) = p^y (1 - p)^{1 - y} \) for \( y \in \\{0, 1\\} \).  
     Binomial coefficient for \( n = 1 \) is 1, so it simplifies to that form.  
     Answer: A.',
         'easy',
         'one_of_many',
         json_encode([
-            "A" => "Values 0 or 1; p^x (1 - p)^{1 - x}",
-            "B" => "Values 0 or 1; binomial form",
-            "C" => "px",
-            "D" => "(1 - p)^x"
+            "A" => "Values 0 or 1; \( P(Y = y) = \binom{1}{x} p^y (1 - p)^{1 - y} \)",
+            "B" => "Values 0 or 1; \( P(Y = y) = py \)",
+            "C" => "Values 0 or 1; \( P(Y = y) = p^y (1 - p)^{1 - y} \)",
+            "D" => "Values 0 or 1; \( P(Y = y) = (1 - p)^y \)"
         ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
-        json_encode(["correct_option" => "A"]),
+        json_encode(["correct_option" => "C"]),
         $exercise_number
     );
     $exercise_number++;
@@ -1512,16 +1361,16 @@ function add_bernoulli_distribution_exercises_to_the_lesson($lesson_number) {
         $category_id,
         'Exercise ' . $exercise_number . ' – Expected Value and Variance of Bernoulli',
         <<<EOT
-    A Bernoulli-distributed random variable \( X \sim \\text{Bernoulli}(p) \) has:<br>
-    - <strong>Expected Value</strong>: \( E[X] = p \)<br>
-    - <strong>Variance</strong>: \( \\text{Var}(X) = p(1 - p) \)<br><br>
+    A Bernoulli-distributed random variable \( Y \sim \\text{Bernoulli}(p) \) has:<br>
+    - <strong>Expected Value</strong>: \( E[Y] = p \)<br>
+    - <strong>Variance</strong>: \( \\text{Var}(Y) = p(1 - p) \)<br><br>
     <strong>Question:</strong><br>
     Compute the expected value and variance of a Bernoulli random variable with \( p = 0.7 \).<br>
     Provide both values.
     EOT,
         'Solution:<br>
-    - Expected Value: \( E[X] = 0.7 \)<br>
-    - Variance: \( \\text{Var}(X) = 0.7 \\cdot 0.3 = 0.21 \)',
+    - Expected Value: \( E[Y] = 0.7 \)<br>
+    - Variance: \( \\text{Var}(Y) = 0.7 \\cdot 0.3 = 0.21 \)',
         'easy',
         'labeled_inputs',
         null,
@@ -1541,26 +1390,26 @@ function add_bernoulli_distribution_exercises_to_the_lesson($lesson_number) {
     The Bernoulli distribution is also part of the <strong>exponential family</strong> and can be written as:
 
     \[
-    p(x | p) = p^x (1 - p)^{1 - x} = \\exp\\left( x \\ln\\left(\\frac{p}{1 - p}\\right) + \\ln(1 - p) \\right)
+    p(y | p) = p^y (1 - p)^{1 - y} = \\exp\\left( y \\ln\\left(\\frac{p}{1 - p}\\right) + \\ln(1 - p) \\right)
     \]
 
     <strong>Question:</strong><br>
     What are the components of the exponential family form for Bernoulli?<br>
     Match the following:<br><br>
-    - \( T(x) \): {blank1}<br>
+    - \( T(y) \): {blank1}<br>
     - \( \\eta(p) \): {blank2}<br>
     - \( A(p) \): {blank3}<br>
-    - \( h(x) \): {blank4}<br>
+    - \( h(y) \): {blank4}<br>
     EOT,
         'Solution: <br>
-    - \( T(x) = x \) (sufficient statistic)  <br>
+    - \( T(y) = y \) (sufficient statistic)  <br>
     - \( \\eta(p) = \\ln\\left(\\frac{p}{1 - p}\\right) \) (natural parameter)  <br>
     - \( A(p) = -\\ln(1 - p) \) (log-partition)  <br>
-    - \( h(x) = 1 \) (base measure)',
+    - \( h(y) = 1 \) (base measure)',
         'medium',
         'drag_and_drop',
         json_encode([
-            "A" => "x",
+            "A" => "y",
             "B" => "ln(p/(1 - p))",
             "C" => "-ln(1 - p)",
             "D" => "1"
@@ -1573,6 +1422,194 @@ function add_bernoulli_distribution_exercises_to_the_lesson($lesson_number) {
         ]),
         $exercise_number
     );
+    $exercise_number++;
+    $result = add_exercise(
+        $lesson_id,
+        $category_id,
+        'Exercise ' . $exercise_number . ' – Logit and Sigmoid from Bernoulli',
+        <<<EOT
+        The <strong>Bernoulli distribution</strong> can be expressed in exponential family form:
+
+        \[
+        p(x) = \\exp\\left(x \cdot \\eta - A(\\eta)\\right)
+        \]
+
+        where the natural parameter \( \\eta \) is related to the success probability \( p \) by:
+
+        \[
+        \\eta = \ln\\left(\\frac{p}{1 - p}\\right)
+        \]
+
+        This expression defines the <strong>canonical link function</strong> for the Bernoulli distribution — it maps the mean \( p \) to the natural parameter \( \\eta \).<br><br>
+
+        Solve this equation for \( p \). The resulting expression is called the <strong>canonical response function</strong>.<br><br>
+
+        <strong>Question:</strong><br>
+        Which of the following expressions correctly represents the <strong>canonical response function</strong> for the Bernoulli distribution?
+    EOT,
+        'Solution:<br>
+        Starting from the canonical link function:<br>
+        \[
+        \\eta = \\ln\\left(\\frac{p}{1 - p}\\right)
+        \]<br>
+        Solving for \( p \):<br>
+        \[
+        p = \\frac{1}{1 + e^{-\\eta}}
+        \]<br>
+        This is the <strong>canonical response function</strong> for the Bernoulli distribution — also known as the <strong>logistic (sigmoid)</strong> function.<br><br>
+        Correct answer: C.',
+        'medium',
+        'one_of_many',
+        json_encode([
+            "A" => "\(p = \\ln(1 + e^{-\\eta})\)",
+            "B" => "\(p = e^{-\\eta}\)",
+            "C" => "\(p = \\frac{1}{1 + e^{-\\eta}}\)",
+            "D" => "\(p = 1 - e^{-\\eta}\)",
+            "E" => "\(p = \\frac{e^{-\\eta}}{1 + e^{-\\eta}}\)"
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+        json_encode(["correct_option" => "C"]),
+        $exercise_number
+    );
+    $exercise_number++;
+
+
+    $result = add_exercise(
+        $lesson_id,
+        $category_id,
+        'Exercise ' . $exercise_number . ' – Canonical Link Function for Bernoulli',
+        <<<EOT
+        In a <strong>generalized linear model (GLM)</strong>, the link function connects the expected value \( \mu \) of the response variable to the linear predictor \( \\eta \).<br><br>
+
+        For the Bernoulli distribution, the canonical link is the <strong>logit</strong> function:
+
+        \[
+        g(\mu) = \ln\left(\\frac{\mu}{1 - \mu}\\right)
+        \]
+
+        This function is the inverse of the <strong>logistic (sigmoid)</strong> function:
+
+        \[
+        \mu = \\sigma(\\eta) = \\frac{1}{1 + e^{-\\eta}}
+        \]
+
+        Hence, logistic regression arises from using the Bernoulli distribution with its canonical link function. The model predicts the <strong>log-odds</strong> of success as a linear combination of input features.
+
+        <br><br>
+        <strong>Question:</strong><br>
+        Which of the following statements are true? Select all that apply.
+        <br><br>
+        A. The logit link function is the inverse of the sigmoid function.<br>
+        B. Logistic regression uses the canonical link for the Gaussian distribution.<br>
+        C. In logistic regression, \( \\eta = \\mathbf{w} \\cdot \\mathbf{x} \) represents the log-odds.<br>
+        D. The expected value \( \mu \) is mapped from \( \\eta \) using the exponential function.<br>
+        E. The canonical link function for Bernoulli is \( \ln\\left(\\frac{\mu}{1 - \mu}\\right) \).<br>
+    EOT,
+        'Solution:<br>
+        - A is true: the logit is the inverse of sigmoid.<br>
+        - B is false: logistic regression uses the Bernoulli distribution, not Gaussian.<br>
+        - C is true: logistic regression models log-odds via a linear predictor.<br>
+        - D is false: \( \mu = \\frac{1}{1 + e^{-\\eta}} \), not \( e^{\\eta} \).<br>
+        - E is true: this is the canonical link for Bernoulli.<br><br>
+        Correct answers: A, C, E.',
+        'medium',
+        'multiple_choice',
+        json_encode([
+            "A" => "The logit link function is the inverse of the sigmoid function.",
+            "B" => "Logistic regression uses the canonical link for the Gaussian distribution.",
+            "C" => "In logistic regression, η = w ⋅ x represents the log-odds.",
+            "D" => "The expected value μ is mapped from η using the exponential function.",
+            "E" => "The canonical link function for Bernoulli is ln(μ / (1 − μ))."
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+        json_encode(["correct_options" => ["A", "C", "E"]]),
+        $exercise_number
+    );
+    $exercise_number++;
+
+    // Exercise 2: Generalized Linear Model and MLE
+    $result = add_exercise(
+        $lesson_id,
+        $category_id,
+        'Exercise ' . $exercise_number . ' – Logistic Regression belongs to Exponential Family',
+        <<<EOT
+    A <strong>generalized linear model (GLM)</strong> is a flexible framework for modeling relationships between a response variable and predictors, extending linear regression to non-Gaussian distributions. A GLM consists of three components:<br>
+    1. <strong>Random Component</strong>: The response variable follows a distribution from the exponential family (e.g., Bernoulli for logistic regression).<br>
+    2. <strong>Systematic Component</strong>: A linear predictor \( \\eta = \mathbf{w} \cdot \mathbf{x} \), where \( \mathbf{w} \) are weights and \( \mathbf{x} \) are features.<br>
+    3. <strong>Link Function</strong>: A function \( g \) such that \( g(\mu) = \\eta \), where \( \mu \) is the expected value of the response. For logistic regression, the link function is the logit, \( g(\mu) = \ln\left(\\frac{\mu}{1 - \mu}\\right) \).<br>
+        <br>
+    GLMs are typically solved using <strong>maximum likelihood estimation (MLE)</strong>. The likelihood function is constructed based on the exponential family distribution, and the log-likelihood is maximized with respect to the weights \( \mathbf{w} \). Since the log-likelihood is often non-linear, iterative optimization methods like gradient descent or Newton-Raphson are used to find the optimal weights.
+    <br>
+        <br>
+    Given a logistic regression model with features \( \mathbf{x} = [1, 2] \) (including bias) and weights \( \mathbf{w} = [0.5, -0.3] \), the linear predictor is:<br>
+
+    \[
+     \\eta = \mathbf{w} \cdot \mathbf{x}
+    \]
+
+    The predicted probability is obtained via the logistic function:
+
+    \[
+     \mu = \sigma(\\eta) = \\frac{1}{1 + e^{-\\eta}}
+    \]
+
+    <strong>Question:</strong>  
+    Compute the predicted probability \( \mu \). Round to 3 decimal places.
+        <br>
+        <br>
+    1. Calculate \( \\eta \).  <br>
+    2. Compute \( \mu = \sigma(\\eta) \).<br>
+    EOT,
+        'Solution:  <br>
+    1. \( \\eta = 0.5 \cdot 1 + (-0.3) \cdot 2 = 0.5 - 0.6 = -0.1 \).  <br>
+    2. \( \mu = \\frac{1}{1 + e^{0.1}} \\approx \\frac{1}{1 + 1.1052} \\approx 0.475 \).  <br>
+    Answer: \( \mu \\approx 0.475 \).',
+        'medium',
+        'labeled_inputs',
+        null,
+        json_encode(["correct_options" => [
+            "\(\\eta\)" => "-0.1",
+            "\(\mu\)" => "0.475"
+        ]]),
+        $exercise_number
+    );
+    $exercise_number++;
+        // Exercise 5: Exponential Family for Logistic Regression
+    $result = add_exercise(
+        $lesson_id,
+        $category_id,
+        'Exercise ' . $exercise_number . ' – Logistic Regression in Exponential Family',
+        <<<EOT
+    Logistic regression models the target variable \( y \in \{0, 1\} \) as a Bernoulli distribution, parameterized by \( p = \sigma(\mathbf{w} \cdot \mathbf{x}) \), where \( \sigma(z) =\\frac{1}{1 + e^{-z}} \). In the exponential family, the natural parameter \(\\eta \) relates to the linear predictor.
+    <br>
+    Given the canonical form of the Bernoulli distribution:<br>
+
+    \[
+    P(y | \\eta) = (1 - \sigma(\\eta)) \\exp(y \\eta)
+    \]
+
+    where \( \\eta = \ln\left(\\frac{p}{1 - p}\\right) \), and \( p = \sigma(\\eta) \).<br>
+        <br>
+    <strong>Question:</strong>  <br>
+    For a logistic regression model with features \( \mathbf{x} = [1, -1] \) and weights \( \mathbf{w} = [0.2, 0.3] \), compute the natural parameter \( \\eta \). Round to 2 decimal places.<br>
+        <br>
+    1. Compute \( \mathbf{w} \cdot \mathbf{x} \).  <br>
+    2. Since \( \\eta = \mathbf{w} \cdot \mathbf{x} \) in logistic regression, report \( \\eta \).<br>
+    EOT,
+        'Solution:  <br>
+    1. \( \mathbf{w} \cdot \mathbf{x} = 0.2 \cdot 1 + 0.3 \cdot (-1) = 0.2 - 0.3 = -0.1 \).  <br>
+    2. \( \\eta = -0.1 \).  <br>
+    Answer: A.',
+        'medium',
+        'one_of_many',
+        json_encode([
+            "A" => "-0.10",
+            "B" => "0.10",
+            "C" => "-0.50",
+            "D" => "0.50"
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+        json_encode(["correct_option" => "A"]),
+        $exercise_number
+    );
+    $exercise_number++;
 }
 
 function add_binomial_distribution_exercises_to_the_lesson($lesson_number) {
@@ -1692,10 +1729,6 @@ function add_binomial_distribution_exercises_to_the_lesson($lesson_number) {
     <strong>Question:</strong><br>  
     Which of the following represents the correct log-likelihood function for this observation? Assume the binomial coefficient term is constant and focus on the variable-dependent terms.<br>
         <br>
-    A. \( 3 \ln(p) + 5 \ln(1 - p) \)  <br>
-    B. \( 8 \ln(p) + 3 \ln(1 - p) \)  <br>
-    C. \( 3 \ln(p) + 8 \ln(1 - p) \)  <br>
-    D. \( 5 \ln(p) + 3 \ln(1 - p) \)    <br>
     EOT,
         'Solution:  
     The log-likelihood is \( \\ell(p) = \ln\left(\binom{8}{3}\right) + 3 \ln(p) + (8 - 3) \ln(1 - p) \).  
@@ -1748,10 +1781,10 @@ function add_binomial_distribution_exercises_to_the_lesson($lesson_number) {
     - Base measure \( h(y) \)           {blank4}<br>
     EOT,
         'Solution:  <br>
-    - \( h(y) = \binom{n}{y} \) (Base measure)  <br>
     - \( T(y) = y \) (Sufficient statistic)  <br>
     - \(\\eta(p) = \ln\left(\frac{p}{1 - p}\right) \) (Natural parameter)  <br>
-    - \( A(p) = -n \ln(1 - p) \) (Log-partition function)',
+    - \( A(p) = -n \ln(1 - p) \) (Log-partition function)<br>
+    - \( h(y) = \binom{n}{y} \) (Base measure)  <br>',
         'medium',
         'drag_and_drop',
         json_encode([
@@ -1761,10 +1794,10 @@ function add_binomial_distribution_exercises_to_the_lesson($lesson_number) {
             "D" => "ln(p/(1-p))"  
         ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
         json_encode([
-            "1" => "B",
-            "2" => "C",
-            "3" => "D",
-            "4" => "A"
+            "1" => "C",
+            "2" => "D",
+            "3" => "A",
+            "4" => "B"
         ]),
         $exercise_number
     );
@@ -2064,7 +2097,7 @@ function add_gaussian_distribution_exercises_to_the_lesson($lesson_number) {
     The probability density function (PDF) of the Gaussian distribution with mean \( \mu \) and variance \( \sigma^2 \) is:
 
     \[
-    p(x) =\\frac{1}{\sqrt{2\pi \sigma^2}} \\exp\left( -\\frac{(x - \mu)^2}{2\sigma^2} \right)
+    p(x) =\\frac{1}{\sqrt{2\pi \sigma^2}} \\exp\left( -\\frac{(x - \mu)^2}{2\sigma^2} \\right)
     \]
 
     <strong>Question:</strong><br>
@@ -2072,7 +2105,7 @@ function add_gaussian_distribution_exercises_to_the_lesson($lesson_number) {
     EOT,
             'Solution:  
     \[
-    p(1) =\\frac{1}{\sqrt{2\pi}} \\exp\left(-\\frac{1}{2}\right) \approx 0.2419
+    p(1) =\\frac{1}{\sqrt{2\pi}} \\exp\left(-\\frac{1}{2}\\right) \approx 0.2419
     \]
     Answer: 0.2419',
         'easy',
@@ -2088,34 +2121,39 @@ function add_gaussian_distribution_exercises_to_the_lesson($lesson_number) {
     );
 
     // Exercise 2: Gaussian in Exponential Family Form
-    add_exercise(
+    $result = add_exercise(
         $lesson_id,
         $category_id,
-        'Exercise ' . $exercise_number . ' – Gaussian as Exponential Family',
+        'Exercise ' . $exercise_number . ' – Gaussian with Fixed Variance in Exponential Family',
         <<<EOT
-    The Gaussian distribution can be written in exponential family form as:
+    The Gaussian distribution with <strong>fixed variance</strong> \( \sigma^2 \) can be expressed in the exponential family form as:
 
     \[
-    p(x) = h(x) \\exp\left(\\eta_1 x +\\eta_2 x^2 - A(\\eta) \right)
+    p(y) = h(y) \\exp\left( \\eta y - A(\\eta) \\right)
     \]
 
+    This is a single-parameter exponential family, where the sufficient statistic \( T(y) \) captures all the information about \( y \) needed for estimating the mean.
+
+    <br><br>
     <strong>Question:</strong><br>
-    Which of the following represents the sufficient statistic \( T(x) \) for the Gaussian distribution?
+    What is the sufficient statistic \( T(y) \) for the fixed-variance Gaussian?
+
     EOT,
-            'Solution:  
-    For Gaussian, the sufficient statistics are \( T(x) = (x, x^2) \).  
+        'Solution:  
+    With fixed variance, the Gaussian becomes a one-parameter exponential family and the sufficient statistic is \( T(y) = y \).  
     Answer: C.',
         'medium',
         'one_of_many',
         json_encode([
-            "A" => "x",
-            "B" => "x^2",
-            "C" => "(x, x^2)",
+            "A" => "(y, y^2)",
+            "B" => "y^2",
+            "C" => "y",
             "D" => "None of the above"
         ]),
         json_encode(["correct_option" => "C"]),
         $exercise_number++
     );
+
 
     // Exercise 3: Mean and Variance of Gaussian
     add_exercise(
@@ -2150,7 +2188,7 @@ function add_gaussian_distribution_exercises_to_the_lesson($lesson_number) {
     For \( x_1 = 2 \), \( x_2 = 4 \), assuming a Gaussian distribution with known variance \( \sigma^2 = 1 \), the log-likelihood function for mean \( \mu \) is:
 
     \[
-    \\ell(\mu) = -\\frac{1}{2} \sum_{i=1}^{2} (x_i - \mu)^2 + \text{const}
+    \\ell(\mu) = -\\frac{1}{2} \sum_{i=1}^{2} (x_i - \mu)^2 + \\text{const}
     \]
 
     <strong>Question:</strong><br>
@@ -2173,8 +2211,303 @@ function add_gaussian_distribution_exercises_to_the_lesson($lesson_number) {
         json_encode(["correct_option" => "C"]),
         $exercise_number++
     );
+    // Exercise 4: Log-Likelihood Gradient for Logistic Regression
+    $result = add_exercise(
+        $lesson_id,
+        $category_id,
+        'Exercise ' . $exercise_number . ' – Gradient of Logistic Log-Likelihood',
+        <<<EOT
+    In logistic regression, the log-likelihood is maximized to estimate the weights \( \mathbf{w} \). For a single observation with target \( y \in \{0, 1\} \), features \( \mathbf{x} \), and predicted probability \( \mu = \sigma(\mathbf{w} \cdot \mathbf{x}) \), the log-likelihood is:
+
+    \[
+    \\ell(\mathbf{w}) = y \ln(\mu) + (1 - y) \ln(1 - \mu)
+    \]
+
+    To optimize \( \mathbf{w} \), we compute the gradient of the log-likelihood with respect to \( \mathbf{w} \):
+
+    \[
+    \\nabla_{\mathbf{w}} \\ell(\mathbf{w}) = (y - \mu) \mathbf{x}
+    \]
+
+    Consider a single observation with \( y = 1 \), \( \mathbf{x} = [1, 2] \), and \( \mathbf{w} = [0.5, -0.3] \).
+
+    <strong>Question:</strong>  <br>
+    Compute the gradient \( \\nabla_{\mathbf{w}} \\ell(\mathbf{w}) \). Round each component to 3 decimal places.<br>
+        <br>
+    1. Calculate \( \mathbf{w} \cdot \mathbf{x} \).<br>
+    2. Compute \( \mu = \sigma(\mathbf{w} \cdot \mathbf{x}) \).<br>
+    3. Compute the gradient \( (y - \mu) \mathbf{x} \).<br>
+    EOT,
+        'Solution:  <br>
+    1. \( \mathbf{w} \cdot \mathbf{x} = 0.5 \cdot 1 + (-0.3) \cdot 2 = 0.5 - 0.6 = -0.1 \).  <br>
+    2. \( \mu = \sigma(-0.1) =\\frac{1}{1 + e^{0.1}} \approx\\frac{1}{1 + 1.1052} \approx 0.475 \).  <br>
+    3. \( y - \mu = 1 - 0.475 = 0.525 \).  <br>
+    4. Gradient = \( 0.525 \cdot [1, 2] = [0.525, 1.050] \).  <br>
+    Answer: [0.525, 1.050].',
+        'hard',
+        'labeled_inputs',
+        null,
+        json_encode([
+            "correct_options" => [
+                "\(w_0\)" => "0.525",
+                "\(w_1\)" => "1.050"
+            ]
+        ]),
+        $exercise_number
+    );
+    $exercise_number++;
 }
 
+function add_glm_summary_exercises_to_the_lesson($lesson_number){
+    $module_two_term = get_term_by('slug', 'module-two', 'course_topic');
+    $category_id = $module_two_term ? $module_two_term->term_id : 0;
+    $lesson_id = get_lesson_for_category($category_id, $lesson_number);
+    $exercise_number = 1;
+
+    add_exercise(
+        $lesson_id,
+        $category_id,
+        'Exercise ' . $exercise_number . ' – Estimating \( \mu \) in Gaussian GLM',
+        <<<EOT
+    <p>You're solving a <strong>regression problem</strong>. That means, for every input \( x \), the target variable \( y \) is drawn from a Gaussian distribution:</p>
+
+    
+
+    \[
+    y \sim \mathcal{N}(\mu, \sigma^2)
+    \]
+
+    <p><strong>Question:</strong><br>
+    Which picture correctly describes the situation:
+    
+    EOT,
+        'To complete the model, you must minimize the squared error using gradient descent (or closed-form solution) to find the optimal \( \\theta \).',
+        'medium',
+        'one_of_many',
+        json_encode([
+            "A" => '<img src=\"https://mldenizen.com/wp-content/uploads/2025/07/gaussian_assumption_2.png\" alt=\"For every x, y is drawed from Gaussian distribution\" style=\"max-width: 80%; height: auto; border: 1px solid #ccc; padding: 4px; background: white;\" />',
+            "B" => '<img src=\"https://mldenizen.com/wp-content/uploads/2025/07/gaussian_assumption.png\" alt=\"For every x, y is drawed from Gaussian distribution\" style=\"max-width: 80%; height: auto; border: 1px solid #ccc; padding: 4px; background: white;\" />',
+
+        ], JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT),
+        json_encode(["correct_option" => "B"]),
+        $exercise_number++
+    );
+
+
+    add_exercise(
+        $lesson_id,
+        $category_id,
+        'Exercise ' . $exercise_number . ' – Estimating \( \mu \) in Gaussian GLM',
+        <<<EOT
+    <p>You're solving a <strong>regression problem</strong>. That means, for every input \( x \), the target variable \( y \) is drawn from a Gaussian distribution:</p>
+
+    \[
+    y \sim \mathcal{N}(\mu, \sigma^2)
+    \]
+
+    <p>You assume \( \sigma = 1 \), and you want to model \( \mu \) as a linear function of the input \( x \), i.e., estimate \( \mu = \\theta^T x \).</p>
+
+    <p>Because the Gaussian distribution belongs to the <strong>exponential family</strong>, you use a <strong>Generalized Linear Model (GLM)</strong>. For Gaussian, the natural (canonical) parameter is:</p>
+
+    \[
+    \\eta = \mu
+    \]
+
+    <p>And the canonical link function is the identity:</p>
+
+    \[
+    g(\mu) = \mu = \\theta^T x
+    \]
+
+    <p>So estimating \( \mu \) becomes equivalent to estimating \( \\theta \). You use <strong>Maximum Likelihood Estimation</strong> by minimizing the <strong>negative log-likelihood</strong>, which gives the classic squared error loss:</p>
+
+    \[
+    \mathcal{L}(\\theta) = \sum_{i=1}^{n} (y_i - \\theta^T x_i)^2
+    \]
+
+    <p><strong>Visual:</strong> For every \( x \), the vertical bell curve below shows the assumed distribution of \( y \):</p>
+
+    <img src="https://mldenizen.com/wp-content/uploads/2025/07/guassian_distribution_linear_correlation.png" alt="Vertical Gaussian distributions along regression line" style="max-width: 100%; height: auto; border: 1px solid #ccc; padding: 4px; background: white;" />
+
+    <p><strong>Question:</strong> What is left to complete the model fitting?</p>
+    EOT,
+        'To complete the model, you must minimize the squared error using gradient descent (or closed-form solution) to find the optimal \( \\theta \).',
+        'medium',
+        'one_of_many',
+        json_encode([
+            "A" => "Identify the canonical link function for the Gaussian distribution",
+            "B" => "Differentiate the log-partition function to compute the mean",
+            "C" => "Minimize the negative log-likelihood (squared loss) to solve for \( \\theta \)",
+            "D" => "Apply a sigmoid transformation to estimate class probabilities"
+        ]),
+        json_encode(["correct_option" => "C"]),
+        $exercise_number++
+    );
+
+    add_exercise(
+        $lesson_id,
+        $category_id,
+        'Exercise ' . $exercise_number . ' – Sequence: Fitting a Binary Classifier in GLM',
+        <<<EOT
+    <p>In logistic regression (a GLM for binary classification), you assume the target variable follows a Bernoulli distribution and use a sigmoid to map linear outputs to probabilities.</p>
+        
+    <img src="https://mldenizen.com/wp-content/uploads/2025/07/binary_modeled_sigmoid.png" alt="Using sigmoid function to model target variable" style="max-width: 100%; height: auto; border: 1px solid #ccc; padding: 4px; background: white;" />
+
+    <p>Put the following steps in the correct order:</p>
+
+    <ol>
+        <li>{blank1}</li>
+        <li>{blank2}</li>
+        <li>{blank3}</li>
+        <li>{blank4}</li>
+    </ol>
+    EOT,
+        'Solution:
+            1. Start from labeled binary data (0 or 1)<br>
+            2. Assume the probability of 1 is modeled by a sigmoid of a linear function: \\( \\sigma(\\theta^T x + b) \\)<br>
+            3. Use Maximum Likelihood Estimation to learn \\( \\theta \\) and \\( b \\)<br>
+            4. Predict class by thresholding the sigmoid output at 0.5',
+        'medium',
+        'drag_and_drop',
+        json_encode([
+            "A" => "Use Maximum Likelihood Estimation to learn how steep the sigmoid is (\\( \\theta \\)) and its horizontal position( \\( b \\))",
+            "B" => "Predict class by thresholding the sigmoid output at 0.5",
+            "C" => "Assume the probability of 1 is modeled by a sigmoid of a linear function: \\( \\sigma(\\theta^T x + b) \\)",
+            "D" => "Start from labeled binary data (0 or 1)"
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+        json_encode([
+            "1" => "D",
+            "2" => "C",
+            "3" => "A",
+            "4" => "B"
+        ]),
+        $exercise_number++
+    );
+
+    add_exercise(
+        $lesson_id,
+        $category_id,
+        'Exercise ' . $exercise_number . ' – Logistic Regression: Predicting Probability',
+        <<<EOT
+    In logistic regression, the probability is computed using a sigmoid function over a linear combination:
+
+    \[
+    P(y = 1 \mid \mathbf{x}) = \sigma(\mathbf{w}^\\top \mathbf{x} + b), \quad \sigma(z) = \\frac{1}{1 + e^{-z}}
+    \]
+
+    Given:
+    <ul>
+    <li>\( \mathbf{x} = [2, 1] \)</li>
+    <li>\( \mathbf{w} = [1.0, -0.5] \)</li>
+    <li>\( b = 0 \)</li>
+    </ul>
+
+    <strong>Question:</strong><br>
+    Compute the predicted probability that \( y = 1 \).
+    EOT,
+        'Solution:
+    The linear combination is \( z = 1.0 \cdot 2 + (-0.5) \cdot 1 = 1.5 \)<br>
+    The probability is \( \sigma(1.5) = \\frac{1}{1 + e^{-1.5}} \approx 0.817 \).',
+        'medium',
+        'labeled_inputs',
+        null,
+        json_encode([
+            "correct_options" => [
+                "\( p(Y==1)\)" => "0.817"
+            ]
+        ]),
+        $exercise_number++
+    );
+    add_exercise(
+        $lesson_id,
+        $category_id,
+        'Exercise ' . $exercise_number . ' – From Data to Expected Value',
+        <<<EOT
+    The Generalized Linear Model (GLM) framework provides a clear sequence of steps from raw data to computing a predicted value.
+
+    <strong>Task:</strong><br>
+    Put the following steps in the correct logical order — starting from data and ending with computing the expected value of the target variable.<br>
+        <br>
+       1. {blank1}<br>
+       2. {blank2}<br>
+       3. {blank3}<br>
+       4. {blank4}<br>
+       5. {blank5}
+    EOT,
+        'Solution:
+    Correct order:<br>
+    1. Identify the nature of the target variable (e.g., binary, count, continuous).<br>
+    2. Select a probability distribution from the exponential family that models the target.<br>
+    3. Connect the distribution’s natural (canonical) parameter to a linear combination of input features.<br>
+    4. Fit the model by minimizing the negative log-likelihood (NLL) of the PMF written in canonical form, typically using gradient descent on the linear parameter vector \( \boldsymbol{\\theta} \).<br>
+    5. Use the model to compute the expected value of the target variable for new data.
+    ',
+        'medium',
+        'drag_and_drop',
+        json_encode([
+            "A" => "Select a distribution from the exponential family",
+            "B" => "Identify the nature of the target variable",
+            "C" => "Fit the model by minimizing the negative log-likelihood using gradient descent on θ",
+            "D" => "Compute the expected value for new inputs",
+            "E" => "Link the canonical parameter to a linear combination of inputs"
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+        json_encode([
+            "1" => "B",
+            "2" => "A",
+            "3" => "E",
+            "4" => "C",
+            "5" => "D"
+        ]),
+        
+        $exercise_number++
+    );
+
+    add_exercise(
+        $lesson_id,
+        $category_id,
+        'Exercise ' . $exercise_number . ' – Cross-Entropy: Choose All That Apply',
+        <<<EOT
+    Cross-entropy loss arises naturally from several members of the exponential family when optimizing via Maximum Likelihood. Below are several expressions—some true, some impostors.
+
+    <strong>Task:</strong><br>
+    Select <u>all</u> the options that represent correct cross-entropy loss functions derived from probability distributions.
+
+    EOT,
+        'Solution:
+    Correct options:<br>
+    True Binary cross-entropy from Bernoulli:  
+    \[
+    L = - \left[ y \log(\hat{y}) + (1 - y) \log(1 - \hat{y}) \right]
+    \]  
+    True Binary cross-entropy from Binomial (n trials):  
+    \[
+    L = - \left[ k \log(\hat{p}) + (n - k) \log(1 - \hat{p}) \right]
+    \]  
+    True Multinomial cross-entropy from Softmax:  
+    \[
+    L = - \sum_{i=1}^K y_i \log(\hat{y}_i)
+    \]  
+    False - Others are either fake or misleading.',
+        'medium',
+        'multiple_choice',
+        json_encode([
+            "A"=>"Cross-entropy from Gaussian:\n\\[ L = \\frac{1}{2}(y - \\hat{y})^2 \\]",
+            "B"=>"Polynomial entropy loss:\n\\[ L = x^3 \\log(x) - 2x \\]",
+            "C"=>"Binary cross-entropy from Binomial:\n\\[ L = - \\left[ k \\log(\\hat{p}) + (n - k) \\log(1 - \\hat{p}) \\right] \\]",
+            "D"=>"Multinomial cross-entropy from Softmax:\n\\[ L = - \\sum_{i=1}^K y_i \\log(\\hat{y}_i) \\]",
+            "E"=>"Uniform distribution entropy penalty:\n\\[ L = -\\log\\left(\\frac{1}{N}\\right) \\]",
+            "F"=>"Binary cross-entropy from Bernoulli:\n\\[ L = - \\left[ y \\log(\\hat{y}) + (1 - y) \\log(1 - \\hat{y}) \\right] \\]",
+        ]),
+        json_encode([
+            "correct_options" => [
+                "C", "D", "F"
+            ]
+        ]),
+        $exercise_number++
+    );
+
+
+}
 function exercise_module_two_plugin_activate() {
 
     add_probability_distributions_exercises_to_the_lesson(1);
@@ -2186,6 +2519,6 @@ function exercise_module_two_plugin_activate() {
     add_binomial_distribution_exercises_to_the_lesson(7);
     add_gaussian_distribution_exercises_to_the_lesson(8);
     add_multinomial_distribution_exercises_to_the_lesson(9);
+    add_glm_summary_exercises_to_the_lesson(10);
 }
-register_activation_hook( __FILE__, 'exercise_module_two_plugin_activate' );
 ?>

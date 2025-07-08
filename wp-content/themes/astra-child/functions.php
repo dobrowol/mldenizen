@@ -10,6 +10,64 @@ add_action( 'wp_enqueue_scripts', 'astra_child_enqueue_styles' );
 function astra_child_enqueue_styles() {
     wp_enqueue_style( 'astra-parent-style', get_template_directory_uri() . '/style.css' );
 }
+function enable_mathjax_selection() {
+    ?>
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      document.querySelectorAll(".mjx-assistive-mml").forEach(el => {
+        el.removeAttribute("unselectable");
+        el.style.userSelect = "text";
+        el.style.pointerEvents = "auto";
+      });
+    });
+    </script>
+    <?php
+}
+add_action('wp_footer', 'enable_mathjax_selection');
+
+function add_mathjax_copy_button_with_internal_source() {
+    ?>
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        if (!window.MathJax || !MathJax.startup) {
+            console.warn("MathJax not ready");
+            return;
+        }
+
+        MathJax.startup.promise.then(() => {
+            const mathItems = MathJax.startup.document.math;
+
+            mathItems.forEach((math) => {
+                const tex = math.inputJax.format === "TeX" ? math.start.data.originalText : null;
+                const container = math.typesetRoot.parentElement;
+
+                if (tex && container && !container.classList.contains("latex-copied")) {
+                    const btn = document.createElement("button");
+                    btn.textContent = "📋";
+                    btn.title = "Copy LaTeX";
+                    btn.style.marginLeft = "6px";
+                    btn.style.fontSize = "0.8em";
+                    btn.style.cursor = "pointer";
+
+                    btn.addEventListener("click", (e) => {
+                        e.preventDefault();
+                        navigator.clipboard.writeText(tex).then(() => {
+                            btn.textContent = "✅";
+                            setTimeout(() => btn.textContent = "📋", 1000);
+                        });
+                    });
+
+                    container.appendChild(btn);
+                    container.classList.add("latex-copied");
+                }
+            });
+        });
+    });
+    </script>
+    <?php
+}
+add_action('wp_footer', 'add_mathjax_copy_button_with_internal_source');
+
 
 function ml_denizen_login_logout_shortcode() {
     if ( is_user_logged_in() ) {
