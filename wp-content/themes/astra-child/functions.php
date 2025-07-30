@@ -167,8 +167,10 @@ function ml_courses_grid_shortcode() {
         'post_type'      => 'course',
         'posts_per_page' => -1,
         'post_status'    => 'publish',
+        'suppress_filters' => false, 
     );
-    $courses = get_posts($args); // ← use get_posts (not WP_Query loop)
+    $query = new WP_Query($args);
+    $courses = $query->posts;// ← use get_posts (not WP_Query loop)
 
     ob_start();
     ?>
@@ -307,6 +309,7 @@ function get_image_url_by_name($filename) {
         'post_type'      => 'attachment',
         'post_status'    => 'inherit',
         'posts_per_page' => 1,
+        'lang'           => '',
         'meta_query'     => [
             [
                 'key'     => '_wp_attached_file',
@@ -570,10 +573,25 @@ function ml_duolingo_learning_path_shortcode() {
             );
             $num_ex = count($exercises);
 
-            $angle_span = 150;
-            $angle_start = 90 + ($angle_span / 2); // 150°
-            $angle_end = 90 - ($angle_span / 2);   // 30°
-            $angle_step = $angle_span / max($lesson_count - 1, 1);
+            $lesson_count = count($lessons);
+
+            $lesson_count = count($lessons);
+
+            // Ustawienia dla funkcji łuku
+            $angle_min = 0;     // dla 1 lekcji
+            $angle_max = 180;   // maksymalny łuk
+            $scale_factor = 80; // im większy, tym szybciej rośnie kąt
+
+            if ($lesson_count <= 1) {
+                $angle_span = 0;
+            } else {
+                // Wzrost logarytmiczny – możesz też spróbować sqrt() albo inny
+                $angle_span = min($angle_max, log($lesson_count) * $scale_factor);
+            }
+
+            // Ustaw pozostałe kąty
+            $angle_start = 90 + ($angle_span / 2);
+            $angle_step = ($lesson_count > 1) ? ($angle_span / ($lesson_count - 1)) : 0;
 
             $angle_deg = $angle_start - ($index * $angle_step);
             $angle_rad = deg2rad($angle_deg);

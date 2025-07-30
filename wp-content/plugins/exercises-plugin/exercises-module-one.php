@@ -1,11 +1,11 @@
 <?php
 
 function add_module_one_lesson_2_exercises($lesson_number) {
-    $module_one_term = get_term_by( 'slug', 'module-one', 'course_topic' );
+    $module_one_term = get_term_by( 'slug', 'module-one-en', 'course_topic' );
     if ( $module_one_term ) {
         $category_id = $module_one_term->term_id;
     } else {
-        error_log('Term "module-one" not found in course_topic taxonomy.');
+        error_log('Term "module-one-en" not found in course_topic taxonomy.');
         $category_id = 0;
     }
     $exercise_number = 1;
@@ -178,11 +178,11 @@ function add_module_one_lesson_2_exercises($lesson_number) {
 }
 
 function add_module_one_lesson_3_exercises($lesson_number) {
-    $module_one_term = get_term_by( 'slug', 'module-one', 'course_topic' );
+    $module_one_term = get_term_by( 'slug', 'module-one-en', 'course_topic' );
     if ( $module_one_term ) {
         $category_id = $module_one_term->term_id;
     } else {
-        error_log('Term "module-one" not found in course_topic taxonomy.');
+        error_log('Term "module-one-en" not found in course_topic taxonomy.');
         $category_id = 0;
     }
     $exercise_number = 1;
@@ -559,11 +559,11 @@ function add_module_one_lesson_3_exercises($lesson_number) {
 
 }
 function add_module_one_lesson_3_run_exercises($lesson_number) {
-    $module_one_term = get_term_by( 'slug', 'module-one', 'course_topic' );
+    $module_one_term = get_term_by( 'slug', 'module-one-en', 'course_topic' );
     if ( $module_one_term ) {
         $category_id = $module_one_term->term_id;
     } else {
-        error_log('Term "module-one" not found in course_topic taxonomy.');
+        error_log('Term "module-one-en" not found in course_topic taxonomy.');
         $category_id = 0;
     }
     $exercise_number = 1;
@@ -764,11 +764,11 @@ function add_module_one_lesson_3_run_exercises($lesson_number) {
 
 }
 function add_module_one_lesson_0_exercises() {
-    $module_one_term = get_term_by( 'slug', 'module-one', 'course_topic' );
+    $module_one_term = get_term_by( 'slug', 'module-one-en', 'course_topic' );
     if ( $module_one_term ) {
         $category_id = $module_one_term->term_id;
     } else {
-        error_log('Term "module-one" not found in course_topic taxonomy.');
+        error_log('Term "module-one-en" not found in course_topic taxonomy.');
         $category_id = 0;
     }
     $exercise_number = 1;
@@ -998,11 +998,11 @@ $result = add_exercise(
 }
 
 function add_module_one_lesson_4_exercises($lesson_number = 4) {
-    $module_one_term = get_term_by( 'slug', 'module-one', 'course_topic' );
+    $module_one_term = get_term_by( 'slug', 'module-one-en', 'course_topic' );
     if ( $module_one_term ) {
         $category_id = $module_one_term->term_id;
     } else {
-        error_log('Term "module-one" not found in course_topic taxonomy.');
+        error_log('Term "module-one-en" not found in course_topic taxonomy.');
         $category_id = 0;
     }
     $exercise_number = 1;
@@ -1248,11 +1248,11 @@ function add_module_one_lesson_4_exercises($lesson_number = 4) {
     }
 
 function add_module_one_lesson_5_exercises($lesson_number = 5) {
-    $module_one_term = get_term_by( 'slug', 'module-one', 'course_topic' );
+    $module_one_term = get_term_by( 'slug', 'module-one-en', 'course_topic' );
     if ( $module_one_term ) {
         $category_id = $module_one_term->term_id;
     } else {
-        error_log('Term "module-one" not found in course_topic taxonomy.');
+        error_log('Term "module-one-en" not found in course_topic taxonomy.');
         $category_id = 0;
     }
     $exercise_number = 1;
@@ -1704,11 +1704,11 @@ function add_module_one_lesson_5_exercises($lesson_number = 5) {
 
 }
 function add_module_one_lesson_6_exercises($lesson_number) {
-    $module_one_term = get_term_by( 'slug', 'module-one', 'course_topic' );
+    $module_one_term = get_term_by( 'slug', 'module-one-en', 'course_topic' );
     if ( $module_one_term ) {
         $category_id = $module_one_term->term_id;
     } else {
-        error_log('Term "module-one" not found in course_topic taxonomy.');
+        error_log('Term "module-one-en" not found in course_topic taxonomy.');
         $category_id = 0;
     }
     $exercise_number = 1;

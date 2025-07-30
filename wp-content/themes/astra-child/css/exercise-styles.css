@@ -137,6 +137,11 @@ textarea {
     border-left: 4px solid #dc3545;
     padding: 8px;
 }
+.missed-correct-answer {
+    background-color: #f8d7da;
+    border-left: 4px solid #dc3545;
+    padding: 8px;
+}
 .tooltip {
     position: relative;
     cursor: help;

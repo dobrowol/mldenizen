@@ -309,6 +309,8 @@ function render_exercise($recommended_exercise, $term_id, $feedback = null) {
                     $class = 'correct-answer';
                 } elseif ($is_selected && !$is_correct) {
                     $class = 'incorrect-answer';
+                } elseif (!$is_selected && $is_correct) {
+                    $class = 'missed-correct-answer';
                 }
 
                 $checked = $is_selected ? 'checked' : '';
@@ -502,16 +504,14 @@ function render_exercise($recommended_exercise, $term_id, $feedback = null) {
                     }
                 }
                 // force exact indent regardless of what's in the original content
-                $replacement = '<div class="dropzone ' . esc_attr($css_class) . ' mathjax-render" style="display:inline-block; border:2px dashed #aaa; min-height:30px; margin:3px 0; width:50%; padding:3px 6px; vertical-align:middle;">' .
-                    '<div class="dropzone-content mathjax-render" style="pointer-events:none; white-space:nowrap; overflow-x:auto; text-align:left;">' . wp_kses_post($options[$submitted_val] ?? 'Drop here') . '</div>' .
+                $replacement = '<span class="dropzone ' . esc_attr($css_class) . ' mathjax-render" style="display:inline-block; border:2px dashed #aaa; min-height:30px; margin:0 5px; width:120px; padding:3px 6px; vertical-align:middle;">' .
+                    '<span class="dropzone-content mathjax-render" style="pointer-events:none; white-space:nowrap; overflow-x:auto; text-align:left;">' .
+                    wp_kses_post($options[$submitted_val] ?? 'Drop here') .
+                    '</span>' .
                     '<input type="hidden" name="user_answer[' . $i . ']" value="' . esc_attr($submitted_val) . '">' .
-                '</div>';
+                    '</span>';
 
-                $full_content = preg_replace(
-                    '/\{blank' . $i . '\}/',
-                    $replacement,
-                    $full_content
-                );
+                $full_content = preg_replace('/\{blank' . $i . '\}/', $replacement, $full_content);   
             }
             echo '<div>' .  str_replace('\{', '\\{', $full_content)  . '</div>';
             error_log("content inside dragable is ".$content_inside_dragable);

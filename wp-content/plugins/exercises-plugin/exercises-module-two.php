@@ -1,11 +1,11 @@
 <?php
 
 function add_probability_distributions_exercises_to_the_lesson($lesson_number) {
-    $module_two_term = get_term_by( 'slug', 'module-two', 'course_topic' );
+    $module_two_term = get_term_by( 'slug', 'module-two-en', 'course_topic' );
     if ( $module_two_term ) {
         $category_id = $module_two_term->term_id;
     } else {
-        error_log('Term "module-two" not found in course_topic taxonomy.');
+        error_log('Term "module-two-en" not found in course_topic taxonomy.');
         $category_id = 0;
     }
     $exercise_number = 1;
@@ -64,13 +64,13 @@ function add_probability_distributions_exercises_to_the_lesson($lesson_number) {
 
     where:<br>
     - \( p \) is the probability of success (i.e., \( X = 1 \)),<br>
-    - \( 1 - p \) is the probability of failure (i.e., \( X = 0 \)).<b>
-
+    - \( 1 - p \) is the probability of failure (i.e., \( X = 0 \)).<br>
+        <br>
     <strong>Example:</strong> <br>
     Using the parameters from our scenario:<br>
     - \( P(X = 1) = 0.2 \)<br>
     - \( P(X = 0) = 0.8 \)<br>
-
+        <br>
     <strong>Question:</strong><br>  
     You observe a single data point: the user clicked (i.e., \( X = 1 \)). What is the value of the PMF for this observation?<br>
         <br>
@@ -173,15 +173,89 @@ function add_probability_distributions_exercises_to_the_lesson($lesson_number) {
         ]),
         $exercise_number
     );
+    $exercise_number++;
+
+    $result = add_exercise(
+        $lesson_id,
+        $category_id,
+        'Exercise ' . $exercise_number . ' – Deriving the Poisson from Binomial',
+        <<<EOT
+    The <span class="tooltip"><strong>Poisson distribution</strong><span class="tooltip-text">It's the cool-headed cousin of the Binomial distribution, perfect for modeling rare events over time or space. Think radioactive decays, incoming emails, or goats crossing a bridge — all happening independently, without a fixed number of trials.</span></span> emerges as a limit of the Binomial distribution when:<br><br>
+
+    - The number of trials \( n \\to \infty \),<br>
+    - The probability of success \( p \\to 0 \),<br>
+    - But the expected number of successes \( \lambda = np \) stays constant.<br><br>
+
+    In that case, we get the Poisson distribution with parameter \( \lambda \), and the PMF becomes:
+
+    \[
+    P(X = k) = \\frac{e^{-\lambda} \lambda^k}{k!}
+    \]
+
+    This makes the Poisson a great model when we’re counting how many rare events occur in a fixed interval of time or space.
+
+    <strong>Question:</strong><br>
+    Which of the following scenarios would best be modeled by a Poisson distribution?
+    EOT,
+        'Solution: A – The Poisson distribution models counts of rare, independent events in a fixed time/space — like customer arrivals.',
+        'medium',
+        'one_of_many',
+        json_encode([
+            "A" => "The number of customers arriving at a store in an hour.",
+            "B" => "The number of times a coin lands on heads in 10 flips.",
+            "C" => "The height of students in a classroom.",
+            "D" => "The probability of rain tomorrow."
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+        json_encode([
+            "correct_option" => "A"
+        ]),
+        $exercise_number
+    );
+    $exercise_number++;
+
+    $result = add_exercise(
+        $lesson_id,
+        $category_id,
+        'Exercise ' . $exercise_number . ' – Applying the Poisson Distribution',
+        <<<EOT
+    The <strong>Poisson distribution</strong> is defined by a single parameter \( \lambda \), which represents the average number of events in a given interval (time, space, etc.).<br><br>
+
+    Its PMF is given by:
+
+    \[
+    P(X = k) = \\frac{e^{-\lambda} \lambda^k}{k!}
+    \]
+
+    Suppose the number of emails you receive per hour follows a Poisson distribution with \( \lambda = 2 \).
+
+    <strong>Question:</strong><br>
+    What is the probability that you receive exactly 3 emails in an hour?
+
+    EOT,
+        'Solution: D – \( P(X = 3) = \\frac{e^{-2} \cdot 8}{6} = \\frac{8e^{-2}}{6} \approx 0.180 \)',
+        'medium',
+        'one_of_many',
+        json_encode([
+            "A" => "0.270",
+            "B" => "0.220",
+            "C" => "0.090",
+            "D" => "0.180"
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+        json_encode([
+            "correct_option" => "D"
+        ]),
+        $exercise_number
+    );
+    $exercise_number++;
 
 }
 
 function add_exponential_family_exercises_to_the_lesson($lesson_number) {
-    $module_two_term = get_term_by( 'slug', 'module-two', 'course_topic' );
+    $module_two_term = get_term_by( 'slug', 'module-two-en', 'course_topic' );
     if ( $module_two_term ) {
         $category_id = $module_two_term->term_id;
     } else {
-        error_log('Term "module-two" not found in course_topic taxonomy.');
+        error_log('Term "module-two-en" not found in course_topic taxonomy.');
         $category_id = 0;
     }
     $exercise_number = 1;
@@ -279,11 +353,11 @@ function add_exponential_family_exercises_to_the_lesson($lesson_number) {
         'one_of_many',
         json_encode([
             "A" => "Defines sufficient statistic",
-            "B" => "Ensures normalization",
-            "C" => "Transforms natural parameter",
-            "D" => "Computes base measure"
+            "B" => "Transforms natural parameter",
+            "C" => "Computes base measure",
+            "D" => "Ensures normalization",
         ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
-        json_encode(["correct_option" => "B"]),
+        json_encode(["correct_option" => "D"]),
         $exercise_number
     );
     $exercise_number++;
@@ -320,8 +394,8 @@ function add_exponential_family_exercises_to_the_lesson($lesson_number) {
     <br>
     <strong>Question:</strong><br>  
     What is the natural parameter \( \\eta(p) \) for the binomial distribution when \( p = 0.6 \)? Round to 2 decimal places.
-
-    1. Identify \( \\eta(p) \) from the exponential form.
+        <br>
+    1. Identify \( \\eta(p) \) from the exponential form.<br>
     2. Compute \( \\eta(p) \) for \( p = 0.6 \).
     EOT,
         'Solution:  
@@ -408,12 +482,12 @@ function add_exponential_family_exercises_to_the_lesson($lesson_number) {
         'easy',
         'one_of_many',
         json_encode([
-            "A" => "It normalizes the distribution to ensure it sums to 1.",
-            "B" => "It controls the shape or behavior of the distribution of \( y \).",
+            "A" => "It controls the shape or behavior of the distribution of \( y \).",
+            "B" => "It normalizes the distribution to ensure it sums to 1.",
             "C" => "It defines the base measure of the distribution.",
             "D" => "It computes the sufficient statistic for \( y \)."
         ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
-        json_encode(["correct_option" => "B"]),
+        json_encode(["correct_option" => "A"]),
         $exercise_number
     );
     $exercise_number++;
@@ -445,16 +519,70 @@ function add_exponential_family_exercises_to_the_lesson($lesson_number) {
     );
     $exercise_number++;
 
-    
+    $result = add_exercise(
+        $lesson_id,
+        $category_id,
+        'Exercise ' . $exercise_number . ' – Natural Parameter in a Binary Classifier',
+        <<<EOT
+    To understand why transforming to exponential's family form matters, let’s take a quick look into the future.
+
+    Imagine you're building a 
+    <span class="tooltip">
+    neural network binary classifier
+    <span class="tooltip-text">
+        Ah, the neural network binary classifier — the enchanted golem of modern computation. Born of algebraic incantations and trained on offerings of data, it peers into the void of inputs and dares to answer: “Yes” or “No.” Or, more precisely, “0.973, probably yes.”
+
+        Don’t let its layers fool you. This is no accident of wires and hope. Hidden beneath the surface lies a pact with probability — a sigmoid twist of fate that transforms cold numbers into decisions.
+
+        In ancient scrolls (and recent arXiv papers), it is whispered: this creature learns by minimizing loss, backpropagating regret, and converging on the truth (or something adjacent).
+
+        But take heed: feed it junk, and it will hallucinate logic. Worship its output blindly, and you'll find yourself knee-deep in false positives wondering where it all went wrong. Tread wisely, O builder of classifiers.
+    </span>
+    </span>. It takes real-valued inputs, passes them through several layers, and ultimately produces a prediction. The network takes real-valued inputs, processes them through layers, and finally produces a prediction.
+
+    Below is a simplified diagram of the process:
+
+    <div class="exercise-image">
+        <img src="https://mldenizen.com/wp-content/uploads/2025/07/logistic_regression.png" alt="Neural network prediction pipeline: input → linear output z → sigmoid(z) → predicted probability" style="max-width: 100%;">
+    </div>
+    <p>
+        {blank1}<span style="display:inline-block; width:1px;"></span>
+        {blank2}<span style="display:inline-block; width:20px;"></span>
+        {blank3}<span style="display:inline-block; width:40px;"></span>
+        {blank4}
+    </p>
+    <br>    
+    Match each label below to the correct part of the diagram.
+
+    EOT,
+        'Solution: The linear output \( z \) is the natural parameter (logit); the sigmoid reverses it to produce a probability, which is the mean parameter.',
+        'medium',
+        'drag_and_drop',
+        json_encode([
+            "A" => "z = Natural Parameter (Logit).",
+            "B" => "sigmoid(z) = Probability (Inverse of Natural Parameter).",
+            "C" => "Input Features.",
+            "D" => "Neural Network Layers."
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+        json_encode([
+            "1" => "C",
+            "2" => "D",
+            "3" => "A",
+            "4" => "B"
+        ]),
+        $exercise_number
+    );
+    $exercise_number++;
+
 
 }
 function add_glm_exercises_to_the_lesson($lesson_number){
 
-    $module_two_term = get_term_by( 'slug', 'module-two', 'course_topic' );
+    $module_two_term = get_term_by( 'slug', 'module-two-en', 'course_topic' );
     if ( $module_two_term ) {
         $category_id = $module_two_term->term_id;
     } else {
-        error_log('Term "module-two" not found in course_topic taxonomy.');
+        error_log('Term "module-two-en" not found in course_topic taxonomy.');
         $category_id = 0;
     }
     $exercise_number = 1;
@@ -487,11 +615,7 @@ function add_glm_exercises_to_the_lesson($lesson_number){
         <br>
     <strong>Question:</strong><br>
     Which of the following are true properties of GLMs? Select all that apply.<br>
-        <br>
-    A. The response variable must follow a Gaussian distribution.  <br>
-    B. The link function relates the linear predictor to the expected response.  <br>
-    C. GLMs are an extension of the exponential family with covariates.  <br>
-    D. The log-likelihood in GLMs is concave, ensuring a unique MLE solution.<br>
+
     EOT,
         'Solution:  <br>
     - A: False (GLMs can model various exponential family distributions, not just Gaussian).  <br>
@@ -612,12 +736,6 @@ function add_glm_exercises_to_the_lesson($lesson_number){
     During training, we are given a dataset of input-output pairs \( (\mathbf{x}^{(i)}, y^{(i)}) \), and we aim to choose model parameters \( \boldsymbol{w} \) that best explain the data.
 
     <br><br>
-    <strong>Key point:</strong><br>
-    We do <strong>not</strong> learn the parameters of the exponential family distribution directly. Instead, we learn the parameters of the <strong>model</strong> that produces the natural parameter \(\\eta \), which in turn defines the distribution.<br><br>
-
-    In other words, we maximize the likelihood of the observed data by optimizing \( \boldsymbol{w} \), not \(\\eta \), which is computed as \(\\eta = \mathbf{x}^\\top \boldsymbol{w} \).
-
-    <br><br>
     <strong>Question:</strong><br>
     Which of the following statements are correct?
 
@@ -649,13 +767,13 @@ function add_glm_exercises_to_the_lesson($lesson_number){
 
     Given data pairs \( (\mathbf{x}^{(i)}, y^{(i)}) \), we assume that the response \( y^{(i)} \) follows an exponential family distribution whose natural parameter \(\\eta^{(i)} = \mathbf{x}^{(i)\\top} \boldsymbol{w} \).<br><br>
 
-    The model is trained using <strong>Maximum Likelihood Estimation (MLE)</strong>:
+    The model is trained using:
 
     \[
     \boldsymbol{w}^* = \arg\max_{\boldsymbol{w}} \sum_{i=1}^{n} \log p(y^{(i)} \mid \mathbf{x}^{(i)}; \boldsymbol{w})
     \]
 
-    Because this expression is often differentiable, we typically use <strong>gradient ascent</strong> (or descent on the negative log-likelihood) to find \( \boldsymbol{w} \).
+    This expression is often differentiable.
 
     <br><br>
     <strong>Question:</strong><br>
@@ -775,10 +893,7 @@ function add_glm_exercises_to_the_lesson($lesson_number){
     <br>
     - <strong>Canonical link function</strong>: A link function \( g \) that satisfies \( g(\mu) =\\eta \). When this link function matches the natural parameter directly, it's called canonical.
     <br>
-    - <strong>Canonical response</strong>: The expected value \( \mu = \mathbb{E}[y] \), which is related to the natural parameter by the gradient of the log-partition function:
-    \[
-    \mu =\\frac{dA(\\eta)}{d\\eta}
-    \]
+    - <strong>Canonical response</strong>: The expected value \( \mu = \mathbb{E}[y] \), which is related to the natural parameter.
 
     This gradient defines the <strong>canonical response</strong>.
 
@@ -815,7 +930,7 @@ function add_glm_exercises_to_the_lesson($lesson_number){
     <br><br>
     1. <strong>Model parameters</strong> \( \boldsymbol{\\theta} \): These are the parameters of the linear predictor \(\\eta = \mathbf{x}^\\top \boldsymbol{\\theta} \). These are what we learn during training.
     <br><br>
-    2. <strong>Natural parameters</strong> \(\\eta \): These are the parameters used in the exponential family form of the distribution:
+    2. <strong>Natural parameter</strong> \(\\eta \): This is the parameter used in the exponential family form of the distribution:
     \[
     p(y) = h(y) \\exp(\\eta \cdot T(y) - A(\\eta))
     \]
@@ -911,63 +1026,63 @@ function add_glm_exercises_to_the_lesson($lesson_number){
         $exercise_number
     );
     $exercise_number++;
-    $result = add_exercise(
-        $lesson_id,
-        $category_id,
-        'Exercise ' . $exercise_number . ' – Why Is Logistic Regression Still Called Regression?',
-        <<<EOT
-    In traditional machine learning terms:<br>
-    - <strong>Regression</strong> means predicting a continuous output.<br>
-    - <strong>Classification</strong> means predicting discrete categories.<br>
-        <br>
-    Yet in statistics, both <strong>linear regression</strong> and <strong>logistic regression</strong> are called <strong>regression models</strong> — even though logistic regression is used for classification.<br>
+    // $result = add_exercise(
+    //     $lesson_id,
+    //     $category_id,
+    //     'Exercise ' . $exercise_number . ' – Why Is Logistic Regression Still Called Regression?',
+    //     <<<EOT
+    // In traditional machine learning terms:<br>
+    // - <strong>Regression</strong> means predicting a continuous output.<br>
+    // - <strong>Classification</strong> means predicting discrete categories.<br>
+    //     <br>
+    // Yet in statistics, both <strong>linear regression</strong> and <strong>logistic regression</strong> are called <strong>regression models</strong> — even though logistic regression is used for classification.<br>
 
-    <br><br>
-    <strong>Why?</strong><br>
-    Because in Generalized Linear Models (GLMs), “regression” refers not to the output type, but to the structure of the model:<br>
-    - Both models use a <strong>linear function of inputs</strong>: \(\\eta = \mathbf{x}^\\top \boldsymbol{\\theta} \)<br>
-    - Both models use that \(\\eta \) to predict the <strong>expected value</strong> of \( y \), possibly through a <strong>link function</strong>.<br>
-        <br>
-    For example:<br>
-    <ul>
-    <li>Linear regression: \( \mu =\\eta \)</li>
-    <li>Logistic regression: \( \mu = \sigma(\\eta) =\\frac{1}{1 + e^{-\\eta}} \)</li>
-    </ul>
+    // <br><br>
+    // <strong>Why?</strong><br>
+    // Because in Generalized Linear Models (GLMs), “regression” refers not to the output type, but to the structure of the model:<br>
+    // - Both models use a <strong>linear function of inputs</strong>: \(\\eta = \mathbf{x}^\\top \boldsymbol{\\theta} \)<br>
+    // - Both models use that \(\\eta \) to predict the <strong>expected value</strong> of \( y \), possibly through a <strong>link function</strong>.<br>
+    //     <br>
+    // For example:<br>
+    // <ul>
+    // <li>Linear regression: \( \mu =\\eta \)</li>
+    // <li>Logistic regression: \( \mu = \sigma(\\eta) =\\frac{1}{1 + e^{-\\eta}} \)</li>
+    // </ul>
 
-    In both cases, the <strong>structure is a regression on the expected value</strong> — even if the final prediction is categorical.
+    // In both cases, the <strong>structure is a regression on the expected value</strong> — even if the final prediction is categorical.
 
-    <br><br>
-    <strong>Question:</strong><br>
-    Why is logistic regression still called "regression"?
+    // <br><br>
+    // <strong>Question:</strong><br>
+    // Why is logistic regression still called "regression"?
 
-    EOT,
-        'Solution:<br>
-    A: True — Logistic regression uses a linear model to predict the expected value (probability), just like linear regression.<br>
-    B: False — Logistic regression is not misnamed; it follows the GLM definition of regression.<br>
-    C: False — It is not called regression because of a mistake; it’s deliberate and structural.<br>
-    D: True — In GLMs, “regression” refers to the linear structure, not to the output type.<br>
-    Correct answers: A, D',
-        'easy',
-        'multiple_choice',
-        json_encode([
-            "A" => "Because logistic regression models a transformed expected value via a linear predictor.",
-            "B" => "Because someone misnamed it and it stuck.",
-            "C" => "Because it was originally used for continuous values.",
-            "D" => "Because in GLMs, regression refers to modeling structure, not output type."
-        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
-        json_encode(["correct_options" => ["A", "D"]]),
-        $exercise_number
-    );
-    $exercise_number++;
+    // EOT,
+    //     'Solution:<br>
+    // A: True — Logistic regression uses a linear model to predict the expected value (probability), just like linear regression.<br>
+    // B: False — Logistic regression is not misnamed; it follows the GLM definition of regression.<br>
+    // C: False — It is not called regression because of a mistake; it’s deliberate and structural.<br>
+    // D: True — In GLMs, “regression” refers to the linear structure, not to the output type.<br>
+    // Correct answers: A, D',
+    //     'easy',
+    //     'multiple_choice',
+    //     json_encode([
+    //         "A" => "Because logistic regression models a transformed expected value via a linear predictor.",
+    //         "B" => "Because someone misnamed it and it stuck.",
+    //         "C" => "Because it was originally used for continuous values.",
+    //         "D" => "Because in GLMs, regression refers to modeling structure, not output type."
+    //     ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+    //     json_encode(["correct_options" => ["A", "D"]]),
+    //     $exercise_number
+    // );
+    // $exercise_number++;
 
 }
 function add_exponential_family_two_exercises_to_the_lesson($lesson_number){
 
-    $module_two_term = get_term_by( 'slug', 'module-two', 'course_topic' );
+    $module_two_term = get_term_by( 'slug', 'module-two-en', 'course_topic' );
     if ( $module_two_term ) {
         $category_id = $module_two_term->term_id;
     } else {
-        error_log('Term "module-two" not found in course_topic taxonomy.');
+        error_log('Term "module-two-en" not found in course_topic taxonomy.');
         $category_id = 0;
     }
     $exercise_number = 1;
@@ -1068,11 +1183,11 @@ function add_exponential_family_two_exercises_to_the_lesson($lesson_number){
 }
 
 function add_repetition_exercises_to_the_lesson($lesson_number) {
-    $module_two_term = get_term_by( 'slug', 'module-two', 'course_topic' );
+    $module_two_term = get_term_by( 'slug', 'module-two-en', 'course_topic' );
     if ( $module_two_term ) {
         $category_id = $module_two_term->term_id;
     } else {
-        error_log('Term "module-two" not found in course_topic taxonomy.');
+        error_log('Term "module-two-en" not found in course_topic taxonomy.');
         $category_id = 0;
     }
     $exercise_number = 1;
@@ -1316,11 +1431,11 @@ function add_repetition_exercises_to_the_lesson($lesson_number) {
 
 }
 function add_bernoulli_distribution_exercises_to_the_lesson($lesson_number) {
-    $module_two_term = get_term_by( 'slug', 'module-two', 'course_topic' );
+    $module_two_term = get_term_by( 'slug', 'module-two-en', 'course_topic' );
     if ( $module_two_term ) {
         $category_id = $module_two_term->term_id;
     } else {
-        error_log('Term "module-two" not found in course_topic taxonomy.');
+        error_log('Term "module-two-en" not found in course_topic taxonomy.');
         $category_id = 0;
     }
 
@@ -1613,11 +1728,11 @@ function add_bernoulli_distribution_exercises_to_the_lesson($lesson_number) {
 }
 
 function add_binomial_distribution_exercises_to_the_lesson($lesson_number) {
-    $module_two_term = get_term_by( 'slug', 'module-two', 'course_topic' );
+    $module_two_term = get_term_by( 'slug', 'module-two-en', 'course_topic' );
     if ( $module_two_term ) {
         $category_id = $module_two_term->term_id;
     } else {
-        error_log('Term "module-two" not found in course_topic taxonomy.');
+        error_log('Term "module-two-en" not found in course_topic taxonomy.');
         $category_id = 0;
     }
     $exercise_number = 1;
@@ -1854,11 +1969,11 @@ function add_binomial_distribution_exercises_to_the_lesson($lesson_number) {
 
 
 function add_multinomial_distribution_exercises_to_the_lesson($lesson_number) {
-    $module_two_term = get_term_by( 'slug', 'module-two', 'course_topic' );
+    $module_two_term = get_term_by( 'slug', 'module-two-en', 'course_topic' );
     if ( $module_two_term ) {
         $category_id = $module_two_term->term_id;
     } else {
-        error_log('Term "module-two" not found in course_topic taxonomy.');
+        error_log('Term "module-two-en" not found in course_topic taxonomy.');
         $category_id = 0;
     }
     $exercise_number = 1;
@@ -2083,7 +2198,7 @@ function add_multinomial_distribution_exercises_to_the_lesson($lesson_number) {
 
 }
 function add_gaussian_distribution_exercises_to_the_lesson($lesson_number) {
-    $module_two_term = get_term_by('slug', 'module-two', 'course_topic');
+    $module_two_term = get_term_by('slug', 'module-two-en', 'course_topic');
     $category_id = $module_two_term ? $module_two_term->term_id : 0;
     $lesson_id = get_lesson_for_category($category_id, $lesson_number);
     $exercise_number = 1;
@@ -2259,7 +2374,7 @@ function add_gaussian_distribution_exercises_to_the_lesson($lesson_number) {
 }
 
 function add_glm_summary_exercises_to_the_lesson($lesson_number){
-    $module_two_term = get_term_by('slug', 'module-two', 'course_topic');
+    $module_two_term = get_term_by('slug', 'module-two-en', 'course_topic');
     $category_id = $module_two_term ? $module_two_term->term_id : 0;
     $lesson_id = get_lesson_for_category($category_id, $lesson_number);
     $exercise_number = 1;
