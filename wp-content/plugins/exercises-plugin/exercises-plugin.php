@@ -9,6 +9,7 @@ require_once plugin_dir_path( __FILE__ ) . 'bkt-algorithm.php';
 require_once plugin_dir_path( __FILE__ ) . 'exercises-vector-spaces.php';
 require_once plugin_dir_path( __FILE__ ) . 'exercises-module-one.php';
 require_once plugin_dir_path( __FILE__ ) . 'exercises-module-two.php';
+require_once plugin_dir_path( __FILE__ ) . 'exercises-module-three.php';
 
 function register_lesson_post_type() {
     $labels = array(
@@ -300,6 +301,9 @@ function exercise_plugin_activate() {
 
     // Then: Module Two
     exercise_module_two_plugin_activate();
+
+    // Then: Module Three
+    exercise_module_three_plugin_activate();
 }
 register_activation_hook( __FILE__, 'exercise_plugin_activate' );
 

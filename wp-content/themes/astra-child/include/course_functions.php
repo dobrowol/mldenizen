@@ -337,7 +337,7 @@ function render_exercise($recommended_exercise, $term_id, $feedback = null) {
         $ajax_url = admin_url('admin-ajax.php', 'https');
 
         // JS config
-        echo "<script>const codeTemplate = $encoded_code; const ajaxUrl = '" . esc_url($ajax_url) . "';</script>";
+        echo "<script>const codeTemplate = $encoded_code; const Url = '" . esc_url($ajax_url) . "';</script>";
 
 
         // Show code
@@ -391,10 +391,10 @@ function render_exercise($recommended_exercise, $term_id, $feedback = null) {
                 .then(res => res.json())
                 .then(res => {
                     document.getElementById("code_output").textContent =
-                        res.data?.output || res.data?.error || "Brak danych";
+                        res.data?.output || res.data?.error || "Missing data";
                 })
                 .catch(err => {
-                    document.getElementById("code_output").textContent = "Błąd: " + err.message;
+                    document.getElementById("code_output").textContent = "Error: " + err.message;
                 });
             }
         </script>';
@@ -443,6 +443,8 @@ function render_exercise($recommended_exercise, $term_id, $feedback = null) {
             }
 
             const payload = { code: finalCode };
+            
+            console.log("🧪 Final code sent:", finalCode);
 
             fetch(ajaxUrl, {
                 method: "POST",
@@ -451,7 +453,7 @@ function render_exercise($recommended_exercise, $term_id, $feedback = null) {
             })
             .then(res => res.json())
             .then(res => {
-                const out = res.output || res.error || "Brak danych";
+                const out = res.output || res.error || "Missing data";
                 const output = document.getElementById("code_output");
                 if (out.startsWith("data:image/png;base64")) {
                     const img = new Image();
@@ -596,7 +598,7 @@ function render_exercise($recommended_exercise, $term_id, $feedback = null) {
     echo '<div class="submit-button-container">';
     if ( $recommended_exercise->question_type === 'code_runner' || 
     $recommended_exercise->question_type === 'geometric_interpretation' || $feedback ) {
-        echo '<input type="submit" name="submit_continue" value="Continue" onclick="location.reload()">';
+        echo '<input type="submit" name="submit_continue" value="Continue">';
     } else{
         echo '<input type="submit" name="submit_answer" value="Check"></div>';
     }
@@ -613,6 +615,7 @@ function show_exercise($lesson_id, $exercise_number, $term_id) {
     
     global $wpdb;
     $table = $wpdb->prefix . 'exercises';
+    error_log("looking for exercise ".$exercise_number." for lesson ".$lesson_id);
     $exercise = $wpdb->get_row($wpdb->prepare(
         "SELECT * FROM $table WHERE lesson_id = %d AND exercise_number = %d",
         $lesson_id, $exercise_number

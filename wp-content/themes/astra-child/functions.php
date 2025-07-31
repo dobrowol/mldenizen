@@ -25,48 +25,6 @@ function enable_mathjax_selection() {
 }
 add_action('wp_footer', 'enable_mathjax_selection');
 
-function add_mathjax_copy_button_with_internal_source() {
-    ?>
-    <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        if (!window.MathJax || !MathJax.startup) {
-            console.warn("MathJax not ready");
-            return;
-        }
-
-        MathJax.startup.promise.then(() => {
-            const mathItems = MathJax.startup.document.math;
-
-            mathItems.forEach((math) => {
-                const tex = math.inputJax.format === "TeX" ? math.start.data.originalText : null;
-                const container = math.typesetRoot.parentElement;
-
-                if (tex && container && !container.classList.contains("latex-copied")) {
-                    const btn = document.createElement("button");
-                    btn.textContent = "📋";
-                    btn.title = "Copy LaTeX";
-                    btn.style.marginLeft = "6px";
-                    btn.style.fontSize = "0.8em";
-                    btn.style.cursor = "pointer";
-
-                    btn.addEventListener("click", (e) => {
-                        e.preventDefault();
-                        navigator.clipboard.writeText(tex).then(() => {
-                            btn.textContent = "✅";
-                            setTimeout(() => btn.textContent = "📋", 1000);
-                        });
-                    });
-
-                    container.appendChild(btn);
-                    container.classList.add("latex-copied");
-                }
-            });
-        });
-    });
-    </script>
-    <?php
-}
-add_action('wp_footer', 'add_mathjax_copy_button_with_internal_source');
 
 
 function ml_denizen_login_logout_shortcode() {
@@ -207,6 +165,9 @@ function ml_courses_grid_shortcode() {
 add_shortcode('ml_course_cards', 'ml_courses_grid_shortcode');
 
 function handle_submit_continue() {
+    error_log("-------------------");
+    error_log("handle submit");
+    error_log("-------------------");
     unset($_SESSION['last_answer_feedback']);
     global $wpdb;
     unset($_SESSION['lesson_description']);
@@ -762,7 +723,19 @@ function handle_submit_answer($exercise_id, $term_id, $exercise) {
     }  else {
         $user_answer = sanitize_text_field($_POST['user_answer']);
     }
+    // ⛔ If no answer provided, skip checking and mark as "skipped"
+    if (!isset($_POST['user_answer']) || (is_array($_POST['user_answer']) && count(array_filter($_POST['user_answer'])) === 0) || (is_string($_POST['user_answer']) && trim($_POST['user_answer']) === '')) {
+        error_log("⚠️ No user answer provided — skipping verification and auto-moving forward.");
 
+        $_SESSION['last_answer_feedback'] = [
+            'exercise_id' => $exercise_id,
+            'submitted' => [],
+            'correct' => null, // null = unanswered
+            'correct_keys' => [],
+        ];
+
+        return $_SESSION['last_answer_feedback'];
+    }
     // Verify
     $result = verify_answer($exercise_id, $user_answer);
 
@@ -832,12 +805,18 @@ function ml_submit_exercise_ajax() {
     wp_die();
 }
 add_action('wp_enqueue_scripts', function () {
-    error_log("wp_enque_scripts ".get_stylesheet_directory_uri() . '/js/exercise.js');
+    $script_path = get_stylesheet_directory() . '/js/exercise.js'; // fizyczna ścieżka
+    $script_url  = get_stylesheet_directory_uri() . '/js/exercise.js'; // URL
+
+    $version = file_exists($script_path) ? filemtime($script_path) : false;
+
+    error_log("wp_enqueue_scripts $script_url?ver=$version");
+
     wp_enqueue_script(
         'ml-exercise-script',
-        get_stylesheet_directory_uri() .  '/js/exercise.js',
+        $script_url,
         [],
-        null,
+        $version, // 👈 automatyczna wersja, zależna od modyfikacji
         true
     );
 
