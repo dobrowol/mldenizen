@@ -197,7 +197,7 @@ function add_gaussian_discriminant_analysis_lesson($lesson_number) {
         $lesson_id,
         $category_id,
         'Exercise – Covariance and GDA Boundary',
-        '<p>This exercise lets you visualize how the decision boundary of a Gaussian Discriminant Analysis (GDA) model changes when you vary the covariance matrices of the classes. By default, both classes share the same covariance (LDA setting). Try changing the values to explore Quadratic Discriminant Analysis (QDA) behavior.</p>
+        '<p>This exercise lets you visualize how the decision boundary of a Gaussian Discriminant Analysis (GDA) model changes when you vary the covariance matrices of the classes. By default, both classes share the same covariance (Linear Discriminant Analysis setting). Different covariance matrices will trigger Quadratic Discriminant Analysis (QDA).</p>
         <p><strong>Instructions:</strong> Modify the covariance matrices of class 0 and class 1. Run the visualization to see how the boundary adapts.</p>',
         json_encode([
             'params' => [
@@ -218,6 +218,269 @@ function add_gaussian_discriminant_analysis_lesson($lesson_number) {
     $exercise_number++;
 }
 
+function add_multidimensional_Gaussian_distribution($lesson_number){
+    $module_three_term = get_term_by( 'slug', 'module-three-en', 'course_topic' );
+    if ( $module_three_term ) {
+        $category_id = $module_three_term->term_id;
+    } else {
+        error_log('Term "module-three-en" not found in course_topic taxonomy.');
+        $category_id = 0;
+    }
+    $lesson_id = get_lesson_for_category( $category_id, $lesson_number );
+    $exercise_number = 1;
+
+    $options = json_encode([
+        "input1", "input2", "input3"
+    ]);
+
+    $correct_option = json_encode([
+        "correct_options" => [
+            "input1" => "1/(sqrt(2 pi) sigma)",
+            "input2" => "(x - mu)^2",
+            "input3" => "2 sigma^2"
+        ]
+    ]);
+
+    $result = add_exercise(
+        $lesson_id,
+        $category_id,
+        'Exercise ' . $exercise_number . ' – Fill the Gaussian pdf',
+        <<<EOT
+    Fill the three blanks to write the <strong>probability density function</strong> of a univariate Gaussian (Normal) distribution with mean \\(\\mu\\) and standard deviation \\(\\sigma\\):
+
+    \\[
+    p(x) = {input1} \\, \\exp\\left( - \\frac{{input2}}{{input3}} \\right)
+    \\]
+
+    Type <strong>only</strong> what goes inside each blank.<br>
+    Accepted formatting examples: <code>1/(sqrt(2 pi) sigma)</code>, <code>(x-mu)^2</code>, <code>2 sigma^2</code>.<br>
+    <br>
+    <strong>Hint:</strong> The first blank is the normalizing constant, the second is the squared distance from the mean, and the third is the variance term inside the exponent.
+    EOT,
+        'Solution: \(p(x) = \frac{1}{\sqrt{2\pi}\sigma} \exp\!\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)\).',
+        'easy',
+        'labeled_inputs',
+        $options,
+        $correct_option,
+        $exercise_number
+    );
+
+    $exercise_number++;
+    $options = json_encode([
+        "input1", "input2", "input3"
+    ]);
+
+    $correct_option = json_encode([
+        "correct_options" => [
+            "input1" => "(2 pi)^{d/2} |Sigma|^{1/2}",
+            "input2" => "(x - mu)^T Sigma^{-1} (x - mu)",
+            "input3" => "2"
+        ]
+    ]);
+
+    $result = add_exercise(
+        $lesson_id,
+        $category_id,
+        'Exercise ' . $exercise_number . ' – Fill the Multivariate Gaussian pdf',
+        <<<EOT
+    Fill the three blanks to write the <strong>probability density function</strong> of a \(d\)-dimensional Gaussian distribution with mean vector \\(\\mu\\) and covariance matrix \\(\\Sigma\\):
+
+    \\[
+    p(x) =
+    \\frac{1}{ {input1} }
+    \\exp\\left(
+        -\\frac{{input2}}{{input3}}
+    \\right)
+    \\]
+
+    Type <strong>only</strong> the content inside each blank.<br>
+    Accepted formatting: <code>(2 pi)^{d/2} |Sigma|^{1/2}</code>, <code>(x - mu)^T Sigma^{-1} (x - mu)</code>, <code>2</code>.<br><br>
+    <strong>Hint:</strong> One blank is the normalizing constant, one is the quadratic Mahalanobis term, and one is the factor in the exponent.
+    EOT,
+        'Solution: \(p(x) = \frac{1}{(2\pi)^{d/2} |\Sigma|^{1/2}} \exp\!\left(-\frac{(x-\mu)^T\Sigma^{-1}(x-\mu)}{2}\right)\).',
+        'medium',
+        'labeled_inputs',
+        $options,
+        $correct_option,
+        $exercise_number
+    );
+
+    $exercise_number++;
+
+    $options = json_encode([
+        "c11", "c12", "c21", "c22"
+    ]);
+
+    $correct_option = json_encode([
+        "correct_options" => [
+            "c11" => "1",
+            "c12" => "-1",
+            "c21" => "-1",
+            "c22" => "1"
+        ]
+    ]);
+
+    $result = add_exercise(
+        $lesson_id,
+        $category_id,
+        'Exercise ' . $exercise_number . ' – Build the Sample Covariance Matrix',
+        <<<EOT
+    <p>
+    Given the 2D samples \\\\(x^{(1)}=(1,2),\\; x^{(2)}=(3,0),\\; x^{(3)}=(2,1)\\\\) and using the <strong>unbiased</strong> sample covariance
+    \\\\(\\Sigma = \\frac{1}{n-1} \\sum_{k=1}^{n} (x^{(k)}-\\mu)(x^{(k)}-\\mu)^\\top\\\\) with \\\\(\\mu=\\frac{1}{n}\\sum_k x^{(k)}=(2,1)\\\\),
+    fill the entries of \\\\(\\Sigma\\\\).
+    </p>
+
+    <p>
+    <em>Tip:</em> After centering, the vectors are \\\\((-1,1),\\,(1,-1),\\,(0,0)\\\\).
+    </p>
+
+    <table class="array-type">
+    <thead>
+        <tr>
+        <th></th>
+        <th>Feature 1</th>
+        <th>Feature 2</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+        <th>Feature 1</th>
+        <td>{c11}</td>
+        <td>{c12}</td>
+        </tr>
+        <tr>
+        <th>Feature 2</th>
+        <td>{c21}</td>
+        <td>{c22}</td>
+        </tr>
+    </tbody>
+    </table>
+
+    <p><strong>Answer type:</strong> Enter numbers only (e.g., <code>1</code>, <code>-1</code>).</p>
+    EOT,
+        'Solution: Using Σ = (1/(n-1)) Σ_k (x^(k)-μ)(x^(k)-μ)^T with n=3 gives Σ = [[1, -1], [-1, 1]].',
+        'easy',
+        'array_type',
+        $options,
+        $correct_option,
+        $exercise_number
+    );
+
+    $exercise_number++;
+    $options = json_encode([
+        "A" => "The main diagonal stores the feature means; the off-diagonals store differences of means.",
+        "B" => "The main diagonal stores the variances of each variable; the off-diagonals store covariances that capture the direction (sign) and strength (magnitude) of linear relationships, determining the orientation and spread of the data.",
+        "C" => "The main diagonal stores standard deviations; the off-diagonals are correlations in [−1, 1].",
+        "D" => "The main diagonal are eigenvalues and the off-diagonals are eigenvectors.",
+        "E" => "All diagonal entries must be 1 and off-diagonals must be 0 for any valid covariance matrix."
+    ]);
+
+    $correct_matches = json_encode([
+        "correct_options" => ["B"] // single correct choice
+    ]);
+
+    $result = add_exercise(
+        $lesson_id,
+        $category_id,
+        'Exercise ' . $exercise_number . ' – What does the covariance matrix tell us?',
+        <<<EOT
+    In the covariance matrix \\(\\Sigma\\) for variables \\(X_1,\\ldots,X_d\\), what do the
+    <em>main diagonal</em> and the <em>off-diagonal</em> entries represent?
+
+    \\[
+    \\Sigma =
+    \\begin{bmatrix}
+    \\operatorname{Var}(X_1) & \\operatorname{Cov}(X_1,X_2) & \\cdots \\\\
+    \\operatorname{Cov}(X_2,X_1) & \\operatorname{Var}(X_2) & \\cdots \\\\
+    \\vdots & \\vdots & \\ddots
+    \\end{bmatrix}
+    \\]
+
+    <strong>Hint:</strong> Diagonals describe each variable’s spread; off-diagonals describe how pairs move together (sign and magnitude). 
+    EOT,
+        'Solution: B — Diagonals are variances; off-diagonals are covariances indicating the sign and strength of linear relationships. Together they set the data’s scale and orientation (e.g., ellipse axes in a Gaussian).',
+        'easy',
+        'one_of_many',
+        $options,
+        $correct_matches,
+        $exercise_number
+    );
+
+    $exercise_number++;
+
+    $options = json_encode([
+        "A" => "Different variances for X and Y; positive correlation; main axis along x = y.",
+        "B" => "Same variances (1) and zero correlation; circular spread with no preferred orientation.",
+        "C" => "Same variances (1) and strong negative correlation (cov = −1); data are elongated along x = −y (principal axis), with zero variance along x = +y.",
+        "D" => "Different variances for X and Y; negative correlation; main axis along the x-axis.",
+        "E" => "Independence of X and Y, since the off-diagonal entries are non-zero."
+    ]);
+
+    $correct_matches = json_encode([
+        "correct_options" => ["C"] // single correct choice
+    ]);
+
+    $result = add_exercise(
+        $lesson_id,
+        $category_id,
+        'Exercise ' . $exercise_number . ' – Interpreting the Covariance Matrix',
+        <<<EOT
+    You estimated the covariance matrix of two variables \(X\) and \(Y\):
+    \\[
+    \\Sigma =
+    \\begin{bmatrix}
+    1 & -1\\\\[0.25em]
+    -1 & 1
+    \\end{bmatrix}
+    \\]
+    Which statement best describes the **spread** and **orientation** of the data implied by this matrix?
+
+    <strong>Hint:</strong> Think eigenvalues/eigenvectors (principal axes) and the sign of the covariance.
+    EOT,
+        'Solution: C — Equal marginal variances (1) with strong negative correlation (−1). The principal axis is along \(x=-y\) (largest variance), and the orthogonal axis \(x=+y\) has zero variance.',
+        'medium',
+        'multiple_choice',
+        $options,
+        $correct_matches,
+        $exercise_number
+    );
+
+    $exercise_number++;
+    $options = json_encode([
+        "A" => "LDA assumes a single shared covariance matrix Σ for all classes; this yields linear decision boundaries.",
+        "B" => "Because Σ is shared, all class-conditional ellipses have the same shape and rotation (principal axes); only their centers (means) differ.",
+        "C" => "LDA assumes features are independent within each class (Σ is diagonal).",
+        "D" => "Each class has its own covariance Σ_k with different rotations and spreads; boundaries are quadratic.",
+        "E" => "Correlations (off-diagonal terms) are allowed, but must be the same across classes since Σ is shared."
+    ]);
+
+    $correct_matches = json_encode([
+        "correct_options" => ["A","B","E"] // multiple correct choices
+    ]);
+
+    $result = add_exercise(
+        $lesson_id,
+        $category_id,
+        'Exercise ' . $exercise_number . ' – What does LDA assume about Σ (and what follows)?',
+        <<<EOT
+    In Gaussian Discriminant Analysis with the <strong>LDA</strong> assumption, what does the model assume about the covariance matrix \\(\\Sigma\\)? 
+    What does this imply about the <em>correlation</em> of features, the <em>rotation</em> (orientation) of the ellipses, and the <em>spread</em> across classes?
+
+    <strong>Hint:</strong> Contrast LDA with QDA (class-specific covariance) and with the naïve Bayes assumption (diagonal covariance).
+    EOT,
+        'Solution: A, B, E — LDA uses a single shared Σ, so decision boundaries are linear. All classes share the same shape/rotation (principal axes) and spreads along those axes; only means differ. Correlations are allowed (Σ need not be diagonal) but are identical across classes. (QDA: class-specific Σ → quadratic boundaries; Naïve Bayes: diagonal Σ → no within-class correlations.)',
+        'medium',
+        'multiple_choice',
+        $options,
+        $correct_matches,
+        $exercise_number
+    );
+
+    $exercise_number++;
+
+
+}
 function add_GNB_vs_GDA_comparison_lesson($lesson_number){
     $module_three_term = get_term_by( 'slug', 'module-three-en', 'course_topic' );
     if ( $module_three_term ) {
