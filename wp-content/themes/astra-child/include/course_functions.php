@@ -200,6 +200,23 @@ function render_exercise($recommended_exercise, $term_id, $feedback = null) {
             echo '</div>';
         }
     } elseif ( 'labeled_inputs' === $recommended_exercise->question_type ) {
+
+        // ---- helpers -----------------------------------------------------------
+        if (!function_exists('is_numeric_like')) {
+            function is_numeric_like($v): bool {
+                if (is_int($v) || is_float($v)) return true;
+                if (!is_string($v)) return false;
+                $v = trim($v);
+                if ($v === '') return false;
+                return (bool) preg_match('/^[+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?$/', $v);
+            }
+        }
+        if (!function_exists('normalize_text')) {
+            function normalize_text(string $s): string {
+                $s = trim($s);
+                return preg_replace('/\s+/u', ' ', $s);
+            }
+        }
         $json_string = $recommended_exercise->correct_answer;
         error_log("options are " . $json_string);
 
@@ -214,30 +231,42 @@ function render_exercise($recommended_exercise, $term_id, $feedback = null) {
 
             foreach ($correct_options as $label => $correct_value) {
                 $safe_label = esc_html($label);
-                $input_name = 'user_answer[' . esc_attr($label) . ']';
 
+                $input_name = 'user_answer[' . esc_attr($label) . ']';
+                $is_num   = is_numeric_like($correct_value);
                 // Check if submitted (associative array from POST/verify)
                 if ( $feedback && is_array($submitted) ) {
 
-                    $user_value = isset($submitted[$label]) ? floatval($submitted[$label]) : null;
+                    $user_val = $submitted[$label] ?? '';
 
-                    if ($user_value === null) {
+                    if ($user_val === null) {
                         $class = 'missing-answer';
-                    } elseif (abs($user_value - floatval($correct_value)) < $epsilon) {
-                        $class = 'correct-answer';
                     } else {
-                        $class = 'incorrect-answer';
+                        if ($is_num) {
+                            $ok = abs(floatval($user_val) - floatval($correct_value)) < $epsilon;
+                        } else {
+                            $ok = strcasecmp(normalize_text((string)$user_val), normalize_text((string)$correct_value)) === 0;
+                        }
+                        $class = $ok ? 'correct-answer' : 'incorrect-answer';
                     }
 
                     echo '<label class="' . esc_attr($class) . ' mathjax-render" style="display:block; margin-bottom:8px;">';
                     echo $safe_label . ' = ';
-                    echo '<input type="number" step="any" value="' . esc_attr($user_value) . '" readonly style="width:120px;">';
-                    echo '</label>';
+                    if ($is_num) {
+                        echo '<input type="number" step="any" value="' . esc_attr((string)$user_val) . '" readonly style="width:120px;">';
+                    } else {
+                        echo '<input type="text" value="' . esc_attr((string)$user_val) . '" readonly style="width:240px;">';
+                    }
+                    echo '</label><br>';
                 }
                 // Not submitted yet — show editable input
                 else {
                     echo '<label>' . $safe_label . ' = ';
-                    echo '<input type="number" step="any" name="' . $input_name . '" required style="width: 120px;"></label><br>';
+                    if ($is_num) {
+                        echo '<input type="number" step="any" name="' . $input_name . '" required style="width: 120px;"></label><br>';
+                    } else {
+                        echo '<input type="text" name="' . $input_name . '" style="width:240px;"></label><br>';
+                    }
                 }
             }
 

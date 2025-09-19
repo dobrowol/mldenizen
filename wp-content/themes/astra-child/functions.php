@@ -699,7 +699,7 @@ function handle_submit_answer($exercise_id, $term_id, $exercise) {
     elseif ( 'labeled_inputs' === $exercise->question_type && isset($_POST['user_answer']) && is_array($_POST['user_answer']) ) {
         $user_answer = [];
         foreach ($_POST['user_answer'] as $label => $value) {
-            $user_answer[ sanitize_text_field($label) ] = floatval($value);
+            $user_answer[ sanitize_text_field($label) ] = $value;
         }
         error_log("user answer is ".print_r($user_answer, true));
     } elseif ( 'match_boxes' === $exercise->question_type && isset($_POST['user_answer']) ) {

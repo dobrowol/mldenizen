@@ -859,7 +859,7 @@ function add_module_one_lesson_0_exercises() {
     <strong>Output bias:</strong> \( b^{(2)} = 0 \)
 
     <strong>Step 1:</strong> Compute the hidden layer output:  
-    \( h = \text{ReLU}(W^{(1)} \cdot x + b^{(1)}) \)
+    \( h = \\text{ReLU}(W^{(1)} \cdot x + b^{(1)}) \)
 
     <strong>Step 2:</strong> Compute the final output:  
     \( y = W^{(2)} \cdot h + b^{(2)} \)
