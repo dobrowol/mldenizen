@@ -218,7 +218,7 @@ function add_gaussian_discriminant_analysis_lesson($lesson_number) {
     $exercise_number++;
 }
 
-function add_multidimensional_Gaussian_distribution($lesson_number){
+function add_multivariate_Gaussian_distribution($lesson_number){
     $module_three_term = get_term_by( 'slug', 'module-three-en', 'course_topic' );
     if ( $module_three_term ) {
         $category_id = $module_three_term->term_id;
@@ -882,7 +882,9 @@ function exercise_module_three_plugin_activate() {
 
     add_naive_bayes_lesson(1);
     add_gaussian_discriminant_analysis_lesson(2);
-    add_gradient_descent_lesson(3);
+    add_multivariate_Gaussian_distribution(3);
+    add_gradient_descent_lesson(4);
+
     add_GNB_vs_GDA_comparison_lesson(6);
 
 }
